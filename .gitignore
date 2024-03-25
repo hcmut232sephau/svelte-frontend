@@ -1,8 +1,9 @@
 .DS_Store
 node_modules
 /build
-/public
 /.svelte-kit
+/public
+/.firebase
 /package
 .env
 .env.*
