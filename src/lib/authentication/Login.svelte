@@ -1,6 +1,11 @@
 <script>
     import { createEventDispatcher } from 'svelte';
 
+    /**
+     * @type {String}
+     */
+    export let pageName;
+
     const dispatch = createEventDispatcher();
 
     let email = "";
@@ -18,7 +23,7 @@
     }
 </script>
 <h1>
-    Log into Sephau
+    Log into {pageName}
 </h1>
 <div>
     <input bind:value={email} placeholder="Enter your e-mail" />

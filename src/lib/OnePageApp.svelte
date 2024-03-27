@@ -5,6 +5,8 @@
     import Register from "./authentication/Register.svelte";
     import UnverifiedEmail from "./authentication/UnverifiedEmail.svelte";
 
+    const pageName = "Neuroflask";
+
     let appCtrl = new ApplicationController();
 
     /**
@@ -31,11 +33,13 @@
 </script>
 {#if appCtrl.isUserRegistering}
     <Register
+        pageName={pageName}
         on:register={onRegister}
         on:switchToLogin={onSwitchToLogin}
     />
 {:else if appCtrl.user === null}
     <Login
+        pageName={pageName}
         on:login={onLogin}
         on:switchToRegister={onSwitchToRegister}
     />
