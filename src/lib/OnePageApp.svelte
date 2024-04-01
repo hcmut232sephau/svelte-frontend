@@ -64,18 +64,20 @@
         appCtrl.logout();
     }
 </script>
-{#if isRegistering}
-    <Register
-        pageName={pageName}
-        on:register={onRegister}
-        on:switchToLogin={() => appCtrl.switchToLogin()}
-    />
-{:else if user === null}
-    <Login
-        pageName={pageName}
-        on:login={onLogin}
-        on:switchToRegister={() => appCtrl.switchToRegistering()}
-    />
+{#if user === null}
+    {#if isRegistering}
+        <Register
+            pageName={pageName}
+            on:register={onRegister}
+            on:switchToLogin={() => appCtrl.switchToLogin()}
+        />
+    {:else}
+        <Login
+            pageName={pageName}
+            on:login={onLogin}
+            on:switchToRegister={() => appCtrl.switchToRegistering()}
+        />
+    {/if}
 {:else if !nonNullAssert(user).emailVerified}
     <UnverifiedEmail
         on:logout={onLogout}
