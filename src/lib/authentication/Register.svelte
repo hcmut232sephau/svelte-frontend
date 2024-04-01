@@ -1,5 +1,6 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import SmartTextField from '$lib/ui/SmartTextField.svelte';
+import { createEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
@@ -12,11 +13,51 @@
     let password = "";
     let reenteredPassword = "";
 
+    /**
+     * @type {String | null}
+     */
+    let emailError = null;
+    /**
+     * @type {String | null}
+     */
+    let passwordError = null;
+    /**
+     * @type {String | null}
+     */
+    let reenteredPasswordError = null;
+
     function onRegister() {
-        dispatch('register', {
-            email,
-            password
-        });
+        emailError = null;
+        passwordError = null;
+        reenteredPasswordError = null;
+
+        let isInputValid = true;
+
+        if (email == "") {
+            isInputValid = false;
+            emailError = "Cannot leave this empty";
+        }
+
+        if (password == "") {
+            isInputValid = false;
+            if (reenteredPassword == "") {
+                passwordError = "Cannot leave these empty";
+            } else {
+                passwordError = "Cannot leave this empty";
+            }
+        }
+
+        if (password != reenteredPassword) {
+            isInputValid = false;
+            reenteredPasswordError = "Passwords don't match";
+        }
+
+        if (isInputValid) {
+            dispatch('register', {
+                email,
+                password
+            });
+        }
     }
 
     function onSwitchToLogin() {
@@ -24,20 +65,26 @@
     }
 </script>
 <h1>
-    Sign up for a {pageName} account
+    Create a {pageName} account
 </h1>
+<SmartTextField
+    title="Email"
+    bind:value={email}
+    bind:error={emailError}
+/>
+<SmartTextField
+    title="Password"
+    bind:value={password}
+    bind:error={passwordError}
+/>
+<SmartTextField
+    title="Re-enter password"
+    bind:value={reenteredPassword}
+    bind:error={reenteredPasswordError}
+/>
 <div>
-    <input bind:value={email} placeholder="Enter your e-mail" />
+    <button class="login-button" on:click={onRegister}>Create account</button>
 </div>
 <div>
-    <input bind:value={password} placeholder="Enter your password" type="password" autocomplete="off" />
-</div>
-<div>
-    <input bind:value={reenteredPassword} placeholder="Re-enter your password" type="password" autocomplete="off" />
-</div>
-<div>
-    <button class="login-button" on:click={onRegister}>Sign up</button>
-</div>
-<div>
-    <button class="login-button" on:click={onSwitchToLogin}>Log in instead</button>
+    Already have a {pageName} account? <button class="login-button" on:click={onSwitchToLogin}>Log in</button>
 </div>

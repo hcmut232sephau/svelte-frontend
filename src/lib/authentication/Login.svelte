@@ -1,4 +1,5 @@
 <script>
+    import SmartTextField from '$lib/ui/SmartTextField.svelte';
     import { createEventDispatcher } from 'svelte';
 
     /**
@@ -11,11 +12,37 @@
     let email = "";
     let password = "";
 
+    /**
+     * @type {String | null}
+     */
+    let emailError = null;
+    /**
+     * @type {String | null}
+     */
+    let passwordError = null;
+
     function onLogin() {
-        dispatch('login', {
-            email,
-            password
-        });
+        emailError = null;
+        passwordError = null;
+
+        let isInputValid = true;
+
+        if (email == "") {
+            isInputValid = false;
+            emailError = "Cannot leave this empty";
+        }
+
+        if (password == "") {
+            isInputValid = false;
+            passwordError = "Cannot leave this empty";
+        }
+
+        if (isInputValid) {
+            dispatch('login', {
+                email,
+                password
+            });
+        }
     }
 
     function onSwitchToRegister() {
@@ -25,15 +52,19 @@
 <h1>
     Log into {pageName}
 </h1>
-<div>
-    <input bind:value={email} placeholder="Enter your e-mail" />
-</div>
-<div>
-    <input bind:value={password} placeholder="Enter your password" type="password" autocomplete="off" />
-</div>
+<SmartTextField
+    title="Email"
+    bind:value={email}
+    bind:error={emailError}
+/>
+<SmartTextField
+    title="Password"
+    bind:value={password}
+    bind:error={passwordError}
+/>
 <div>
     <button class="login-button" on:click={onLogin}>Log in</button>
 </div>
 <div>
-    <button class="switch-to-register-button" on:click={onSwitchToRegister}>Sign up instead</button>
+    Don't have a {pageName} account? <button class="switch-to-register-button" on:click={onSwitchToRegister}>Create one</button>
 </div>

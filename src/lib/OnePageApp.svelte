@@ -1,6 +1,8 @@
 <script>
-    import { ApplicationController } from "./ApplicationController"
+    import { onDestroy } from "svelte";
+    import { ApplicationController } from "./Controllers.js"
     import Dashboard from "./Dashboard.svelte";
+    import { nonNullAssert } from "./TypeTools";
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
     import UnverifiedEmail from "./authentication/UnverifiedEmail.svelte";
@@ -10,41 +12,76 @@
     let appCtrl = new ApplicationController();
 
     /**
+     * @type {boolean}
+     */
+    let isRegistering;
+    /**
+     * @type {import("firebase/auth").User | null}
+     */
+    let user;
+    const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {
+        isRegistering = val;
+    });
+    const unsubscribeUser = appCtrl.user.subscribe((val) => {
+        user = val;
+    });
+    onDestroy(() => {
+        unsubscribeIsRegistering();
+        unsubscribeUser();
+    });
+
+    /**
      * @param {CustomEvent} event
      */
     function onRegister(event) {
-        console.log(event.detail);
+        const detail = event.detail;
+
+        console.log("onRegister", detail);
+        console.log("Calling Firebase");
+
+        appCtrl.register(detail.email, detail.password);
     }
 
     /**
      * @param {CustomEvent} event
      */
-    function onLogin(event) {
-        console.log(event.detail);
+     function onLogin(event) {
+        const detail = event.detail;
+
+        console.log("onLogin", detail);
+        console.log("Calling Firebase");
+
+        appCtrl.login(detail.email, detail.password);
     }
 
-    function onSwitchToLogin() {
-        appCtrl.isUserRegistering = false;
-    }
+    /**
+     * @param {CustomEvent} event
+     */
+    function onLogout(event) {
+        console.log("onLogout", event.detail);
+        console.log("Calling Firebase");
 
-    function onSwitchToRegister() {
-        appCtrl.isUserRegistering = true;
+        appCtrl.logout();
     }
 </script>
-{#if appCtrl.isUserRegistering}
+{#if isRegistering}
     <Register
         pageName={pageName}
         on:register={onRegister}
-        on:switchToLogin={onSwitchToLogin}
+        on:switchToLogin={() => appCtrl.switchToLogin()}
     />
-{:else if appCtrl.user === null}
+{:else if user === null}
     <Login
         pageName={pageName}
         on:login={onLogin}
-        on:switchToRegister={onSwitchToRegister}
+        on:switchToRegister={() => appCtrl.switchToRegistering()}
     />
-{:else if !appCtrl.user.emailVerified}
-    <UnverifiedEmail />
+{:else if !nonNullAssert(user).emailVerified}
+    <UnverifiedEmail
+        on:logout={onLogout}
+    />
 {:else}
-    <Dashboard />
+    <Dashboard
+        on:logout={onLogout}
+    />
 {/if}
