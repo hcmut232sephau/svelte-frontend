@@ -69,7 +69,7 @@
         dispatch('switchToRegister', {});
     }
 </script>
-<div class="card bg-neutral-800 w-96 rounded-lg">
+<div class="card bg-neutral-800 w-128 rounded">
     <div class="card-body">
         <h1>
             Log into {pageName}
@@ -95,7 +95,7 @@
             </div>
         {/if}
         <div>
-            Don't have a {pageName} account? <button class="switch-to-register-button text-blue-600" on:click={onSwitchToRegister}>Create one</button>
+            Don't have a {pageName} account? <button class="text-blue-600" on:click={onSwitchToRegister}>Create one</button>
         </div>
     </div>
 </div>

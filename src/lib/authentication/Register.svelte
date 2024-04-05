@@ -79,7 +79,7 @@
         dispatch('switchToLogin', {});
     }
 </script>
-<div class="card bg-neutral-800 w-96 rounded-lg">
+<div class="card bg-neutral-800 w-128 rounded">
     <div class="card-body">
         <h1>
             Create a {pageName} account
@@ -111,7 +111,7 @@
             </div>
         {/if}
         <div>
-            Already have a {pageName} account? <button class="login-button text-blue-600" on:click={onSwitchToLogin}>Log in</button>
+            Already have a {pageName} account? <button class="text-blue-600" on:click={onSwitchToLogin}>Log in</button>
         </div>
     </div>
 </div>
