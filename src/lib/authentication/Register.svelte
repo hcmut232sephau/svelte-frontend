@@ -85,6 +85,7 @@
         />
         <SmartTextField
             title="Re-enter password"
+            type="password"
             bind:value={reenteredPassword}
             bind:error={reenteredPasswordError}
         />
