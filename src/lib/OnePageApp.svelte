@@ -79,10 +79,11 @@
                 on:switchToRegister={() => appCtrl.switchToRegistering()}
             />
         {/if}
-    {:else if !nonNullAssert(user).emailVerified}
+    <!-- Uncomment below if email verification is needed -->
+    <!-- {:else if !nonNullAssert(user).emailVerified}
         <UnverifiedEmail
             on:logout={onLogout}
-        />
+        /> -->
     {:else}
         <Dashboard
             on:logout={onLogout}
