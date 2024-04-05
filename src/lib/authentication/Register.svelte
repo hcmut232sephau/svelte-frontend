@@ -103,7 +103,7 @@
             bind:error={passwordError}
         />
         <div>
-            <button class="login-button btn rounded-lg bg-neutral-300 text-gray-700" on:click={onRegister}>Create account</button>
+            <button class="login-button PrimaryButton" on:click={onRegister}>Create account</button>
         </div>
         {#if error !== null}
             <div class="text-red-500">
