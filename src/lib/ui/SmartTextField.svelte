@@ -8,6 +8,10 @@
     /**
      * @type {String}
      */
+    export let type = "text";
+    /**
+     * @type {String}
+     */
     export let value;
     /**
      * @type {String | null}
@@ -15,9 +19,21 @@
     export let error;
 
     const dispatch = createEventDispatcher();
+
+    // @ts-ignore
+    function handleInput(e) {
+        value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
+    };
 </script>
 <div class="smart-text-field w-full ">
-    <input type="text" placeholder={title} bind:value={value} class="input input-bordered rounded-md w-full bg-neutral-700">
+    <input
+        type={type}
+        placeholder={title}
+        value={value}
+        on:input={handleInput}
+
+        class="input input-bordered rounded-md w-full bg-neutral-700"
+    >
 
     {#if error !== null}
         <div class="text-red-500">

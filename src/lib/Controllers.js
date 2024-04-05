@@ -37,7 +37,6 @@ export class ApplicationController {
         this.isRegistering = writable(false);
 
         this.firebaseCtrl.auth.onAuthStateChanged((u) => {
-            console.log("User state changed", u);
             this.onAuthStateChanged(u);
         });
     }
@@ -61,40 +60,19 @@ export class ApplicationController {
      * @param {string} email
      * @param {string} password
      */
-    register(email, password) {
-        try {
-            createUserWithEmailAndPassword(this.firebaseCtrl.auth, email, password);
-            // From here on `onAuthStateChanged` will carry client logic.
-            // No need for async.
-        } catch (e) {
-            // TODO: proper handling
-            console.log(e);
-        }
+    async register(email, password) {
+        return await createUserWithEmailAndPassword(this.firebaseCtrl.auth, email, password);
     }
 
     /**
      * @param {string} email
      * @param {string} password
      */
-    login(email, password) {
-        try {
-            signInWithEmailAndPassword(this.firebaseCtrl.auth, email, password);
-            // From here on `onAuthStateChanged` will carry client logic.
-            // No need for async.
-        } catch (e) {
-            // TODO: proper handling
-            console.log(e);
-        }
+    async login(email, password) {
+        return await signInWithEmailAndPassword(this.firebaseCtrl.auth, email, password);
     }
 
-    logout() {
-        try {
-            signOut(this.firebaseCtrl.auth);
-            // From here on `onAuthStateChanged` will carry client logic.
-            // No need for async.
-        } catch (e) {
-            // TODO: proper handling
-            console.log(e);
-        }
+    async logout() {
+        signOut(this.firebaseCtrl.auth);
     }
 }

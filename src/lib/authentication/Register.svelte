@@ -1,11 +1,16 @@
 <script>
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
-import { createEventDispatcher } from 'svelte';
+    import { ApplicationController } from '$lib/Controllers'
+    import { createEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
      */
     export let pageName;
+    /**
+     * @type {ApplicationController}
+     */
+    export let appCtrl;
 
     const dispatch = createEventDispatcher();
 
@@ -53,10 +58,7 @@ import { createEventDispatcher } from 'svelte';
         }
 
         if (isInputValid) {
-            dispatch('register', {
-                email,
-                password
-            });
+            appCtrl.register(email, password);
         }
     }
 
@@ -71,11 +73,13 @@ import { createEventDispatcher } from 'svelte';
         </h1>
         <SmartTextField
             title="Email"
+            type="email"
             bind:value={email}
             bind:error={emailError}
         />
         <SmartTextField
             title="Password"
+            type="password"
             bind:value={password}
             bind:error={passwordError}
         />

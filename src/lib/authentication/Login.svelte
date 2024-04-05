@@ -1,16 +1,26 @@
 <script>
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
+    import { ApplicationController } from '$lib/Controllers'
     import { createEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
      */
     export let pageName;
+    /**
+     * @type {ApplicationController}
+     */
+    export let appCtrl;
 
     const dispatch = createEventDispatcher();
 
     let email = "";
     let password = "";
+
+    /**
+     * @type {String | null}
+     */
+    let error = null;
 
     /**
      * @type {String | null}
@@ -22,6 +32,7 @@
     let passwordError = null;
 
     function onLogin() {
+        error = null;
         emailError = null;
         passwordError = null;
 
@@ -38,10 +49,19 @@
         }
 
         if (isInputValid) {
-            dispatch('login', {
-                email,
-                password
-            });
+            appCtrl.login(email, password)
+                .catch(err => {
+                    const code = err.code;
+                    // const errorMessage = err.message;
+
+                    if (code == "auth/invalid-email") {
+                        emailError = "Invalid email";
+                    } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential") {
+                        password = "Incorrect password";
+                    } else {
+                        error = "Unknown login error. Check your credentials and try again later. (error code " + code + ")";
+                    }
+                });
         }
     }
 
@@ -56,17 +76,24 @@
         </h1>
         <SmartTextField
             title="Email"
+            type="email"
             bind:value={email}
             bind:error={emailError}
         />
         <SmartTextField
             title="Password"
+            type="password"
             bind:value={password}
             bind:error={passwordError}
         />
         <div>
             <button class="login-button btn rounded-lg bg-neutral-300 text-gray-700" on:click={onLogin}>Log in</button>
         </div>
+        {#if error !== null}
+            <div class="text-red-500">
+                {error}
+            </div>
+        {/if}
         <div>
             Don't have a {pageName} account? <button class="switch-to-register-button text-blue-600" on:click={onSwitchToRegister}>Create one</button>
         </div>

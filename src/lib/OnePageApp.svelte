@@ -33,34 +33,7 @@
     /**
      * @param {CustomEvent} event
      */
-    function onRegister(event) {
-        const detail = event.detail;
-
-        console.log("onRegister", detail);
-        console.log("Calling Firebase");
-
-        appCtrl.register(detail.email, detail.password);
-    }
-
-    /**
-     * @param {CustomEvent} event
-     */
-     function onLogin(event) {
-        const detail = event.detail;
-
-        console.log("onLogin", detail);
-        console.log("Calling Firebase");
-
-        appCtrl.login(detail.email, detail.password);
-    }
-
-    /**
-     * @param {CustomEvent} event
-     */
     function onLogout(event) {
-        console.log("onLogout", event.detail);
-        console.log("Calling Firebase");
-
         appCtrl.logout();
     }
 </script>
@@ -69,13 +42,13 @@
         {#if isRegistering}
             <Register
                 pageName={pageName}
-                on:register={onRegister}
+                appCtrl={appCtrl}
                 on:switchToLogin={() => appCtrl.switchToLogin()}
             />
         {:else}
             <Login
                 pageName={pageName}
-                on:login={onLogin}
+                appCtrl={appCtrl}
                 on:switchToRegister={() => appCtrl.switchToRegistering()}
             />
         {/if}
