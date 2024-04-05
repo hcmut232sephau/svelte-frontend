@@ -71,7 +71,7 @@
 </script>
 <div class="card bg-neutral-800 w-128 rounded">
     <div class="card-body">
-        <h1>
+        <h1 class="text-lg font-bold">
             Log into {pageName}
         </h1>
         <SmartTextField
