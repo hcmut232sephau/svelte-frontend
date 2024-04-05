@@ -64,27 +64,31 @@ import { createEventDispatcher } from 'svelte';
         dispatch('switchToLogin', {});
     }
 </script>
-<h1>
-    Create a {pageName} account
-</h1>
-<SmartTextField
-    title="Email"
-    bind:value={email}
-    bind:error={emailError}
-/>
-<SmartTextField
-    title="Password"
-    bind:value={password}
-    bind:error={passwordError}
-/>
-<SmartTextField
-    title="Re-enter password"
-    bind:value={reenteredPassword}
-    bind:error={reenteredPasswordError}
-/>
-<div>
-    <button class="login-button" on:click={onRegister}>Create account</button>
-</div>
-<div>
-    Already have a {pageName} account? <button class="login-button" on:click={onSwitchToLogin}>Log in</button>
+<div class="card bg-neutral-800 w-96 rounded-lg">
+    <div class="card-body">
+        <h1>
+            Create a {pageName} account
+        </h1>
+        <SmartTextField
+            title="Email"
+            bind:value={email}
+            bind:error={emailError}
+        />
+        <SmartTextField
+            title="Password"
+            bind:value={password}
+            bind:error={passwordError}
+        />
+        <SmartTextField
+            title="Re-enter password"
+            bind:value={reenteredPassword}
+            bind:error={reenteredPasswordError}
+        />
+        <div>
+            <button class="login-button btn rounded-lg bg-neutral-300 text-gray-700" on:click={onRegister}>Create account</button>
+        </div>
+        <div>
+            Already have a {pageName} account? <button class="login-button text-blue-600" on:click={onSwitchToLogin}>Log in</button>
+        </div>
+    </div>
 </div>

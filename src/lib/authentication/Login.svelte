@@ -65,7 +65,7 @@
             bind:error={passwordError}
         />
         <div>
-            <button class="login-button btn rounded-lg bg-neutral-700" on:click={onLogin}>Log in</button>
+            <button class="login-button btn rounded-lg bg-neutral-300 text-gray-700" on:click={onLogin}>Log in</button>
         </div>
         <div>
             Don't have a {pageName} account? <button class="switch-to-register-button text-blue-600" on:click={onSwitchToRegister}>Create one</button>
