@@ -20,6 +20,8 @@
     <input type="text" placeholder={title} bind:value={value} class="input input-bordered rounded-md w-full bg-neutral-700">
 
     {#if error !== null}
-        {error}
+        <div class="text-red-500">
+            {error}
+        </div>
     {/if}
 </div>

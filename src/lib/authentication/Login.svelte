@@ -29,12 +29,12 @@
 
         if (email == "") {
             isInputValid = false;
-            emailError = "Cannot leave this empty";
+            emailError = "Cannot leave email empty";
         }
 
         if (password == "") {
             isInputValid = false;
-            passwordError = "Cannot leave this empty";
+            passwordError = "Cannot leave password empty";
         }
 
         if (isInputValid) {
