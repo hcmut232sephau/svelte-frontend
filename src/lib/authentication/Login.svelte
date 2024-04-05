@@ -87,7 +87,7 @@
             bind:error={passwordError}
         />
         <div>
-            <button class="login-button PrimaryButton" on:click={onLogin}>Log in</button>
+            <button class="PrimaryButton" on:click={onLogin}>Log in</button>
         </div>
         {#if error !== null}
             <div class="text-red-500">
