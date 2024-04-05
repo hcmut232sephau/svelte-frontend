@@ -25,7 +25,7 @@
         value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
     };
 </script>
-<div class="smart-text-field w-full ">
+<div class="w-full">
     <input
         type={type}
         placeholder={title}
