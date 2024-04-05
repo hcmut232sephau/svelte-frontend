@@ -21,44 +21,57 @@
     /**
      * @type {String | null}
      */
+    let error = null;
+
+    /**
+     * @type {String | null}
+     */
     let emailError = null;
     /**
      * @type {String | null}
      */
     let passwordError = null;
-    /**
-     * @type {String | null}
-     */
-    let reenteredPasswordError = null;
 
     function onRegister() {
+        error = null;
         emailError = null;
         passwordError = null;
-        reenteredPasswordError = null;
 
         let isInputValid = true;
 
         if (email == "") {
             isInputValid = false;
-            emailError = "Cannot leave this empty";
+            emailError = "Cannot leave email empty";
         }
 
-        if (password == "") {
+        if (password == "" || reenteredPassword == "") {
             isInputValid = false;
-            if (reenteredPassword == "") {
-                passwordError = "Cannot leave these empty";
-            } else {
-                passwordError = "Cannot leave this empty";
-            }
+            passwordError = "Cannot leave password inputs empty";
         }
 
         if (password != reenteredPassword) {
             isInputValid = false;
-            reenteredPasswordError = "Passwords don't match";
+            passwordError = "Passwords don't match";
         }
 
         if (isInputValid) {
-            appCtrl.register(email, password);
+            appCtrl.register(email, password)
+                .catch(err => {
+                    const code = err.code;
+                    // const errorMessage = err.message;
+
+                    if (code == "auth/invalid-email") {
+                        emailError = "Invalid email";
+                    } else if (code == "auth/weak-password") {
+                        password = "Password is too weak";
+                    } else if (code == "auth/email-already-in-use") {
+                        emailError = "Email already used";
+                    } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential") {
+                        password = "Invalid credentals";
+                    } else {
+                        error = "Unknown account creation error. Check your inputs and try again later. (error code " + code + ")";
+                    }
+                });
         }
     }
 
@@ -81,17 +94,22 @@
             title="Password"
             type="password"
             bind:value={password}
-            bind:error={passwordError}
+            error={null}
         />
         <SmartTextField
             title="Re-enter password"
             type="password"
             bind:value={reenteredPassword}
-            bind:error={reenteredPasswordError}
+            bind:error={passwordError}
         />
         <div>
             <button class="login-button btn rounded-lg bg-neutral-300 text-gray-700" on:click={onRegister}>Create account</button>
         </div>
+        {#if error !== null}
+            <div class="text-red-500">
+                {error}
+            </div>
+        {/if}
         <div>
             Already have a {pageName} account? <button class="login-button text-blue-600" on:click={onSwitchToLogin}>Log in</button>
         </div>
