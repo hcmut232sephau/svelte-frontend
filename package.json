@@ -24,6 +24,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"firebase": "^10.9.0"
+		"firebase": "^10.6.0"
 	}
 }
