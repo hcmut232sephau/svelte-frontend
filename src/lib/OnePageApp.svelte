@@ -64,26 +64,28 @@
         appCtrl.logout();
     }
 </script>
-{#if user === null}
-    {#if isRegistering}
-        <Register
-            pageName={pageName}
-            on:register={onRegister}
-            on:switchToLogin={() => appCtrl.switchToLogin()}
+<div class="flex justify-center items-center h-screen bg-neutral-950">
+    {#if user === null}
+        {#if isRegistering}
+            <Register
+                pageName={pageName}
+                on:register={onRegister}
+                on:switchToLogin={() => appCtrl.switchToLogin()}
+            />
+        {:else}
+            <Login
+                pageName={pageName}
+                on:login={onLogin}
+                on:switchToRegister={() => appCtrl.switchToRegistering()}
+            />
+        {/if}
+    {:else if !nonNullAssert(user).emailVerified}
+        <UnverifiedEmail
+            on:logout={onLogout}
         />
     {:else}
-        <Login
-            pageName={pageName}
-            on:login={onLogin}
-            on:switchToRegister={() => appCtrl.switchToRegistering()}
+        <Dashboard
+            on:logout={onLogout}
         />
     {/if}
-{:else if !nonNullAssert(user).emailVerified}
-    <UnverifiedEmail
-        on:logout={onLogout}
-    />
-{:else}
-    <Dashboard
-        on:logout={onLogout}
-    />
-{/if}
+</div>

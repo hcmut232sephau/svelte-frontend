@@ -16,8 +16,8 @@
 
     const dispatch = createEventDispatcher();
 </script>
-<div class="smart-text-field">
-    <input type="text" placeholder={title} bind:value={value}>
+<div class="smart-text-field w-full ">
+    <input type="text" placeholder={title} bind:value={value} class="input input-bordered rounded-md w-full bg-neutral-700">
 
     {#if error !== null}
         {error}
