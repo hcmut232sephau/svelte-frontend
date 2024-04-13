@@ -68,7 +68,10 @@ export class ApplicationController {
      * @param {import("@firebase/auth").User | null} newUser
      */
     onAuthStateChanged(newUser) {
-        if (newUser != null && this.accountType == null) {
+        this.user.set(newUser);
+
+        // Sync account type
+        if (newUser !== null && get(this.accountType) === null) {
             const db = this.firebaseCtrl.db;
             const usersRef = collection(db, "users");
             getDoc(doc(usersRef, newUser.uid)).then(e => {
@@ -81,7 +84,6 @@ export class ApplicationController {
                 return e;
             });
         }
-        this.user.set(newUser);
     }
 
     switchToRegistering() {

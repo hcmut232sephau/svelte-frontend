@@ -1,9 +1,12 @@
 <script>
-
+    /**
+     * @type {String}
+     */
+    export let pageName;
 </script>
 <aside class="h-screen">
     <div class="h-full flex flex-col bg-neutral-800 size-96">
-        <h1 class="p-10 font-bold text-2xl">NeuroFlask</h1>
+        <h1 class="p-10 font-bold text-2xl">{pageName}</h1>
 
         <ul class="flex-1 w-full">
             <slot></slot>
@@ -18,7 +21,7 @@
             </div>
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
-                    <h4 class="font-bold"> User Name</h4>
+                    <h4 class="font-bold">Username</h4>
                     <span class="text-xz text-gray-700">Student</span>
                 </div>
             </div>

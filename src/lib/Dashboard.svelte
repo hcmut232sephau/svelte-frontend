@@ -3,16 +3,17 @@
     import SideBar from './ui/SideBar.svelte';
     import SideBarItem from './ui/SideBarItem.svelte';
 
-    // /**
-    //  * @type {String}
-    //  */
-    // export let pageName;
+    /**
+     * @type {String}
+     */
+    export let pageName;
 
     const dispatch = createEventDispatcher();
 
     function onLogout() {
         dispatch('logout', {});
     }
+
     let courses = [
         "Calculus",
         "Linear Algebra",
@@ -22,15 +23,14 @@
         "Chemistry",
         "Physics"
     ]
-    let selectedCourse = "Calculus"
+
+    let selectedCourse = "Calculus";
 </script>
-<SideBar>
-    {#each courses as course }
+<SideBar pageName={pageName}>
+    {#each courses as course}
         <SideBarItem
-        title = {course}
-        isSelected = {false}
+            title={course}
+            isSelected={false}
         />
-        
     {/each}
-    
 </SideBar>

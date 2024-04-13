@@ -78,6 +78,7 @@
     </div>
 {:else}
     <Dashboard
+        pageName={pageName}
         on:logout={onLogout}
     />
 {/if}
