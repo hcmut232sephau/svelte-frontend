@@ -28,13 +28,23 @@ export class ApplicationController {
      * @type {import("svelte/store").Writable<import("@firebase/auth").User | null>} 
      */
     user;
+
+    /**
+     * @type {import("svelte/store").Writable<boolean | null>} 
+     */
     isRegistering;
+
+    /**
+     * @type {import("svelte/store").Writable<"student" | "teacher" | null>}
+     */
+    accountType;
 
     constructor() {
         this.firebaseCtrl = new FirebaseController();
 
         this.user = writable(null);
         this.isRegistering = writable(false);
+        this.accountType = writable(null);
 
         this.firebaseCtrl.auth.onAuthStateChanged((u) => {
             this.onAuthStateChanged(u);
