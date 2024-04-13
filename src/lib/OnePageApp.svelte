@@ -21,7 +21,7 @@
      */
     let user;
     /**
-     * @type {"student" | "teacher" | "admin" | null}
+     * @type {"student" | "teacher" | null}
      */
     let accountType;
     const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {

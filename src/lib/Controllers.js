@@ -48,7 +48,7 @@ export class ApplicationController {
 
     /**
      * Account state.
-     * @type {import("svelte/store").Writable<"student" | "teacher" | "admin" | null>}
+     * @type {import("svelte/store").Writable<"student" | "teacher" | null>}
      */
     accountType;
 
