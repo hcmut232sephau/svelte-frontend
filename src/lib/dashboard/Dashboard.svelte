@@ -3,6 +3,7 @@
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
     import { ApplicationController } from '$lib/Controllers';
+    import ManageCourse from './ManageCourse.svelte';
 
     /**
      * @type {String}
@@ -32,26 +33,52 @@
         "Chemistry",
         "Physics"
     ];
+    let otherPages = [
+        "Manage Courses",
+    ]
 
-    let selectedCourse = "Calculus";
+    let selectedPage = "Calculus";
 
     /**
      * @param {CustomEvent} event
      */
     function onSidebarSelect(event) {
-        selectedCourse = event.detail;
+        selectedPage = event.detail;
     }
 </script>
+
 <SideBar
     pageName={pageName}
     accountType={accountType}
     on:logout={onLogout}
 >
-    {#each courses as course}
+    {#each otherPages as otherPage}
         <SideBarItem
-            title={course}
-            isSelected={course == selectedCourse}
+            title={otherPage}
+            isSelected={otherPage == selectedPage}
             on:sidebar-select={onSidebarSelect}
         />
     {/each}
+    <li class="mb-7"></li>
+    {#each courses as course}
+        <SideBarItem
+            title={course}
+            isSelected={course == selectedPage}
+            on:sidebar-select={onSidebarSelect}
+            
+        />
+    {/each}
 </SideBar>
+<div class="ml-96">
+    {#if selectedPage == "Manage Courses"}
+        <ManageCourse
+        on:onUpdateCourses={
+            (event)=>{
+                courses = event.detail
+            }
+        }
+        courses = {courses}/>
+    {/if}
+</div>
+
+

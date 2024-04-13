@@ -28,14 +28,13 @@
         dispatch('logout', {});
     }
 </script>
-<aside class="h-screen">
+<aside class="h-screen fixed">
     <div class="h-full flex flex-col bg-neutral-800 size-96">
         <h1 class="p-10 font-bold text-2xl">{pageName}</h1>
-
         <ul class="flex-1 w-full">
             <slot></slot>
         </ul>
-        <div class="flex p-10">
+        <div class="flex px-10 py-3">
             <div class="bg-white p-4 rounded-full">
                 <img
                     src="/user-solid.svg"

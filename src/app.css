@@ -8,3 +8,6 @@
 .CardStyle {
     @apply bg-neutral-800 rounded;
 }
+.AutoFit {
+    grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+}
