@@ -63,11 +63,11 @@
                     if (code == "auth/invalid-email") {
                         emailError = "Invalid email";
                     } else if (code == "auth/weak-password") {
-                        password = "Password is too weak";
+                        passwordError = "Password is too weak";
                     } else if (code == "auth/email-already-in-use") {
                         emailError = "Email already used";
                     } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential") {
-                        password = "Invalid credentals";
+                        passwordError = "Invalid credentals";
                     } else {
                         error = "Unknown account creation error. Check your inputs and try again later. (error code " + code + ")";
                     }

@@ -71,7 +71,9 @@ export class ApplicationController {
         this.user.set(newUser);
 
         // Sync account type
-        if (newUser !== null && get(this.accountType) === null) {
+        if (newUser == null) {
+            this.accountType.set(null);
+        } else if (get(this.accountType) === null) {
             const db = this.firebaseCtrl.db;
             const usersRef = collection(db, "users");
             getDoc(doc(usersRef, newUser.uid)).then(e => {
