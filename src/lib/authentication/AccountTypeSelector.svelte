@@ -13,9 +13,9 @@
 
     const dispatch = createEventDispatcher();
 
-    function selectStudentType() {
-        appCtrl.changeAccountType("student");
-    }
+    // function selectStudentType() {
+    //     appCtrl.changeAccountType("student");
+    // }
 
     function selectTeacherType() {
         appCtrl.changeAccountType("teacher");
@@ -30,9 +30,9 @@
         <h1 class="text-lg font-bold">
             Select your {pageName} account type
         </h1>
-        <div>
+        <!-- <div>
             <button class="PrimaryButton w-full" on:click={selectStudentType}>Student</button>
-        </div>
+        </div> -->
         <div>
             <button class="PrimaryButton w-full" on:click={selectTeacherType}>Teacher</button>
         </div>
