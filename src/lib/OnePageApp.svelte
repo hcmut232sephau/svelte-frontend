@@ -83,6 +83,8 @@
 {:else}
     <Dashboard
         pageName={pageName}
+        appCtrl={appCtrl}
+        accountType={accountType}
         on:logout={onLogout}
     />
 {/if}

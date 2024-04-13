@@ -2,9 +2,25 @@
     import { createEventDispatcher } from 'svelte';
 
     /**
+     * @param {"student" | "teacher"} type
+     */
+    function formatAccountType(type) {
+        switch (type) {
+            case "student": return "Student";
+            case "teacher": return "Teacher";
+        }
+    }
+
+    /**
      * @type {String}
      */
     export let pageName;
+    /**
+     * @type {"student" | "teacher"}
+     */
+    export let accountType;
+
+    $: formattedAccountType = formatAccountType(accountType);
 
     const dispatch = createEventDispatcher();
 
@@ -30,7 +46,7 @@
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
                     <h4 class="font-bold">Username</h4>
-                    <span class="text-xz text-gray-500">Teacher</span>
+                    <span class="text-xz text-gray-500">{formattedAccountType}</span>
                 </div>
             </div>
             <button class="btn ml-auto PrimaryButton" on:click={onLogout}>Log out</button>
