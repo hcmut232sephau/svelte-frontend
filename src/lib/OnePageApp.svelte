@@ -37,8 +37,9 @@
         appCtrl.logout();
     }
 </script>
-<div class="flex justify-center items-center h-screen bg-neutral-950">
-    {#if user === null}
+
+{#if !user === null}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
         {#if isRegistering}
             <Register
                 pageName={pageName}
@@ -52,6 +53,7 @@
                 on:switchToRegister={() => appCtrl.switchToRegistering()}
             />
         {/if}
+    </div>
     <!-- Uncomment below if email verification is needed -->
     <!-- {:else if !nonNullAssert(user).emailVerified}
         <UnverifiedEmail
@@ -61,5 +63,4 @@
         <Dashboard
             on:logout={onLogout}
         />
-    {/if}
-</div>
+{/if}

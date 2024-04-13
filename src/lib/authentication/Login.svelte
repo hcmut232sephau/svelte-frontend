@@ -69,7 +69,7 @@
         dispatch('switchToRegister', {});
     }
 </script>
-<div class="card bg-neutral-800 w-128 rounded">
+<div class="card CardStyle w-256">
     <div class="card-body">
         <h1 class="text-lg font-bold">
             Log into {pageName}

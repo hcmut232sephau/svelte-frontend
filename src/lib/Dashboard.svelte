@@ -1,5 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import SideBar from './ui/SideBar.svelte';
+    import SideBarItem from './ui/SideBarItem.svelte';
 
     // /**
     //  * @type {String}
@@ -11,7 +13,24 @@
     function onLogout() {
         dispatch('logout', {});
     }
+    let courses = [
+        "Calculus",
+        "Linear Algebra",
+        "Operating System",
+        "Advanced Programing",
+        "Computer Architecture",
+        "Chemistry",
+        "Physics"
+    ]
+    let selectedCourse = "Calculus"
 </script>
-<div>
-    <button class="logout-button" on:click={onLogout}>Log out</button>
-</div>
+<SideBar>
+    {#each courses as course }
+        <SideBarItem
+        title = {course}
+        isSelected = {false}
+        />
+        
+    {/each}
+    
+</SideBar>
