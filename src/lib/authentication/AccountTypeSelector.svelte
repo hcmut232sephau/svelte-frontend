@@ -1,5 +1,4 @@
 <script>
-    import SmartTextField from '$lib/ui/SmartTextField.svelte';
     import { ApplicationController } from '$lib/Controllers'
     import { createEventDispatcher } from 'svelte';
 

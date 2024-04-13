@@ -1,12 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, connectAuthEmulator } from "firebase/auth";
+import { collection, connectFirestoreEmulator, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 import { writable, get } from 'svelte/store';
-import { collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 export class FirebaseController {
     constructor() {
+        const useEmulator = false;
+
         const firebaseConfig = {
             apiKey: "AIzaSyD_zMBYqbREwqHXIjl23BJnnYKZgeGTOHM",
             authDomain: "hcmut232sephau.firebaseapp.com",
@@ -21,7 +23,13 @@ export class FirebaseController {
         this.app = initializeApp(firebaseConfig);
         this.analytics = getAnalytics(this.app);
         this.auth = getAuth(this.app);
+        if (useEmulator) {
+            connectAuthEmulator(this.auth, "http://127.0.0.1:9099");
+        }
         this.db = getFirestore(this.app);
+        if (useEmulator) {
+            connectFirestoreEmulator(this.db, "http://127.0.0.1", 8080);
+        }
     }
 }
 
