@@ -28,7 +28,7 @@ export class FirebaseController {
         }
         this.db = getFirestore(this.app);
         if (useEmulator) {
-            connectFirestoreEmulator(this.db, "http://127.0.0.1", 8080);
+            connectFirestoreEmulator(this.db, "127.0.0.1", 8080);
         }
     }
 }
