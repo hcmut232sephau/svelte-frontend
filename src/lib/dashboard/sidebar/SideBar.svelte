@@ -1,8 +1,16 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+
     /**
      * @type {String}
      */
     export let pageName;
+
+    const dispatch = createEventDispatcher();
+
+    function onLogout() {
+        dispatch('logout', {});
+    }
 </script>
 <aside class="h-screen">
     <div class="h-full flex flex-col bg-neutral-800 size-96">
@@ -25,7 +33,7 @@
                     <span class="text-xz text-gray-500">Teacher</span>
                 </div>
             </div>
-            <button class="btn ml-auto PrimaryButton">Log out</button>
+            <button class="btn ml-auto PrimaryButton" on:click={onLogout}>Log out</button>
         </div>
     </div>
 </aside>

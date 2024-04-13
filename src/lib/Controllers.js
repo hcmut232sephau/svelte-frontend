@@ -48,7 +48,7 @@ export class ApplicationController {
 
     /**
      * Account state.
-     * @type {import("svelte/store").Writable<"student" | "teacher" | null>}
+     * @type {import("svelte/store").Writable<"student" | "teacher" | "unselected" | null>}
      */
     accountType;
 
@@ -77,7 +77,7 @@ export class ApplicationController {
             getDoc(doc(usersRef, newUser.uid)).then(e => {
                 const currentAccountType = e.get("accountType");
                 if (currentAccountType === undefined) {
-                    this.accountType.set(null);
+                    this.accountType.set("unselected");
                 } else {
                     this.accountType.set(currentAccountType);
                 }

@@ -1,7 +1,7 @@
 <script>
     import { onDestroy } from "svelte";
     import { ApplicationController } from "./Controllers.js"
-    import Dashboard from "./Dashboard.svelte";
+    import Dashboard from "./dashboard/Dashboard.svelte";
     import { nonNullAssert } from "./TypeTools";
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
@@ -21,7 +21,7 @@
      */
     let user;
     /**
-     * @type {"student" | "teacher" | null}
+     * @type {"student" | "teacher" | "unselected" | null}
      */
     let accountType;
     const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {
@@ -69,6 +69,10 @@
             on:logout={onLogout}
         /> -->
 {:else if accountType === null}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
+        Loading...
+    </div>
+{:else if accountType === "unselected"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector
             pageName={pageName}

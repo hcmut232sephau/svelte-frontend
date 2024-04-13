@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import SideBar from './ui/SideBar.svelte';
-    import SideBarItem from './ui/SideBarItem.svelte';
+    import SideBar from './sidebar/SideBar.svelte';
+    import SideBarItem from './sidebar/SideBarItem.svelte';
 
     /**
      * @type {String}
@@ -26,7 +26,10 @@
 
     let selectedCourse = "Calculus";
 </script>
-<SideBar pageName={pageName}>
+<SideBar
+    pageName={pageName}
+    on:logout={onLogout}
+>
     {#each courses as course}
         <SideBarItem
             title={course}
