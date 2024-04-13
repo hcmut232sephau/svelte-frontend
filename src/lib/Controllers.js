@@ -2,7 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
+import { collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 export class FirebaseController {
     constructor() {
@@ -19,23 +20,27 @@ export class FirebaseController {
         // Initialize Firebase
         this.app = initializeApp(firebaseConfig);
         this.analytics = getAnalytics(this.app);
-        this.auth = getAuth();
+        this.auth = getAuth(this.app);
+        this.db = getFirestore(this.app);
     }
 }
 
 export class ApplicationController {
     /**
+     * Firebase user auth.
      * @type {import("svelte/store").Writable<import("@firebase/auth").User | null>} 
      */
     user;
 
     /**
-     * @type {import("svelte/store").Writable<boolean | null>} 
+     * UI state.
+     * @type {import("svelte/store").Writable<boolean>} 
      */
     isRegistering;
 
     /**
-     * @type {import("svelte/store").Writable<"student" | "teacher" | null>}
+     * Account state.
+     * @type {import("svelte/store").Writable<"student" | "teacher" | "admin" | null>}
      */
     accountType;
 
@@ -55,15 +60,28 @@ export class ApplicationController {
      * @param {import("@firebase/auth").User | null} newUser
      */
     onAuthStateChanged(newUser) {
-        this.user.update((_) => newUser);
+        if (newUser != null && this.accountType == null) {
+            const db = this.firebaseCtrl.db;
+            const usersRef = collection(db, "users");
+            getDoc(doc(usersRef, newUser.uid)).then(e => {
+                const currentAccountType = e.get("accountType");
+                if (currentAccountType === undefined) {
+                    this.accountType.set(null);
+                } else {
+                    this.accountType.set(currentAccountType);
+                }
+                return e;
+            });
+        }
+        this.user.set(newUser);
     }
 
     switchToRegistering() {
-        this.isRegistering.update(() => true);
+        this.isRegistering.set(true);
     }
 
     switchToLogin() {
-        this.isRegistering.update(() => false);
+        this.isRegistering.set(false);
     }
 
     /**
@@ -84,5 +102,28 @@ export class ApplicationController {
 
     async logout() {
         signOut(this.firebaseCtrl.auth);
+    }
+
+    /**
+     * Change the account type by writing to Firestore.
+     * CANNOT be used to change to admin.
+     * @param {"student" | "teacher"} type
+     */
+    async changeAccountType(type) {
+        const user = get(this.user);
+        if (user == null) {
+            return; // ??
+        }
+
+        const db = this.firebaseCtrl.db;
+        const usersRef = collection(db, "users");
+        return await setDoc(doc(usersRef, user.uid), {
+            accountType: type,
+        }).then(e => {
+            this.accountType.set(type);
+            return e;
+        }).catch(e => {
+            console.log(e);
+        });
     }
 }
