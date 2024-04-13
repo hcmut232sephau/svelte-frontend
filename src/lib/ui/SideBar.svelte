@@ -22,7 +22,7 @@
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
                     <h4 class="font-bold">Username</h4>
-                    <span class="text-xz text-gray-700">Student</span>
+                    <span class="text-xz text-gray-500">Student</span>
                 </div>
             </div>
             <button class="btn ml-auto PrimaryButton">Log out</button>
