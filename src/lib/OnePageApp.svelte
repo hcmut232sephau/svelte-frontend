@@ -6,6 +6,7 @@
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
     import UnverifiedEmail from "./authentication/UnverifiedEmail.svelte";
+    import AccountTypeSelector from "./authentication/AccountTypeSelector.svelte";
 
     const pageName = "Neuroflask";
 
@@ -19,15 +20,23 @@
      * @type {import("firebase/auth").User | null}
      */
     let user;
+    /**
+     * @type {"student" | "teacher" | "admin" | null}
+     */
+    let accountType;
     const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {
         isRegistering = val;
     });
     const unsubscribeUser = appCtrl.user.subscribe((val) => {
         user = val;
     });
+    const unsubscribeAccountType = appCtrl.accountType.subscribe((val) => {
+        accountType = val;
+    });
     onDestroy(() => {
         unsubscribeIsRegistering();
         unsubscribeUser();
+        unsubscribeAccountType();
     });
 
     /**
@@ -59,6 +68,12 @@
         <UnverifiedEmail
             on:logout={onLogout}
         /> -->
+    {:else if accountType === null}
+        <AccountTypeSelector
+            pageName={pageName}
+            appCtrl={appCtrl}
+            on:logout={onLogout}
+        />
     {:else}
         <Dashboard
             on:logout={onLogout}
