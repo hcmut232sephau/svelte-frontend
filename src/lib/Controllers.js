@@ -7,7 +7,7 @@ import { writable, get } from 'svelte/store';
 
 export class FirebaseController {
     constructor() {
-        const useEmulator = false;
+        const useEmulator = true;
 
         const firebaseConfig = {
             apiKey: "AIzaSyD_zMBYqbREwqHXIjl23BJnnYKZgeGTOHM",
@@ -130,8 +130,6 @@ export class ApplicationController {
         }).then(e => {
             this.accountType.set(type);
             return e;
-        }).catch(e => {
-            console.log(e);
         });
     }
 }

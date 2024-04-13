@@ -1,6 +1,6 @@
 rules_version = '2';
 
-service firebase.storage {
+service cloud.firestore {
   match /databases/{database}/documents {
   	match /users/{targetUid} {
       allow read: if request.auth != null; // TODO
