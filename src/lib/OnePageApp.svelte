@@ -1,12 +1,13 @@
 <script>
     import { onDestroy } from "svelte";
-    import { ApplicationController } from "./Controllers.js"
+    import { ApplicationController, UserData } from "./Controllers.js"
     import Dashboard from "./dashboard/Dashboard.svelte";
     import { nonNullAssert } from "./TypeTools";
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
     import UnverifiedEmail from "./authentication/UnverifiedEmail.svelte";
     import AccountTypeSelector from "./authentication/AccountTypeSelector.svelte";
+    import UsernameSelector from "./authentication/UsernameSelector.svelte";
 
     const pageName = "Neuroflask";
 
@@ -21,22 +22,22 @@
      */
     let user;
     /**
-     * @type {"student" | "teacher" | "unselected" | null}
+     * @type {UserData | null}
      */
-    let accountType;
+    let userData;
     const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {
         isRegistering = val;
     });
     const unsubscribeUser = appCtrl.user.subscribe((val) => {
         user = val;
     });
-    const unsubscribeAccountType = appCtrl.accountType.subscribe((val) => {
-        accountType = val;
+    const unsubscribeUserData = appCtrl.userData.subscribe((val) => {
+        userData = val;
     });
     onDestroy(() => {
         unsubscribeIsRegistering();
         unsubscribeUser();
-        unsubscribeAccountType();
+        unsubscribeUserData();
     });
 
     /**
@@ -68,13 +69,21 @@
         <UnverifiedEmail
             on:logout={onLogout}
         /> -->
-{:else if accountType === null}
+{:else if userData === null}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         Loading...
     </div>
-{:else if accountType === "unselected"}
+{:else if userData.accountType === "unselected"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector
+            pageName={pageName}
+            appCtrl={appCtrl}
+            on:logout={onLogout}
+        />
+    </div>
+{:else if userData.username === ""}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
+        <UsernameSelector
             pageName={pageName}
             appCtrl={appCtrl}
             on:logout={onLogout}
@@ -84,7 +93,7 @@
     <Dashboard
         pageName={pageName}
         appCtrl={appCtrl}
-        accountType={accountType}
+        userData={userData}
         on:logout={onLogout}
     />
 {/if}

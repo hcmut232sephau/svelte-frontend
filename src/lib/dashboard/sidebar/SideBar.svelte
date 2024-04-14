@@ -1,13 +1,15 @@
 <script>
+    import { UserData } from '$lib/Controllers';
     import { createEventDispatcher } from 'svelte';
 
     /**
-     * @param {"student" | "teacher"} type
+     * @param {"student" | "teacher" | "unselected"} type
      */
     function formatAccountType(type) {
         switch (type) {
             case "student": return "Student";
             case "teacher": return "Teacher";
+            case "unselected": return "Unselected";
         }
     }
 
@@ -16,11 +18,11 @@
      */
     export let pageName;
     /**
-     * @type {"student" | "teacher"}
+     * @type {UserData}
      */
-    export let accountType;
+    export let userData;
 
-    $: formattedAccountType = formatAccountType(accountType);
+    $: formattedAccountType = formatAccountType(userData.accountType);
 
     const dispatch = createEventDispatcher();
 
@@ -44,7 +46,7 @@
             </div>
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
-                    <h4 class="font-bold">Username</h4>
+                    <h4 class="font-bold">{userData.username}</h4>
                     <span class="text-xz text-gray-500">{formattedAccountType}</span>
                 </div>
             </div>

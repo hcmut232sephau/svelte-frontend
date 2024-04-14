@@ -9,7 +9,12 @@ service cloud.firestore {
     match /users/{targetUid} {
       allow create, update: if request.auth != null
                             && targetUid == request.auth.uid
-                            && (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher");
+                            && (
+                              (!("accountType" in request.resource.data)
+                               || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
+                              && (!("username" in request.resource.data)
+                               || (request.resource.data.username != "" || request.resource.data.username.length <= 72))
+                            );
 
       allow delete: if false; // TODO
     }

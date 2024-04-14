@@ -2,7 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
-    import { ApplicationController } from '$lib/Controllers';
+    import { ApplicationController, UserData } from '$lib/Controllers';
     import ManageCourse from './ManageCourse.svelte';
     import { SideBarEntry } from './sidebar/States';
 
@@ -15,9 +15,9 @@
      */
     export let appCtrl;
     /**
-     * @type {"student" | "teacher"}
+     * @type {UserData}
      */
-    export let accountType;
+    export let userData;
 
     const dispatch = createEventDispatcher();
 
@@ -53,7 +53,7 @@
 
 <SideBar
     pageName={pageName}
-    accountType={accountType}
+    userData={userData}
     on:logout={onLogout}
 >
     {#each otherPages as otherPage}
