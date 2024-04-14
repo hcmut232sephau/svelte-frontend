@@ -1,5 +1,5 @@
 <script>
-    import {Card, Button, Input} from 'flowbite-svelte'
+    import { Card, Button, Input } from 'flowbite-svelte';
     import { createEventDispatcher } from 'svelte';
     let dispatch = createEventDispatcher()
     /**

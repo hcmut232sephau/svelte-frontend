@@ -56,7 +56,7 @@
         <SideBarItem
             title={otherPage}
             isSelected={otherPage == selectedPage}
-            on:sidebar-select={onSidebarSelect}
+            on:sidebarSelect={onSidebarSelect}
         />
     {/each}
     <li class="mb-7"></li>
@@ -64,7 +64,7 @@
         <SideBarItem
             title={course}
             isSelected={course == selectedPage}
-            on:sidebar-select={onSidebarSelect}
+            on:sidebarSelect={onSidebarSelect}
             
         />
     {/each}

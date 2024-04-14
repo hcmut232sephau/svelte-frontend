@@ -13,7 +13,7 @@
     const dispatch = createEventDispatcher();
 
     function onSelect() {
-        dispatch('sidebar-select', title);
+        dispatch('sidebarSelect', title);
     }
 </script>
 <li>
