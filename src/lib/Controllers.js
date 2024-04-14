@@ -7,7 +7,7 @@ import { writable, get } from 'svelte/store';
 
 export class FirebaseController {
     constructor() {
-        const useEmulator = true;
+        const useEmulator = false;
 
         const firebaseConfig = {
             apiKey: "AIzaSyD_zMBYqbREwqHXIjl23BJnnYKZgeGTOHM",
