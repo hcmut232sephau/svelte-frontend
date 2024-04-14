@@ -7,14 +7,6 @@ export default {
       'serif': ['ui-serif'],
       'mono': ['ui-monospace'],
     },
-    extend: {},
-  },
-  plugins: [require("daisyui"), require('flowbite/plugin')],
-  darkMode: 'class',
-  daisyui: {
-    themes: ["light", "dark", "cupcake", "black"],
-  },
-  theme: {
     extend: {
       colors: {
         // flowbite-svelte
@@ -31,7 +23,11 @@ export default {
           900: '#A5371B'
         }
       }
-    }
-  }
+    },
+  },
+  plugins: [require("daisyui"), require('flowbite/plugin')],
+  darkMode: 'class',
+  daisyui: {
+    themes: ["light", "dark", "cupcake", "black"],
+  },
 }
-
