@@ -28,7 +28,7 @@
             <Card 
                 class="bg-neutral-700 text-white border-none " 
                 padding="sm">
-                {course}
+                {course.title}
             </Card>
             <Button 
             class="ml-auto my-auto ml-2 p-5" 
@@ -37,7 +37,7 @@
                 courses = courses.filter((value)=>{
                     return value !== course;
                 })
-                dispatch("onUpdateCourses", courses)
+                dispatch("onUpdateCourses", courses);
             }}>
                 <img 
                 src="/trash-solid.svg" 
