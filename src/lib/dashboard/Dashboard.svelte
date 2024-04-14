@@ -4,6 +4,7 @@
     import SideBarItem from './sidebar/SideBarItem.svelte';
     import { ApplicationController } from '$lib/Controllers';
     import ManageCourse from './ManageCourse.svelte';
+    import { SideBarEntry } from './sidebar/States';
 
     /**
      * @type {String}
@@ -24,20 +25,23 @@
         dispatch('logout', {});
     }
 
+    let calculusEntry = new SideBarEntry("Calculus");
     let courses = [
-        "Calculus",
-        "Linear Algebra",
-        "Operating System",
-        "Advanced Programing",
-        "Computer Architecture",
-        "Chemistry",
-        "Physics"
+        calculusEntry,
+        new SideBarEntry("Linear Algebra"),
+        new SideBarEntry("Operating System"),
+        new SideBarEntry("Advanced Programing"),
+        new SideBarEntry("Computer Architecture"),
+        new SideBarEntry("Chemistry"),
+        new SideBarEntry("Physics")
     ];
+
+    let manageCoursesEntry = new SideBarEntry("Manage Courses");
     let otherPages = [
-        "Manage Courses",
+        manageCoursesEntry,
     ]
 
-    let selectedPage = "Calculus";
+    let selectedPage = calculusEntry;
 
     /**
      * @param {CustomEvent} event
@@ -54,7 +58,7 @@
 >
     {#each otherPages as otherPage}
         <SideBarItem
-            title={otherPage}
+            entry={otherPage}
             isSelected={otherPage == selectedPage}
             on:sidebarSelect={onSidebarSelect}
         />
@@ -62,7 +66,7 @@
     <li class="mb-7"></li>
     {#each courses as course}
         <SideBarItem
-            title={course}
+            entry={course}
             isSelected={course == selectedPage}
             on:sidebarSelect={onSidebarSelect}
             
@@ -70,14 +74,15 @@
     {/each}
 </SideBar>
 <div class="ml-96">
-    {#if selectedPage == "Manage Courses"}
+    {#if selectedPage == manageCoursesEntry}
         <ManageCourse
-        on:onUpdateCourses={
-            (event)=>{
-                courses = event.detail
+            on:onUpdateCourses={
+                (event)=>{
+                    courses = event.detail
+                }
             }
-        }
-        courses = {courses}/>
+            courses={courses}
+        />
     {/if}
 </div>
 

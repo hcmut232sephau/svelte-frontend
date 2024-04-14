@@ -34,7 +34,7 @@
         <ul class="flex-1 w-full">
             <slot></slot>
         </ul>
-        <div class="flex px-10 py-3">
+        <div class="flex px-10 py-10">
             <div class="bg-white p-4 rounded-full">
                 <img
                     src="/user-solid.svg"

@@ -1,9 +1,10 @@
 <script>
     import { Card, Button, Input } from 'flowbite-svelte';
     import { createEventDispatcher } from 'svelte';
+    import { SideBarEntry } from './sidebar/States';
     let dispatch = createEventDispatcher()
     /**
-     * @type {string[]}
+     * @type {SideBarEntry[]}
      */
     export let courses;
     let newCourse = '';
@@ -18,7 +19,7 @@
             <Button 
             class="ml-2"
             on:click={()=>{
-                courses.push(newCourse);
+                courses.push(new SideBarEntry(newCourse));
                 dispatch("onUpdateCourses", courses)
             }}>Add</Button>
         </div>
