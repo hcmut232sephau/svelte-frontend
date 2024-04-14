@@ -47,7 +47,7 @@
     }
 </script>
 
-{#if !user === null}
+{#if user === null}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         {#if isRegistering}
             <Register
@@ -68,7 +68,7 @@
         <UnverifiedEmail
             on:logout={onLogout}
         /> -->
-{:else if !accountType === null}
+{:else if accountType === null}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         Loading...
     </div>
