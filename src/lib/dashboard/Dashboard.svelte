@@ -7,6 +7,7 @@
     import { SideBarEntry } from './sidebar/States';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
+    import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons'
 
     /**
      * @type {String}
@@ -72,7 +73,14 @@
     userData={userData}
 >
     <SideBarSectionHeader on:click={onCourseShowToggle}>
-        Courses
+        <div class="div flex">
+            <span class="font-bold">Courses</span>
+            {#if !showCourses}
+                <AngleRightOutline class="ml-auto"/>
+            {:else}
+                <AngleDownOutline class="ml-auto"/>
+            {/if}
+        </div>
     </SideBarSectionHeader>
     {#if showCourses}
         {#each courses as course}
