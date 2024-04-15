@@ -19,8 +19,18 @@
 </script>
 <li>
     {#if isSelected}
-        <button on:click={onSelect} class="bg-neutral-300 text-gray-700 w-full py-2 px-10 text-left">{entry.title}</button>
+        <button on:click={onSelect} class="bg-neutral-300 text-gray-700 w-full py-2 px-10 text-left">
+            <div class="flex">
+                <slot></slot>
+                {entry.title}
+            </div>
+        </button>
     {:else}
-        <button on:click={onSelect} class="w-full py-2 px-10 text-left text-white">{entry.title}</button>
+        <button on:click={onSelect} class="w-full py-2 px-10 text-left text-white">
+            <div class="flex ">
+                <slot></slot>
+                {entry.title}
+            </div>
+        </button>
     {/if}
 </li>
