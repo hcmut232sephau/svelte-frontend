@@ -105,8 +105,6 @@ export class ApplicationController {
      * @param {import("@firebase/auth").User | null} newUser
      */
     onAuthStateChanged(newUser) {
-        
-        // Sync account type
         if (newUser === null) {
             this.user.set("loggedOut");
             this.userData.set(null);

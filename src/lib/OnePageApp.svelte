@@ -48,9 +48,9 @@
     }
 </script>
 
-{#if (user === null) || ((user !== "loggedOut") && (userData === null))}
+{#if user === null}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
-        Loading...
+        Authenticating...
     </div>
 {:else if user === "loggedOut"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
@@ -73,6 +73,10 @@
         <UnverifiedEmail
             on:logout={onLogout}
         /> -->
+{:else if userData === null}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
+        Loading...
+    </div>
 {:else if userData.accountType === "unselected"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector
