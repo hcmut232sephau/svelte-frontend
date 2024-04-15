@@ -18,7 +18,7 @@
      */
     let isRegistering;
     /**
-     * @type {import("firebase/auth").User | null}
+     * @type {import("firebase/auth").User | "loggedOut" | null}
      */
     let user;
     /**
@@ -48,7 +48,11 @@
     }
 </script>
 
-{#if user === null}
+{#if (user === null) || (userData === null)}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
+        Loading...
+    </div>
+{:else if user === "loggedOut"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         {#if isRegistering}
             <Register
@@ -69,10 +73,6 @@
         <UnverifiedEmail
             on:logout={onLogout}
         /> -->
-{:else if userData === null}
-    <div class="flex justify-center items-center h-screen bg-neutral-950">
-        Loading...
-    </div>
 {:else if userData.accountType === "unselected"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector

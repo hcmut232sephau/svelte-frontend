@@ -29,28 +29,6 @@
                 Add
             </Button>
         </div>
-        {#each courses as course}
-        <div class="flex my-2">
-            <Card 
-                class="bg-neutral-700 text-white border-none" 
-                padding="sm"
-            >
-                {course.title}
-            </Card>
-            <Button 
-                class="ml-auto my-auto ml-2 p-5" 
-                size="xs"
-                on:click={() => {
-                    courses = courses.filter(value => {
-                        return value !== course;
-                    });
-                    dispatch("onUpdateCourses", courses);
-                }}
-            >
-                <img src="/icons/trash-solid.svg" class="w-4 h-4" alt="">
-            </Button>
-        </div>
-        {/each}
     </Card>
 </div>
 

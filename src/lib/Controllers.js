@@ -73,7 +73,7 @@ export class UserData {
 export class ApplicationController {
     /**
      * Firebase user auth.
-     * @type {import("svelte/store").Writable<import("@firebase/auth").User | null>} 
+     * @type {import("svelte/store").Writable<import("@firebase/auth").User | "loggedOut" | null>} 
      */
     user;
 
@@ -105,12 +105,13 @@ export class ApplicationController {
      * @param {import("@firebase/auth").User | null} newUser
      */
     onAuthStateChanged(newUser) {
-        this.user.set(newUser);
-
+        
         // Sync account type
         if (newUser === null) {
+            this.user.set("loggedOut");
             this.userData.set(null);
         } else {
+            this.user.set(newUser);
             let currentUserData = get(this.userData);
             if (currentUserData === null) {
                 const db = this.firebaseCtrl.db;
@@ -180,8 +181,8 @@ export class ApplicationController {
      */
     async changeAccountType(type) {
         const user = get(this.user);
-        if (user == null) {
-            return; // ??
+        if ((user === null) || (user == "loggedOut")) {
+            return; // ??!!
         }
 
         const db = this.firebaseCtrl.db;
@@ -212,7 +213,7 @@ export class ApplicationController {
      */
     async setUsername(name) {
         const user = get(this.user);
-        if (user == null) {
+        if ((user === null) || (user == "loggedOut")) {
             return; // ??
         }
 

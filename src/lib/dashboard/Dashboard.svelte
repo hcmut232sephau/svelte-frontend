@@ -3,7 +3,7 @@
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
     import { ApplicationController, UserData } from '$lib/Controllers';
-    import ManageCourse from './ManageCourse.svelte';
+    import ManageCourse from './AddCourse.svelte';
     import { SideBarEntry } from './sidebar/States';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
