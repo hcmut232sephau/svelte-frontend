@@ -11,16 +11,12 @@ service cloud.firestore {
       return ("accountType" in data)
              && ("username" in data);
     }
-
-    // Reading user data
-    // There's no sensitive info yet so anyone logged in can read any other account.
-  	match /users/{targetUid} {
-      allow read: if request.auth != null;
-    }
-
-    // Writing user data
-    // Can only be done by the same user.
+    
     match /users/{targetUid} {
+      // There's no sensitive info yet so anyone logged in can read any other account.
+      allow read: if request.auth != null;
+
+      // Can only be done by the same user.
       allow create, update: if request.auth != null
                             && targetUid == request.auth.uid
                             && (
@@ -33,16 +29,6 @@ service cloud.firestore {
       allow delete: if false; // TODO: implement account deletion
     }
 
-    // Reading courses
-    match /courses/{targetCourseId} {
-      allow read: if request.auth != null
-                  && userHasUserData()
-                  && userHasFullUserData()
-                  && (request.auth.uid in resource.data.teachers);
-    }
-
-    // Writing courses
-    // TODO
     match /courses/{targetCourseId} {
       function isTeacher() {
         let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
@@ -55,6 +41,11 @@ service cloud.firestore {
                && (request.auth.uid in courseData.teachers);
       }
 
+      allow read: if request.auth != null
+                  && userHasUserData()
+                  && userHasFullUserData()
+                  && (request.auth.uid in resource.data.teachers);
+
       allow create: if request.auth != null
                     && userHasUserData()
                     && userHasFullUserData()
@@ -63,6 +54,8 @@ service cloud.firestore {
                     && request.resource.data.courseCode != "" && request.resource.data.courseCode.size() <= 10
                     && "courseName" in request.resource.data
                     && request.resource.data.courseName != "" && request.resource.data.courseName.size() <= 72
+                    && "owner" in request.resource.data
+                    && request.auth.uid == request.resource.data.owner
                     && "teachers" in request.resource.data
                     && request.resource.data.teachers.size() == 1
                     && request.auth.uid in request.resource.data.teachers;
@@ -70,7 +63,12 @@ service cloud.firestore {
                     && userHasUserData()
                     && userHasFullUserData()
                     && isTeacher()
-                    && isIncludedInTeachers();
+                    && isIncludedInTeachers()
+                    && (
+                      !("owner" in request.resource.data)
+                      || (request.auth.uid == resource.data.owner)
+                    );
+      allow delete: if request.auth.uid == resource.data.owner;
     }
   }
 }

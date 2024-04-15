@@ -6,7 +6,7 @@ import { reinterpretCast } from "./TypeTools";
 export class CourseController {
     /**
      * Courses visible to this user.
-     * @type {import("svelte/store").Writable<{ courseCode: string, courseName: string, students: string[], teachers: string[] }[] | null>}
+     * @type {import("svelte/store").Writable<{ courseCode: string, courseName: string, owner: string, students: string[], teachers: string[] }[] | null>}
      */
     courses;
 
@@ -27,7 +27,7 @@ export class CourseController {
     }
 
     /**
-     * @returns {Promise<{ courseCode: string, courseName: string, students: string[], teachers: string[] }[]>}
+     * @returns {Promise<{ courseCode: string, courseName: string, owner: string, students: string[], teachers: string[] }[]>}
      */
     async #getCourses() {
         const user = get(this.authCtrl.user);
@@ -70,6 +70,7 @@ export class CourseController {
         const data = {
             courseCode: courseCode,
             courseName: courseName,
+            owner: uid,
             teachers: [uid],
             students: [],
         };
