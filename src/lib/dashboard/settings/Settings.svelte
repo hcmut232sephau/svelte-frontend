@@ -42,7 +42,7 @@
     </Card>
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
-            class="ml-2"
+            class="ml-2 bg-red-800"
             on:click={onLogout}
         >
             Log out
