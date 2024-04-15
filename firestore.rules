@@ -2,6 +2,16 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function userHasUserData() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function userHasFullUserData() {
+      let data = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return ("accountType" in data)
+             && ("username" in data);
+    }
+
     // Reading user data
     // There's no sensitive info yet so anyone logged in can read any other account.
   	match /users/{targetUid} {
@@ -17,7 +27,7 @@ service cloud.firestore {
                               (!("accountType" in request.resource.data)
                                || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
                               && (!("username" in request.resource.data)
-                               || !(request.resource.data.username == "" || request.resource.data.username.length > 72))
+                               || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
                             );
 
       allow delete: if false; // TODO: implement account deletion
@@ -25,19 +35,10 @@ service cloud.firestore {
 
     // Reading courses
     match /courses/{targetCourseId} {
-      function checkCourseRead() {
-        let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-        let courseData = get(/databases/$(database)/documents/courses/$(targetCourseId)).data;
-        return ("accountType" in userData)
-               && ("teachers" in courseData)
-               && (
-                 (userData.accountType == "teacher" && request.auth.uid in courseData.teachers)
-                 || (userData.accountType == "student" && request.auth.uid in courseData.students)
-               );
-      }
-
       allow read: if request.auth != null
-                  && checkCourseRead();
+                  && userHasUserData()
+                  && userHasFullUserData()
+                  && (request.auth.uid in resource.data.teachers);
     }
 
     // Writing courses
@@ -45,32 +46,31 @@ service cloud.firestore {
     match /courses/{targetCourseId} {
       function isTeacher() {
         let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-        return ("accountType" in userData)
-               && (userData.accountType == "teacher");
+        return userData.accountType == "teacher";
       }
 
-      function isIncludedTeacher() {
-        let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      function isIncludedInTeachers() {
         let courseData = get(/databases/$(database)/documents/courses/$(targetCourseId)).data;
-        return ("accountType" in userData)
-               && (userData.accountType == "teacher")
-               && ("teachers" in courseData)
-               && (request.auth.id in courseData.teachers);
+        return ("teachers" in courseData)
+               && (request.auth.uid in courseData.teachers);
       }
 
       allow create: if request.auth != null
+                    && userHasUserData()
+                    && userHasFullUserData()
                     && isTeacher()
                     && "courseCode" in request.resource.data
-                    && request.resource.data.courseCode != "" && request.resource.data.courseCode.length <= 10
+                    && request.resource.data.courseCode != "" && request.resource.data.courseCode.size() <= 10
                     && "courseName" in request.resource.data
-                    && request.resource.data.courseName != "" && request.resource.data.courseName.length <= 72
+                    && request.resource.data.courseName != "" && request.resource.data.courseName.size() <= 72
                     && "teachers" in request.resource.data
-                    && request.resource.data.teachers.length == 1
-                    && request.auth.id in request.resource.data.teachers
-                    && "students" in request.resource.data
-                    && request.resource.data.teachers.length == 0;
+                    && request.resource.data.teachers.size() == 1
+                    && request.auth.uid in request.resource.data.teachers;
       allow update: if request.auth != null
-                    && isIncludedTeacher();
+                    && userHasUserData()
+                    && userHasFullUserData()
+                    && isTeacher()
+                    && isIncludedInTeachers();
     }
   }
 }
