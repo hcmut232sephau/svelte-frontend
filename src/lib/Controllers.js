@@ -173,7 +173,6 @@ export class AuthenticationController {
 
     /**
      * Change the account type by writing to Firestore.
-     * CANNOT be used to change to admin.
      * @param {"student" | "teacher"} type
      */
     async changeAccountType(type) {
@@ -205,7 +204,6 @@ export class AuthenticationController {
 
     /**
      * Change the account username.
-     * CANNOT be used to change to admin.
      * @param {string} name
      */
     async setUsername(name) {
