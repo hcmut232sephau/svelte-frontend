@@ -84,11 +84,14 @@
     </SideBarSectionHeader>
     {#if showCourses}
         {#each courses as course}
-            <SideBarItem
-                entry={course}
-                isSelected={course == selectedPage}
-                on:sidebarSelect={onSidebarSelect}
-            />
+            <div class="ml-4">
+                <SideBarItem
+                    entry={course}
+                    isSelected={course == selectedPage}
+                    on:sidebarSelect={onSidebarSelect}
+                
+                />
+            </div>
         {/each}
     {/if}
     <li class="mb-7"></li>
