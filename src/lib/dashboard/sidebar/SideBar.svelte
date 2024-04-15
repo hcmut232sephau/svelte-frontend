@@ -31,7 +31,7 @@
     }
 </script>
 <aside class="h-screen fixed">
-    <div class="h-full flex flex-col bg-neutral-800 size-96">
+    <div class="h-full flex flex-col bg-neutral-800 max-w-96 w-[30vw] ">
         <h1 class="p-10 font-bold text-2xl">{pageName}</h1>
         <ul class="flex-1 w-full">
             <slot></slot>

@@ -103,21 +103,25 @@
         />
     {/each}
 </SideBar>
-<div class="ml-96">
-    {#if selectedPage == courseAdderEntry}
-        <ManageCourse
-            on:onUpdateCourses={event => {
-                    courses = event.detail
-            }}
-            courses={courses}
-        />
-    {:else if selectedPage == settingsEntry}
-        <Settings
-            authCtrl={authCtrl}
-            userData={userData}
-            on:logout={onLogout}
-        />
-    {/if}
+<div class="flex">
+    
+    <div class="div max-w-96 w-[30vw]"/>
+        <div class="mx-auto">
+            {#if selectedPage == courseAdderEntry}
+                <ManageCourse
+                    on:onUpdateCourses={event => {
+                            courses = event.detail
+                    }}
+                    courses={courses}
+                />
+            {:else if selectedPage == settingsEntry}
+                <Settings
+                    authCtrl={authCtrl}
+                    userData={userData}
+                    on:logout={onLogout}
+                />
+            {/if}
+        </div>
 </div>
 
 

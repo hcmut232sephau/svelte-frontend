@@ -25,12 +25,12 @@
         Username
             <div class="flex my-2">
             <Input
-                class="bg-neutral-700 text-white mr-3"
+                class="bg-neutral-700 text-white mr-3 max-w-64"
                 placeholder="Username"
                 bind:value={username}
             />
             <Button 
-                class="mr-60"
+                class=""
                 on:click={() => {
                     authCtrl.setUsername(username);
                     // TODO: input verification
