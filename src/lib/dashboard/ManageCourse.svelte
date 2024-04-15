@@ -39,9 +39,7 @@
                 })
                 dispatch("onUpdateCourses", courses);
             }}>
-                <img 
-                src="/trash-solid.svg" 
-                class="w-4 h-4 " alt="">
+                <img src="/icons/trash-solid.svg" class="w-4 h-4" alt="">
             </Button>
         </div>
         {/each}

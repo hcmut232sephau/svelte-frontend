@@ -38,11 +38,7 @@
         </ul>
         <div class="flex px-10 py-10">
             <div class="bg-white p-4 rounded-full">
-                <img
-                    src="/user-solid.svg"
-                    class="w-5 h-5 rounded-md"
-                    alt = ""
-                />
+                <img src="/icons/user-solid.svg" class="w-5 h-5 rounded-md" alt = ""/>
             </div>
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
