@@ -95,8 +95,8 @@
             >
                 <div class="div w-5">
                     <span class="font-black text-gray-500 text-xs">{course.courseCode}</span>
-                    {course.courseName}
                 </div>
+                {course.courseName}
             </SideBarItem>
         {/each}
     {/if}
@@ -115,11 +115,8 @@
     <div class="div max-w-96 w-[30vw]"/>
     <div class="mx-auto">
         {#if selectedPage == courseAdderEntry}
-            <ManageCourse
-                on:onUpdateCourses={event => {
-                        courses = event.detail
-                }}
-                courses={courses}
+            <AddCourse
+                courseCtrl={courseCtrl}
             />
         {:else if selectedPage == settingsEntry}
             <Settings
