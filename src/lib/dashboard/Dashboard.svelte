@@ -5,6 +5,8 @@
     import { ApplicationController, UserData } from '$lib/Controllers';
     import ManageCourse from './ManageCourse.svelte';
     import { SideBarEntry } from './sidebar/States';
+    import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
+    import Settings from './settings/Settings.svelte';
 
     /**
      * @type {String}
@@ -25,6 +27,8 @@
         dispatch('logout', {});
     }
 
+    let showCourses = true;
+
     let calculusEntry = new SideBarEntry("Calculus");
     let courses = [
         calculusEntry,
@@ -36,10 +40,12 @@
         new SideBarEntry("Physics")
     ];
 
-    let manageCoursesEntry = new SideBarEntry("Manage Courses");
+    let courseAdderEntry = new SideBarEntry("Add course");
+    let settingsEntry = new SideBarEntry("Settings");
     let otherPages = [
-        manageCoursesEntry,
-    ]
+        courseAdderEntry,
+        settingsEntry
+    ];
 
     let selectedPage = calculusEntry;
 
@@ -48,14 +54,36 @@
      */
     function onSidebarSelect(event) {
         selectedPage = event.detail;
+        if (courses.includes(selectedPage)) {
+            showCourses = true;
+        }
+    }
+
+    /**
+     * @param {CustomEvent} event
+     */
+    function onCourseShowToggle(event) {
+        showCourses = !showCourses;
     }
 </script>
 
 <SideBar
     pageName={pageName}
     userData={userData}
-    on:logout={onLogout}
 >
+    <SideBarSectionHeader on:click={onCourseShowToggle}>
+        Courses
+    </SideBarSectionHeader>
+    {#if showCourses}
+        {#each courses as course}
+            <SideBarItem
+                entry={course}
+                isSelected={course == selectedPage}
+                on:sidebarSelect={onSidebarSelect}
+            />
+        {/each}
+    {/if}
+    <li class="mb-7"></li>
     {#each otherPages as otherPage}
         <SideBarItem
             entry={otherPage}
@@ -63,25 +91,20 @@
             on:sidebarSelect={onSidebarSelect}
         />
     {/each}
-    <li class="mb-7"></li>
-    {#each courses as course}
-        <SideBarItem
-            entry={course}
-            isSelected={course == selectedPage}
-            on:sidebarSelect={onSidebarSelect}
-            
-        />
-    {/each}
 </SideBar>
 <div class="ml-96">
-    {#if selectedPage == manageCoursesEntry}
+    {#if selectedPage == courseAdderEntry}
         <ManageCourse
-            on:onUpdateCourses={
-                (event)=>{
+            on:onUpdateCourses={event => {
                     courses = event.detail
-                }
-            }
+            }}
             courses={courses}
+        />
+    {:else if selectedPage == settingsEntry}
+        <Settings
+            appCtrl={appCtrl}
+            userData={userData}
+            on:logout={onLogout}
         />
     {/if}
 </div>

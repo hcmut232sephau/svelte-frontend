@@ -46,7 +46,6 @@
                     <span class="text-xz text-gray-500">{formattedAccountType}</span>
                 </div>
             </div>
-            <button class="btn ml-auto PrimaryButton" on:click={onLogout}>Log out</button>
         </div>
     </div>
 </aside>
