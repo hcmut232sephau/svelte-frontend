@@ -1,7 +1,7 @@
 <script>
-    import { AuthenticationController, UserData } from '$lib/Controllers';
-    import { Card, Button, Input } from 'flowbite-svelte';
+    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
+    import { Card, Button, Input } from 'flowbite-svelte';
 
     /**
      * @type {AuthenticationController}
@@ -40,7 +40,6 @@
             </Button>
         </div>
     </Card>
-
     <Card class="bg-neutral-800 border-none mx-auto mt-10">
         <Button 
             class="ml-2"

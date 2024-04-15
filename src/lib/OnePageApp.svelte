@@ -1,6 +1,7 @@
 <script>
     import { onDestroy } from "svelte";
-    import { AuthenticationController, FirebaseController, UserData } from "./Controllers.js"
+    import { FirebaseController } from "./FirebaseController.js";
+    import { AuthenticationController, UserData } from "./AuthenticationController.js"
     import Dashboard from "./dashboard/Dashboard.svelte";
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";

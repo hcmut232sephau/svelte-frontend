@@ -1,6 +1,6 @@
 <script>
-    import { AuthenticationController } from '$lib/Controllers'
-    import { createEventDispatcher } from 'svelte';
+    import { Authenticatiimport { AuthenticationController } from "$lib/AuthenticationController";
+entDispatcher } from 'svelte';
 
     /**
      * @type {String}

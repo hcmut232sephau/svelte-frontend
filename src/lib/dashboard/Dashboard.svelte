@@ -1,10 +1,10 @@
 <script>
+    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
+    import { SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
-    import { AuthenticationController, UserData } from '$lib/Controllers';
     import ManageCourse from './AddCourse.svelte';
-    import { SideBarEntry } from './sidebar/States';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
 

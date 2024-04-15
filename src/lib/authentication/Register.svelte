@@ -1,7 +1,7 @@
 <script>
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
-    import { AuthenticationController } from '$lib/Controllers'
-    import { createEventDispatcher } from 'svelte';
+    import { Authentiimport { AuthenticationController } from "$lib/AuthenticationController";
+teEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
