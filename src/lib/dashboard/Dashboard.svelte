@@ -55,7 +55,6 @@
             courses = null;
         } else {
             courses = val.map(e => {
-                console.log(e);
                 return new SideBarCourseEntry(e.courseCode, e.courseName);
             });
         }

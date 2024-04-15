@@ -57,8 +57,6 @@ export class CourseController {
      * @param {string} courseName
      */
     async addCourseAsTeacher(courseCode, courseName) {
-        console.log("adding course ", courseCode, courseName);
-
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);
         if ((user === null) || (user == "loggedOut") || (userData === null)) {
