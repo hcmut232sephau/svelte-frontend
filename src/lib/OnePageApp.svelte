@@ -13,10 +13,8 @@
     let firebaseCtrl = new FirebaseController();
     let authCtrl = new AuthenticationController(firebaseCtrl);
 
-    /**
-     * @type {boolean}
-     */
-    let isRegistering;
+    let isRegistering = false;
+
     /**
      * @type {import("firebase/auth").User | "loggedOut" | null}
      */
@@ -25,9 +23,6 @@
      * @type {UserData | null}
      */
     let userData;
-    const unsubscribeIsRegistering = authCtrl.isRegistering.subscribe(val => {
-        isRegistering = val;
-    });
     const unsubscribeUser = authCtrl.user.subscribe(val => {
         user = val;
     });
@@ -35,7 +30,6 @@
         userData = val;
     });
     onDestroy(() => {
-        unsubscribeIsRegistering();
         unsubscribeUser();
         unsubscribeUserData();
     });
@@ -58,13 +52,13 @@
             <Register
                 pageName={pageName}
                 authCtrl={authCtrl}
-                on:switchToLogin={() => authCtrl.switchToLogin()}
+                on:switchToLogin={() => isRegistering = false}
             />
         {:else}
             <Login
                 pageName={pageName}
                 authCtrl={authCtrl}
-                on:switchToRegister={() => authCtrl.switchToRegistering()}
+                on:switchToRegister={() => isRegistering = true}
             />
         {/if}
     </div>

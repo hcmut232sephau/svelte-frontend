@@ -11,12 +11,6 @@ export class AuthenticationController {
     user;
 
     /**
-     * UI state.
-     * @type {import("svelte/store").Writable<boolean>}
-     */
-    isRegistering;
-
-    /**
      * Account data.
      * @type {import("svelte/store").Writable<UserData | null>}
      */
@@ -74,14 +68,6 @@ export class AuthenticationController {
                 });
             }
         }
-    }
-
-    switchToRegistering() {
-        this.isRegistering.set(true);
-    }
-
-    switchToLogin() {
-        this.isRegistering.set(false);
     }
 
     /**
