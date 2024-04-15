@@ -1,17 +1,13 @@
 <script>
-    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
+    import { CourseController } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
     import { SideBarCourseEntry } from "./sidebar/States";
 
     /**
-     * @type {AuthenticationController}
+     * @type {CourseController}
      */
-    export let authCtrl;
-    /**
-     * @type {UserData}
-     */
-    export let userData;
+    export let courseCtrl;
     /**
      * @type {SideBarCourseEntry}
      */
@@ -23,8 +19,8 @@
     $: courseCode = entry.courseCode;
     $: courseName = entry.courseName;
 </script>
-<div class="flex flex-col">
-    <Card class="bg-neutral-800 border-none mx-auto mt-10">
+<div class="flex flex-col w-[50vw]">
+    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         Course code
             <div class="flex my-2">
             <Input

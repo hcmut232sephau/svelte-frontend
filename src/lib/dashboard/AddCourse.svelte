@@ -45,8 +45,8 @@
         }
     }
 </script>
-<div class="flex flex-col">
-    <Card class="bg-neutral-800 border-none mx-auto mt-10">
+<div class="flex flex-col w-[50vw]">
+    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         Course code
         <div class="flex my-2">
             <Input

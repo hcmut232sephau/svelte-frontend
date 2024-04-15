@@ -126,8 +126,7 @@
             />
         {:else if courses.includes(selectedPage)}
             <CourseView
-                authCtrl={authCtrl}
-                userData={userData}
+                courseCtrl={courseCtrl}
                 entry={selectedPage}
             />
         {/if}
