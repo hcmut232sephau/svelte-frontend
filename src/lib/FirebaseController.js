@@ -5,7 +5,7 @@ import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 
 export class FirebaseController {
     constructor() {
-        const useEmulator = true;
+        const useEmulator = false;
 
         const firebaseConfig = {
             apiKey: "AIzaSyD_zMBYqbREwqHXIjl23BJnnYKZgeGTOHM",
