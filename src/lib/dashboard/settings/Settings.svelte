@@ -21,16 +21,16 @@
     let username = userData.username;
 </script>
 <div class="flex flex-col">
-    <Card class="bg-neutral-800 border-none mx-auto mt-10">
+    <Card class="bg-neutral-800 border-none mt-10 mx-auto" size="lg">
         Username
             <div class="flex my-2">
             <Input
-                class="bg-neutral-700 text-white"
+                class="bg-neutral-700 text-white mr-3"
                 placeholder="Username"
                 bind:value={username}
             />
             <Button 
-                class="ml-2"
+                class="mr-60"
                 on:click={() => {
                     authCtrl.setUsername(username);
                     // TODO: input verification
@@ -40,7 +40,7 @@
             </Button>
         </div>
     </Card>
-    <Card class="bg-neutral-800 border-none mx-auto mt-10">
+    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
             class="ml-2"
             on:click={onLogout}
