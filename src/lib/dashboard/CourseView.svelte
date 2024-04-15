@@ -66,5 +66,12 @@
             </Button>
         </div>
     </Card>
+    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+        <Button 
+            class="ml-2 bg-red-800"
+        >
+            Delete course (placeholder button)
+        </Button>
+    </Card>
 </div>
 
