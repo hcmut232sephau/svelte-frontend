@@ -1,7 +1,7 @@
 <script>
+    import { AuthenticationController } from "$lib/AuthenticationController";
+    import { createEventDispatcher } from 'svelte';
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
-    import { Authentiimport { AuthenticationController } from "$lib/AuthenticationController";
-teEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
