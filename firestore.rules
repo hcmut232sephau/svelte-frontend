@@ -50,7 +50,7 @@ service cloud.firestore {
       }
 
       function isIncludedInTeachers() {
-        let courseData = get(/databases/$(database)/documents/courses/$(targetCourseId)).data;
+        let courseData = resource.data;
         return ("teachers" in courseData)
                && (request.auth.uid in courseData.teachers);
       }
