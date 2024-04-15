@@ -70,7 +70,7 @@ export class UserData {
     }
 }
 
-export class ApplicationController {
+export class AuthenticationController {
     /**
      * Firebase user auth.
      * @type {import("svelte/store").Writable<import("@firebase/auth").User | "loggedOut" | null>} 
@@ -89,14 +89,17 @@ export class ApplicationController {
      */
     userData;
 
-    constructor() {
-        this.firebaseCtrl = new FirebaseController();
+    /**
+     * @param {FirebaseController} firebaseCtrl 
+     */
+    constructor(firebaseCtrl) {
+        this.firebaseCtrl = firebaseCtrl;
 
         this.user = writable(null);
         this.isRegistering = writable(false);
         this.userData = writable(null);
 
-        this.firebaseCtrl.auth.onAuthStateChanged((u) => {
+        this.firebaseCtrl.auth.onAuthStateChanged(u => {
             this.onAuthStateChanged(u);
         });
     }

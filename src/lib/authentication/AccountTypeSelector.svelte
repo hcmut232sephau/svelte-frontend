@@ -1,5 +1,5 @@
 <script>
-    import { ApplicationController } from '$lib/Controllers'
+    import { AuthenticationController } from '$lib/Controllers'
     import { createEventDispatcher } from 'svelte';
 
     /**
@@ -7,18 +7,18 @@
      */
     export let pageName;
     /**
-     * @type {ApplicationController}
+     * @type {AuthenticationController}
      */
-    export let appCtrl;
+    export let authCtrl;
 
     const dispatch = createEventDispatcher();
 
     // function selectStudentType() {
-    //     appCtrl.changeAccountType("student");
+    //     authCtrl.changeAccountType("student");
     // }
 
     function selectTeacherType() {
-        appCtrl.changeAccountType("teacher");
+        authCtrl.changeAccountType("teacher");
     }
 
     function onLogout() {

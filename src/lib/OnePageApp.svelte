@@ -1,6 +1,6 @@
 <script>
     import { onDestroy } from "svelte";
-    import { ApplicationController, UserData } from "./Controllers.js"
+    import { AuthenticationController, FirebaseController, UserData } from "./Controllers.js"
     import Dashboard from "./dashboard/Dashboard.svelte";
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
@@ -9,7 +9,8 @@
 
     const pageName = "Neuroflask";
 
-    let appCtrl = new ApplicationController();
+    let firebaseCtrl = new FirebaseController();
+    let authCtrl = new AuthenticationController(firebaseCtrl);
 
     /**
      * @type {boolean}
@@ -23,13 +24,13 @@
      * @type {UserData | null}
      */
     let userData;
-    const unsubscribeIsRegistering = appCtrl.isRegistering.subscribe((val) => {
+    const unsubscribeIsRegistering = authCtrl.isRegistering.subscribe((val) => {
         isRegistering = val;
     });
-    const unsubscribeUser = appCtrl.user.subscribe((val) => {
+    const unsubscribeUser = authCtrl.user.subscribe((val) => {
         user = val;
     });
-    const unsubscribeUserData = appCtrl.userData.subscribe((val) => {
+    const unsubscribeUserData = authCtrl.userData.subscribe((val) => {
         userData = val;
     });
     onDestroy(() => {
@@ -42,7 +43,7 @@
      * @param {CustomEvent} event
      */
     function onLogout(event) {
-        appCtrl.logout();
+        authCtrl.logout();
     }
 </script>
 
@@ -55,14 +56,14 @@
         {#if isRegistering}
             <Register
                 pageName={pageName}
-                appCtrl={appCtrl}
-                on:switchToLogin={() => appCtrl.switchToLogin()}
+                authCtrl={authCtrl}
+                on:switchToLogin={() => authCtrl.switchToLogin()}
             />
         {:else}
             <Login
                 pageName={pageName}
-                appCtrl={appCtrl}
-                on:switchToRegister={() => appCtrl.switchToRegistering()}
+                authCtrl={authCtrl}
+                on:switchToRegister={() => authCtrl.switchToRegistering()}
             />
         {/if}
     </div>
@@ -74,7 +75,7 @@
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector
             pageName={pageName}
-            appCtrl={appCtrl}
+            authCtrl={authCtrl}
             on:logout={onLogout}
         />
     </div>
@@ -82,14 +83,14 @@
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <UsernameSelector
             pageName={pageName}
-            appCtrl={appCtrl}
+            authCtrl={authCtrl}
             on:logout={onLogout}
         />
     </div>
 {:else}
     <Dashboard
         pageName={pageName}
-        appCtrl={appCtrl}
+        authCtrl={authCtrl}
         userData={userData}
         on:logout={onLogout}
     />
