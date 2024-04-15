@@ -59,6 +59,8 @@
                         emailError = "Invalid email";
                     } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential" || code == "auth/wrong-password") {
                         passwordError = "Incorrect password";
+                    } else if (code == "auth/user-not-found") {
+                        error = "An account with that email doesn't exist. Check your credentials or sign up.";
                     } else {
                         error = "Unknown login error. Check your credentials and try again later. (error code " + code + ")";
                     }

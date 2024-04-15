@@ -1,7 +1,7 @@
 <script>
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { CourseController } from "$lib/CourseController";
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onDestroy } from 'svelte';
     import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
@@ -10,6 +10,7 @@
     import Settings from './settings/Settings.svelte';
     import CourseView from "./CourseView.svelte";
     import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
+    import { reinterpretCast, typelessIncludes } from "$lib/TypeTools";
 
     /**
      * @type {String}
@@ -34,16 +35,35 @@
 
     let showCourses = true;
 
-    let calculusEntry = new SideBarCourseEntry("MT1010", "Calculus");
-    let courses = [
-        calculusEntry,
-        new SideBarCourseEntry("MT2010", "Linear Algebra"),
-        new SideBarCourseEntry("CS2010", "Operating System"),
-        new SideBarCourseEntry("CS2011", "Advanced Programing"),
-        new SideBarCourseEntry("CS2012", "Computer Architecture"),
-        new SideBarCourseEntry("CH1010", "Chemistry"),
-        new SideBarCourseEntry("PH1010", "Physics")
-    ];
+    // let calculusEntry = new SideBarCourseEntry("MT1010", "Calculus");
+    // let courses = [
+    //     calculusEntry,
+    //     new SideBarCourseEntry("MT2010", "Linear Algebra"),
+    //     new SideBarCourseEntry("CS2010", "Operating System"),
+    //     new SideBarCourseEntry("CS2011", "Advanced Programing"),
+    //     new SideBarCourseEntry("CS2012", "Computer Architecture"),
+    //     new SideBarCourseEntry("CH1010", "Chemistry"),
+    //     new SideBarCourseEntry("PH1010", "Physics")
+    // ];
+
+    /**
+     * @type {SideBarCourseEntry[] | null}
+     */
+    let courses = null;
+    $: unsubscribeCourses = courseCtrl.courses.subscribe(val => {
+        if (val === null) {
+            courses = null;
+        } else {
+            courses = val.map(e => {
+                console.log(e);
+                return new SideBarCourseEntry(e.courseCode, e.courseName);
+            });
+        }
+    });
+    onDestroy(() => {
+        unsubscribeCourses();
+        courseCtrl.destroy();
+    });
 
     let courseAdderEntry = new SideBarEntry("Add course");
     let settingsEntry = new SideBarEntry("Settings");
@@ -52,14 +72,17 @@
         settingsEntry
     ];
 
-    let selectedPage = calculusEntry;
+    /**
+     * @type {SideBarEntry | null}
+     */
+    let selectedPage = null;
 
     /**
      * @param {CustomEvent} event
      */
     function onSidebarSelect(event) {
         selectedPage = event.detail;
-        if (courses.includes(selectedPage)) {
+        if (courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)) {
             showCourses = true;
         }
     }
@@ -86,7 +109,7 @@
             {/if}
         </div>
     </SideBarSectionHeader>
-    {#if showCourses}
+    {#if courses !== null && showCourses}
         {#each courses as course}
             <SideBarItem
                 entry={course}
@@ -124,10 +147,10 @@
                 userData={userData}
                 on:logout={onLogout}
             />
-        {:else if courses.includes(selectedPage)}
+        {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
             <CourseView
                 courseCtrl={courseCtrl}
-                entry={selectedPage}
+                entry={reinterpretCast(selectedPage)}
             />
         {/if}
     </div>

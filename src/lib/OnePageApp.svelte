@@ -25,13 +25,13 @@
      * @type {UserData | null}
      */
     let userData;
-    const unsubscribeIsRegistering = authCtrl.isRegistering.subscribe((val) => {
+    const unsubscribeIsRegistering = authCtrl.isRegistering.subscribe(val => {
         isRegistering = val;
     });
-    const unsubscribeUser = authCtrl.user.subscribe((val) => {
+    const unsubscribeUser = authCtrl.user.subscribe(val => {
         user = val;
     });
-    const unsubscribeUserData = authCtrl.userData.subscribe((val) => {
+    const unsubscribeUserData = authCtrl.userData.subscribe(val => {
         userData = val;
     });
     onDestroy(() => {

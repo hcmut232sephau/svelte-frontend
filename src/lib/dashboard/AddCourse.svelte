@@ -2,7 +2,6 @@
     import { CourseController } from '$lib/CourseController';
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
-    import SmartTextField from '$lib/ui/SmartTextField.svelte';
     import InputError from '$lib/ui/InputError.svelte';
 
     /**
@@ -35,13 +34,23 @@
             courseCodeError = "Cannot leave this empty";
         }
 
+        if (courseCode.length > 10) {
+            isInputValid = false;
+            courseNameError = "Cannot use more than 10 characters";
+        }
+
+        if (courseName == "") {
+            isInputValid = false;
+            courseNameError = "Cannot leave this empty";
+        }
+
         if (courseName.length > 72) {
             isInputValid = false;
             courseNameError = "Cannot use more than 72 characters";
         }
 
         if (isInputValid) {
-            courseCtrl.addCourse(courseCode, courseName);
+            courseCtrl.addCourseAsTeacher(courseCode, courseName);
         }
     }
 </script>
