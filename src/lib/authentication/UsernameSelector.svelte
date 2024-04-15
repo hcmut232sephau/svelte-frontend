@@ -1,16 +1,16 @@
 <script>
-    import { ApplicationController } from '$lib/Controllers'
-    import SmartTextField from '$lib/ui/SmartTextField.svelte';
+    import { AuthenticationController } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
+    import SmartTextField from '$lib/ui/SmartTextField.svelte';
 
     /**
      * @type {String}
      */
     export let pageName;
     /**
-     * @type {ApplicationController}
+     * @type {AuthenticationController}
      */
-    export let appCtrl;
+    export let authCtrl;
 
     let name = "";
 
@@ -37,7 +37,7 @@
         }
 
         if (isInputValid) {
-            appCtrl.setUsername(name)
+            authCtrl.setUsername(name)
                 .catch(err => {
                     const code = err.code;
                     error = "Error. Check your input and try again later. (error code " + code + ")";

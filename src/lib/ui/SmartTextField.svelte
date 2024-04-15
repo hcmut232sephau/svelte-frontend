@@ -34,7 +34,6 @@
 
         class="input input-bordered rounded-md w-full bg-neutral-700"
     >
-
     {#if error !== null}
         <div class="text-red-500">
             {error}

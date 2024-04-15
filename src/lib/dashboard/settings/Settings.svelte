@@ -1,12 +1,12 @@
 <script>
-    import { ApplicationController, UserData } from '$lib/Controllers';
-    import { Card, Button, Input } from 'flowbite-svelte';
+    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
+    import { Card, Button, Input } from 'flowbite-svelte';
 
     /**
-     * @type {ApplicationController}
+     * @type {AuthenticationController}
      */
-    export let appCtrl;
+    export let authCtrl;
     /**
      * @type {UserData}
      */
@@ -32,7 +32,7 @@
             <Button 
                 class="ml-2"
                 on:click={() => {
-                    appCtrl.setUsername(username);
+                    authCtrl.setUsername(username);
                     // TODO: input verification
                 }}
             >
@@ -40,7 +40,6 @@
             </Button>
         </div>
     </Card>
-
     <Card class="bg-neutral-800 border-none mx-auto mt-10">
         <Button 
             class="ml-2"

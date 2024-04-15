@@ -1,10 +1,10 @@
 <script>
+    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
+    import { SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
-    import { ApplicationController, UserData } from '$lib/Controllers';
     import ManageCourse from './AddCourse.svelte';
-    import { SideBarEntry } from './sidebar/States';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
     import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons'
@@ -14,9 +14,9 @@
      */
     export let pageName;
     /**
-     * @type {ApplicationController}
+     * @type {AuthenticationController}
      */
-    export let appCtrl;
+    export let authCtrl;
     /**
      * @type {UserData}
      */
@@ -113,7 +113,7 @@
         />
     {:else if selectedPage == settingsEntry}
         <Settings
-            appCtrl={appCtrl}
+            authCtrl={authCtrl}
             userData={userData}
             on:logout={onLogout}
         />

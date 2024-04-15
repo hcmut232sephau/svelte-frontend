@@ -1,5 +1,5 @@
 <script>
-    import { UserData } from '$lib/Controllers';
+    import { UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
 
     /**

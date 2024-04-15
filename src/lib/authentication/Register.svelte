@@ -1,16 +1,16 @@
 <script>
+    import { AuthenticationController } from "$lib/AuthenticationController";
+    import { createEventDispatcher } from "svelte";
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
-    import { ApplicationController } from '$lib/Controllers'
-    import { createEventDispatcher } from 'svelte';
 
     /**
      * @type {String}
      */
     export let pageName;
     /**
-     * @type {ApplicationController}
+     * @type {AuthenticationController}
      */
-    export let appCtrl;
+    export let authCtrl;
 
     const dispatch = createEventDispatcher();
 
@@ -55,7 +55,7 @@
         }
 
         if (isInputValid) {
-            appCtrl.register(email, password)
+            authCtrl.register(email, password)
                 .catch(err => {
                     const code = err.code;
                     // const errorMessage = err.message;
