@@ -2,7 +2,7 @@
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
-    import { SideBarEntry } from "./sidebar/States";
+    import { SideBarCourseEntry } from "./sidebar/States";
 
     /**
      * @type {AuthenticationController}
@@ -13,15 +13,15 @@
      */
     export let userData;
     /**
-     * @type {SideBarEntry}
+     * @type {SideBarCourseEntry}
      */
-    export let sideBarEntry;
+    export let entry;
 
     // TODO: extend SideBarEntry into SideBarCourseEntry, add firebase ID
     // TODO: firebase
     
-    let courseCode = "UNDEF1001";
-    $: courseName = sideBarEntry.title;
+    $: courseCode = entry.courseCode;
+    $: courseName = entry.courseName;
 </script>
 <div class="flex flex-col">
     <Card class="bg-neutral-800 border-none mx-auto mt-10">
@@ -30,7 +30,13 @@
             <Input
                 class="bg-neutral-700 text-white"
                 placeholder="Course code"
-                bind:value={courseCode}
+                value={courseCode}
+                on:input={e => {
+                    if (e.target != null) {
+                        // @ts-ignore
+                        courseCode = e.target.value;
+                    }
+                }}
             />
             <Button 
                 class="ml-2"
@@ -41,14 +47,18 @@
                 Save
             </Button>
         </div>
-    </Card>
-    <Card class="bg-neutral-800 border-none mx-auto mt-10">
         Course name
-            <div class="flex my-2">
+        <div class="flex my-2">
             <Input
                 class="bg-neutral-700 text-white"
                 placeholder="Course name"
-                bind:value={courseName}
+                value={courseName}
+                on:input={e => {
+                    if (e.target != null) {
+                        // @ts-ignore
+                        courseName = e.target.value;
+                    }
+                }}
             />
             <Button 
                 class="ml-2"

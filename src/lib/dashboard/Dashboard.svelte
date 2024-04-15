@@ -1,14 +1,14 @@
 <script>
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
-    import { SideBarEntry } from './sidebar/States';
+    import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
-    import ManageCourse from './AddCourse.svelte';
+    import AddCourse from './AddCourse.svelte';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
-    import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
     import CourseView from "./CourseView.svelte";
+    import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
 
     /**
      * @type {String}
@@ -31,15 +31,15 @@
 
     let showCourses = true;
 
-    let calculusEntry = new SideBarEntry("Calculus");
+    let calculusEntry = new SideBarCourseEntry("MT1010", "Calculus");
     let courses = [
         calculusEntry,
-        new SideBarEntry("Linear Algebra"),
-        new SideBarEntry("Operating System"),
-        new SideBarEntry("Advanced Programing"),
-        new SideBarEntry("Computer Architecture"),
-        new SideBarEntry("Chemistry"),
-        new SideBarEntry("Physics")
+        new SideBarCourseEntry("MT2010", "Linear Algebra"),
+        new SideBarCourseEntry("CS2010", "Operating System"),
+        new SideBarCourseEntry("CS2011", "Advanced Programing"),
+        new SideBarCourseEntry("CS2012", "Computer Architecture"),
+        new SideBarCourseEntry("CH1010", "Chemistry"),
+        new SideBarCourseEntry("PH1010", "Physics")
     ];
 
     let courseAdderEntry = new SideBarEntry("Add course");
@@ -90,7 +90,10 @@
                 isSelected={course == selectedPage}
                 on:sidebarSelect={onSidebarSelect}
             >
-                <div class="div w-5"></div>
+                <div class="div w-5">
+                    <span class="font-black text-gray-500 text-xs">{course.courseCode}</span>
+                    {course.courseName}
+                </div>
             </SideBarItem>
         {/each}
     {/if}
@@ -100,7 +103,9 @@
             entry={otherPage}
             isSelected={otherPage == selectedPage}
             on:sidebarSelect={onSidebarSelect}
-        />
+        >
+            <span class="font-bold">{otherPage.title}</span>
+        </SideBarItem>
     {/each}
 </SideBar>
 <div class="flex">
