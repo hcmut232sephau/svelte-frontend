@@ -1,16 +1,49 @@
 <script>
-    import { Card, Button, Input } from 'flowbite-svelte';
+    import { CourseController } from '$lib/CourseController';
     import { createEventDispatcher } from 'svelte';
-    import { SideBarEntry } from './sidebar/States';
+    import { Card, Button, Input } from 'flowbite-svelte';
+    import SmartTextField from '$lib/ui/SmartTextField.svelte';
+    import InputError from '$lib/ui/InputError.svelte';
+
+    /**
+     * @type {CourseController}
+     */
+    export let courseCtrl;
 
     let dispatch = createEventDispatcher();
-    /**
-     * @type {SideBarEntry[]}
-     */
-    export let courses;
     
     let courseCode = "";
     let courseName = "";
+
+    /**
+     * @type {String | null}
+     */
+    let courseCodeError = null;
+    /**
+     * @type {String | null}
+     */
+    let courseNameError = null;
+
+    function onAddCourse() {
+        courseCodeError = null;
+        courseNameError = null;
+
+        let isInputValid = true;
+
+        if (courseCode == "") {
+            isInputValid = false;
+            courseCodeError = "Cannot leave this empty";
+        }
+
+        if (courseName.length > 72) {
+            isInputValid = false;
+            courseNameError = "Cannot use more than 72 characters";
+        }
+
+        if (isInputValid) {
+            courseCtrl.addCourse(courseCode, courseName);
+        }
+    }
 </script>
 <div class="flex flex-col">
     <Card class="bg-neutral-800 border-none mx-auto mt-10">
@@ -18,27 +51,19 @@
         <div class="flex my-2">
             <Input
                 class="bg-neutral-700 text-white"
-                placeholder="Course code"
                 bind:value={courseCode}
             />
+            <InputError error={courseCodeError}/>
         </div>
         Course name
         <div class="flex my-2">
             <Input
                 class="bg-neutral-700 text-white"
-                placeholder="Course name"
                 bind:value={courseName}
             />
+            <InputError error={courseNameError}/>
         </div>
-        <Button 
-            class="flex my-2"
-            on:click={() => {
-                // courses.push(new SideBarEntry(newCourse));
-                // dispatch("onUpdateCourses", courses)
-            }}
-        >
-            Add
-        </Button>
+        <Button class="flex my-2" on:click={onAddCourse}>Add</Button>
     </Card>
 </div>
 

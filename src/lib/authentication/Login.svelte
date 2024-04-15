@@ -2,6 +2,7 @@
     import { AuthenticationController } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
     import SmartTextField from '$lib/ui/SmartTextField.svelte';
+    import InputError from "$lib/ui/InputError.svelte";
 
     /**
      * @type {String}
@@ -56,8 +57,8 @@
 
                     if (code == "auth/invalid-email") {
                         emailError = "Invalid email";
-                    } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential") {
-                        password = "Incorrect password";
+                    } else if (code == "auth/invalid-login-credentials" || code == "auth/invalid-credential" || code == "auth/wrong-password") {
+                        passwordError = "Incorrect password";
                     } else {
                         error = "Unknown login error. Check your credentials and try again later. (error code " + code + ")";
                     }
@@ -89,11 +90,7 @@
         <div>
             <button class="PrimaryButton w-full" on:click={onLogin}>Log in</button>
         </div>
-        {#if error !== null}
-            <div class="text-red-500">
-                {error}
-            </div>
-        {/if}
+        <InputError error={error}/>
         <div>
             Don't have a {pageName} account? <button class="text-blue-600" on:click={onSwitchToRegister}>Create one</button>
         </div>

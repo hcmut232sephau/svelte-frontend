@@ -1,5 +1,6 @@
 <script>
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
+    import { CourseController } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
@@ -22,6 +23,8 @@
      * @type {UserData}
      */
     export let userData;
+
+    $: courseCtrl = new CourseController(authCtrl);
 
     const dispatch = createEventDispatcher();
 

@@ -56,7 +56,6 @@
         </h1>
         <SmartTextField
             title="Name"
-            type="text"
             bind:value={name}
             bind:error={error}
         />

@@ -1,10 +1,11 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import InputError from './InputError.svelte';
 
     /**
      * @type {String}
      */
-    export let title;
+    export let title = "";
     /**
      * @type {String}
      */
@@ -23,6 +24,7 @@
     // @ts-ignore
     function handleInput(e) {
         value = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
+        dispatch("input", e);
     };
 </script>
 <div class="w-full">
@@ -34,9 +36,5 @@
 
         class="input input-bordered rounded-md w-full bg-neutral-700"
     >
-    {#if error !== null}
-        <div class="text-red-500">
-            {error}
-        </div>
-    {/if}
+    <InputError error={error}/>
 </div>
