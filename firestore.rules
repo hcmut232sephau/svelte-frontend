@@ -17,7 +17,7 @@ service cloud.firestore {
                               (!("accountType" in request.resource.data)
                                || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
                               && (!("username" in request.resource.data)
-                               || !(request.resource.data.username == "" || request.resource.data.length > 72))
+                               || !(request.resource.data.username == "" || request.resource.data.username.length > 72))
                             );
 
       allow delete: if false; // TODO: implement account deletion
