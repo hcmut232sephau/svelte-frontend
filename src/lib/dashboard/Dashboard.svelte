@@ -7,7 +7,8 @@
     import ManageCourse from './AddCourse.svelte';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
-    import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons'
+    import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
+    import CourseView from "./CourseView.svelte";
 
     /**
      * @type {String}
@@ -103,24 +104,27 @@
     {/each}
 </SideBar>
 <div class="flex">
-    
     <div class="div max-w-96 w-[30vw]"/>
-        <div class="mx-auto">
-            {#if selectedPage == courseAdderEntry}
-                <ManageCourse
-                    on:onUpdateCourses={event => {
-                            courses = event.detail
-                    }}
-                    courses={courses}
-                />
-            {:else if selectedPage == settingsEntry}
-                <Settings
-                    authCtrl={authCtrl}
-                    userData={userData}
-                    on:logout={onLogout}
-                />
-            {/if}
-        </div>
+    <div class="mx-auto">
+        {#if selectedPage == courseAdderEntry}
+            <ManageCourse
+                on:onUpdateCourses={event => {
+                        courses = event.detail
+                }}
+                courses={courses}
+            />
+        {:else if selectedPage == settingsEntry}
+            <Settings
+                authCtrl={authCtrl}
+                userData={userData}
+                on:logout={onLogout}
+            />
+        {:else if courses.includes(selectedPage)}
+            <CourseView
+                authCtrl={authCtrl}
+                userData={userData}
+                entry={selectedPage}
+            />
+        {/if}
+    </div>
 </div>
-
-
