@@ -118,8 +118,6 @@ export class AuthenticationController {
                 const db = this.firebaseCtrl.db;
                 const usersRef = collection(db, "users");
                 getDoc(doc(usersRef, newUser.uid)).then(e => {
-                    console.log(e.get("accountType") + " ;;; " + e.get("username"));
-
                     let accountType;
                     const currentAccountType = e.get("accountType");
                     if (currentAccountType === undefined) {
@@ -136,8 +134,6 @@ export class AuthenticationController {
                     } else {
                         username = currentUsername;
                     }
-
-                    console.log(new UserData(accountType, username));
 
                     this.userData.set(new UserData(accountType, username));
 
