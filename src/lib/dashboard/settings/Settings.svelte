@@ -20,8 +20,8 @@
 
     let username = userData.username;
 </script>
-<div class="flex flex-col">
-    <Card class="bg-neutral-800 border-none mt-10 mx-auto" size="lg">
+<div class="flex flex-col w-[50vw]">
+    <Card class="bg-neutral-800 border-none mt-16 mx-auto" size="lg">
         Username
             <div class="flex my-2">
             <Input
