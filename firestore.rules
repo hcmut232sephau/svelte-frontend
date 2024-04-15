@@ -2,10 +2,14 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Reading user data
+    // There's no sensitive info yet so anyone logged in can read any other account.
   	match /users/{targetUid} {
-      allow read: if request.auth != null; // TODO
+      allow read: if request.auth != null;
     }
 
+    // Writing user data
+    // Can only be done by the same user.
     match /users/{targetUid} {
       allow create, update: if request.auth != null
                             && targetUid == request.auth.uid
@@ -16,7 +20,18 @@ service cloud.firestore {
                                || (request.resource.data.username != "" || request.resource.data.username.length <= 72))
                             );
 
-      allow delete: if false; // TODO
+      allow delete: if false; // TODO: implement account deletion
+    }
+
+    // Reading courses
+    match /courses/{targetId} {
+      allow read: if request.auth != null;
+    }
+
+    // Writing courses
+    // TODO
+    match /courses/{targetId} {
+      allow write: if false; // TODO
     }
   }
 }
