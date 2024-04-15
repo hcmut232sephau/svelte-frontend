@@ -48,7 +48,7 @@
     }
 </script>
 
-{#if (user === null) || (userData === null)}
+{#if (user === null) || ((user !== "loggedOut") && (userData === null))}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         Loading...
     </div>
