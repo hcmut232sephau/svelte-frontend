@@ -17,7 +17,7 @@ service cloud.firestore {
                               (!("accountType" in request.resource.data)
                                || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
                               && (!("username" in request.resource.data)
-                               || (request.resource.data.username != "" || request.resource.data.username.length <= 72))
+                               || !(request.resource.data.username == "" || request.resource.data.length > 72))
                             );
 
       allow delete: if false; // TODO: implement account deletion
@@ -42,8 +42,35 @@ service cloud.firestore {
 
     // Writing courses
     // TODO
-    match /courses/{targetId} {
-      allow write: if false; // TODO
+    match /courses/{targetCourseId} {
+      function isTeacher() {
+        let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+        return ("accountType" in userData)
+               && (userData.accountType == "teacher");
+      }
+
+      function isIncludedTeacher() {
+        let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+        let courseData = get(/databases/$(database)/documents/courses/$(targetCourseId)).data;
+        return ("accountType" in userData)
+               && (userData.accountType == "teacher")
+               && ("teachers" in courseData)
+               && (request.auth.id in courseData.teachers);
+      }
+
+      allow create: if request.auth != null
+                    && isTeacher()
+                    && "courseCode" in request.resource.data
+                    && request.resource.data.courseCode != "" && request.resource.data.courseCode.length <= 10
+                    && "courseName" in request.resource.data
+                    && request.resource.data.courseName != "" && request.resource.data.courseName.length <= 72
+                    && "teachers" in request.resource.data
+                    && request.resource.data.teachers.length == 1
+                    && request.auth.id in request.resource.data.teachers
+                    && "students" in request.resource.data
+                    && request.resource.data.teachers.length == 0;
+      allow update: if request.auth != null
+                    && isIncludedTeacher();
     }
   }
 }
