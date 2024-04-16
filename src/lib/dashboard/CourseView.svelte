@@ -16,8 +16,8 @@
     // TODO: extend SideBarEntry into SideBarCourseEntry, add firebase ID
     // TODO: firebase
     
-    $: courseCode = entry.courseCode;
-    $: courseName = entry.courseName;
+    $: courseCode = entry.courseIdentity.courseCode;
+    $: courseName = entry.courseIdentity.courseName;
 </script>
 <div class="flex flex-col w-[50vw]">
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
@@ -34,14 +34,6 @@
                     }
                 }}
             />
-            <Button 
-                class="ml-2"
-                on:click={() => {
-                    // TODO: firebase
-                }}
-            >
-                Save
-            </Button>
         </div>
         Course name
         <div class="flex my-2">
@@ -56,21 +48,24 @@
                     }
                 }}
             />
-            <Button 
-                class="ml-2"
-                on:click={() => {
-                    // TODO: firebase
-                }}
-            >
-                Save
-            </Button>
         </div>
+        <Button 
+            class="my-2"
+            on:click={() => {
+                courseCtrl.setCourseIdentity(entry.courseIdentity.withName(courseName).withCode(courseCode));
+            }}
+        >
+            Save
+        </Button>
     </Card>
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
-            class="ml-2 bg-red-800"
+            class="my-2 bg-red-800"
+            on:click={() => {
+                courseCtrl.deleteCourseAsOwner(entry.courseIdentity.id);
+            }}
         >
-            Delete course (placeholder button)
+            Delete course
         </Button>
     </Card>
 </div>

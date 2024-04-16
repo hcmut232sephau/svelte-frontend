@@ -1,3 +1,5 @@
+import { CourseIdentity } from "$lib/CourseController";
+
 export class SideBarEntry {
     /**
      * @param {string} title 
@@ -9,12 +11,10 @@ export class SideBarEntry {
 
 export class SideBarCourseEntry extends SideBarEntry {
     /**
-     * @param {string} courseCode
-     * @param {string} courseName
+     * @param {CourseIdentity} courseIdentity
      */
-    constructor(courseCode, courseName) {
-        super(`[${courseCode}] ${courseName}`);
-        this.courseCode = courseCode;
-        this.courseName = courseName;
+    constructor(courseIdentity) {
+        super(`[${courseIdentity.courseCode}] ${courseIdentity.courseName}`);
+        this.courseIdentity = courseIdentity;
     }
 }

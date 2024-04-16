@@ -35,17 +35,6 @@
 
     let showCourses = true;
 
-    // let calculusEntry = new SideBarCourseEntry("MT1010", "Calculus");
-    // let courses = [
-    //     calculusEntry,
-    //     new SideBarCourseEntry("MT2010", "Linear Algebra"),
-    //     new SideBarCourseEntry("CS2010", "Operating System"),
-    //     new SideBarCourseEntry("CS2011", "Advanced Programing"),
-    //     new SideBarCourseEntry("CS2012", "Computer Architecture"),
-    //     new SideBarCourseEntry("CH1010", "Chemistry"),
-    //     new SideBarCourseEntry("PH1010", "Physics")
-    // ];
-
     /**
      * @type {SideBarCourseEntry[] | null}
      */
@@ -55,7 +44,7 @@
             courses = null;
         } else {
             courses = val.map(e => {
-                return new SideBarCourseEntry(e.courseCode, e.courseName);
+                return new SideBarCourseEntry(e.identity);
             });
         }
     });
@@ -109,16 +98,16 @@
         </div>
     </SideBarSectionHeader>
     {#if courses !== null && showCourses}
-        {#each courses as course}
+        {#each courses as entry}
             <SideBarItem
-                entry={course}
-                isSelected={course == selectedPage}
+                entry={entry}
+                isSelected={entry == selectedPage}
                 on:sidebarSelect={onSidebarSelect}
             >
                 <div class="div w-5">
-                    <span class="font-black text-gray-500 text-xs">{course.courseCode}</span>
+                    <span class="font-black text-gray-500 text-xs">{entry.courseIdentity.courseCode}</span>
                 </div>
-                {course.courseName}
+                {entry.courseIdentity.courseName}
             </SideBarItem>
         {/each}
     {/if}
