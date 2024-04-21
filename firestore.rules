@@ -43,8 +43,7 @@ service cloud.firestore {
 
       allow read: if request.auth != null
                   && userHasUserData()
-                  && userHasFullUserData()
-                  && (request.auth.uid in resource.data.teachers);
+                  && userHasFullUserData();
 
       allow create: if request.auth != null
                     && userHasUserData()
