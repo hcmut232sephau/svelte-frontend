@@ -40,13 +40,9 @@
      */
     let courses = null;
     $: unsubscribeCourses = courseCtrl.courses.subscribe(val => {
-        if (val === null) {
-            courses = null;
-        } else {
-            courses = val.map(e => {
-                return new SideBarCourseEntry(e.identity);
-            });
-        }
+        courses = val?.map(e => {
+            return new SideBarCourseEntry(e.identity);
+        }) ?? null;
     });
     onDestroy(() => {
         unsubscribeCourses();
@@ -80,6 +76,31 @@
      */
     function onCourseShowToggle(event) {
         showCourses = !showCourses;
+    }
+
+    /**
+     * @param {CustomEvent} event
+     */
+    async function onAddCourse(event) {
+        await courseCtrl.addCourseAsTeacher(event.detail.courseCode, event.detail.courseName);
+        const result = courses?.find(e => e.courseIdentity.courseCode == event.detail.courseCode);
+        if (result !== undefined) {
+            selectedPage = result;
+        }
+    }
+
+    /**
+     * @param {CustomEvent} event
+     */
+    async function onUpdateCourseIdentity(event) {
+        const entry = event.detail.entry;
+        const courseCode = event.detail.courseCode;
+        const courseName = event.detail.courseName;
+        await courseCtrl.setCourseIdentity(entry.courseIdentity.withCode(courseCode).withName(courseName));
+        const result = courses?.find(e => e.courseIdentity.id == entry.courseIdentity.id);
+        if (result !== undefined) {
+            selectedPage = result;
+        }
     }
 </script>
 
@@ -127,7 +148,7 @@
     <div class="mx-auto">
         {#if selectedPage == courseAdderEntry}
             <AddCourse
-                courseCtrl={courseCtrl}
+                on:addCourse={onAddCourse}
             />
         {:else if selectedPage == settingsEntry}
             <Settings
@@ -137,8 +158,10 @@
             />
         {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
             <CourseView
+                authCtrl={authCtrl}
                 courseCtrl={courseCtrl}
                 entry={reinterpretCast(selectedPage)}
+                on:updateCourseIdentity={onUpdateCourseIdentity}
             />
         {/if}
     </div>

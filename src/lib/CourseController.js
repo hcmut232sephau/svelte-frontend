@@ -35,11 +35,13 @@ export class CourseIdentity {
 export class CourseData {
     /**
      * @param {CourseIdentity} identity
+     * @param {string} owner
      * @param {string[]} teachers
      * @param {string[]} students
      */
-    constructor(identity, teachers, students) {
+    constructor(identity, owner, teachers, students) {
         this.identity = identity;
+        this.owner = owner;
         this.teachers = teachers;
         this.students = students;
     }
@@ -95,7 +97,7 @@ export class CourseController {
             const id = e.id;
             const data = e.data();
             const identity = new CourseIdentity(id, data.courseCode, data.courseName);
-            return new CourseData(identity, data.teachers, data.students);
+            return new CourseData(identity, data.owner, data.teachers, data.students);
         }));
     }
 
