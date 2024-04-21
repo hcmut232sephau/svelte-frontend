@@ -25,7 +25,7 @@
         Username
             <div class="flex my-2">
             <Input
-                class="bg-neutral-700 text-white mr-3 max-w-64"
+                class="bg-neutral-700 text-white mr-3"
                 placeholder="Username"
                 bind:value={username}
             />
