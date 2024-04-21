@@ -5,6 +5,7 @@
     import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
+    import CourseBrowser from "./CourseBrowser.svelte";
     import AddCourse from './AddCourse.svelte';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
@@ -49,8 +50,8 @@
         courseCtrl.destroy();
     });
 
-    let courseAdderEntry = new SideBarEntry("Add course");
     let courseBrowserEntry = new SideBarEntry("Browse courses");
+    let courseAdderEntry = new SideBarEntry("Add course");
     let settingsEntry = new SideBarEntry("Settings");
 
     /**
@@ -161,7 +162,12 @@
 <div class="flex">
     <div class="div max-w-96 w-[30vw]"/>
     <div class="mx-auto">
-        {#if selectedPage == courseAdderEntry}
+        {#if selectedPage == courseBrowserEntry}
+            <CourseBrowser
+                authCtrl={authCtrl}
+                courseCtrl={courseCtrl}
+            />
+        {:else if selectedPage == courseAdderEntry}
             <AddCourse
                 on:addCourse={onAddCourse}
             />
