@@ -13,9 +13,9 @@
 
     const dispatch = createEventDispatcher();
 
-    // function selectStudentType() {
-    //     authCtrl.changeAccountType("student");
-    // }
+    function selectStudentType() {
+        authCtrl.changeAccountType("student");
+    }
 
     function selectTeacherType() {
         authCtrl.changeAccountType("teacher");
@@ -28,13 +28,13 @@
 <div class="card bg-neutral-800 w-128 rounded">
     <div class="card-body">
         <h1 class="text-lg font-bold">
-            Select your {pageName} account type
+            Who are you signing up as?
         </h1>
-        <!-- <div>
-            <button class="PrimaryButton w-full" on:click={selectStudentType}>Student</button>
-        </div> -->
         <div>
-            <button class="PrimaryButton w-full" on:click={selectTeacherType}>Teacher</button>
+            <button class="PrimaryButton w-full" on:click={selectStudentType}>A student</button>
+        </div>
+        <div>
+            <button class="PrimaryButton w-full" on:click={selectTeacherType}>A teacher</button>
         </div>
         <div>
             Want to <button class="text-blue-600" on:click={onLogout}>log out</button> instead?

@@ -50,11 +50,26 @@
     });
 
     let courseAdderEntry = new SideBarEntry("Add course");
+    let courseBrowserEntry = new SideBarEntry("Browse courses");
     let settingsEntry = new SideBarEntry("Settings");
-    let otherPages = [
-        courseAdderEntry,
-        settingsEntry
-    ];
+
+    /**
+     * @param {UserData | null} scopedUserData
+     */
+    function getOtherPages(scopedUserData) {
+        if (scopedUserData?.accountType == "teacher") {
+            return [
+                courseAdderEntry,
+                settingsEntry
+            ];
+        }
+        return [
+            courseBrowserEntry,
+            settingsEntry
+        ];
+    }
+
+    $: otherPages = getOtherPages(userData);
 
     /**
      * @type {SideBarEntry | null}

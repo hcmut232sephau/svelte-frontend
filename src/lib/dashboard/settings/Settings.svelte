@@ -40,6 +40,28 @@
             </Button>
         </div>
     </Card>
+    <Card class="bg-neutral-800 border-none mt-16 mx-auto" size="lg">
+        {#if userData.accountType != "student"}
+            <Button 
+                class=""
+                on:click={() => {
+                    authCtrl.changeAccountType("student");
+                }}
+            >
+                Become a student
+            </Button>
+        {/if}
+        {#if userData.accountType != "teacher"}
+            <Button 
+                class=""
+                on:click={() => {
+                    authCtrl.changeAccountType("teacher");
+                }}
+            >
+                Become a teacher
+            </Button>
+        {/if}
+    </Card>
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
             class="ml-2 bg-red-800"
