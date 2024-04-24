@@ -151,6 +151,31 @@
             selectedPage = result;
         }
     }
+
+    /**
+     * @param {CustomEvent} event
+     */
+    async function onDeleteCourse(event) {
+        if (courseCtrl === null) {
+            return;
+        }
+
+        const entry = event.detail.entry;
+        const indexToSelectNext = courses?.findIndex(e => e.courseIdentity.id == entry.courseIdentity.id);
+        await courseCtrl.deleteCourseAsOwner(entry.courseIdentity.id);
+        if (courses === null) {
+            selectedPage = null;
+        } else if ((indexToSelectNext === undefined) || (courses.length == 0)) {
+            if (userData?.accountType == "student") {
+                selectedPage = courseBrowserEntry;
+            } else if (userData?.accountType == "teacher") {
+                selectedPage = courseAdderEntry;
+            }
+        } else {
+            const index = Math.min(indexToSelectNext, courses.length - 1);
+            selectedPage = courses[index] ?? null;
+        }
+    }
 </script>
 
 {#if userData !== null && courseCtrl !== null}
@@ -217,6 +242,7 @@
                 courseCtrl={courseCtrl}
                 entry={reinterpretCast(selectedPage)}
                 on:updateCourseIdentity={onUpdateCourseIdentity}
+                on:deleteCourse={onDeleteCourse}
             />
         {/if}
     </div>
