@@ -21,12 +21,51 @@
      * @type {AuthenticationController}
      */
     export let authCtrl;
-    /**
-     * @type {UserData}
-     */
-    export let userData;
 
-    $: courseCtrl = new CourseController(authCtrl);
+    /**
+     * @type {UserData | null}
+     */
+    let userData = null;
+    /**
+     * @type {CourseController | null}
+     */
+    let courseCtrl = null;
+    $: unsubscribeUserData = authCtrl.userData.subscribe(val => {
+        let refreshCourseCtrl = false;
+        if ((userData === null) || (val === null) || (userData.accountType != val.accountType)) {
+            refreshCourseCtrl = true;
+        }
+        userData = val;
+        if (refreshCourseCtrl) {
+            if (courseCtrl !== null) {
+                courseCtrl.destroy();
+            }
+            if (userData === null) {
+                courseCtrl = null;
+            } else {
+                courseCtrl = new CourseController(authCtrl);
+            }
+        }
+    });
+
+    /**
+     * @type {SideBarCourseEntry[] | null}
+     */
+    let courses = null;
+    $: unsubscribeCourses = courseCtrl?.courses.subscribe(val => {
+        courses = val?.map(e => {
+            return new SideBarCourseEntry(e.identity);
+        }) ?? null;
+    }) ?? null;
+    onDestroy(() => {
+        if (unsubscribeCourses !== null) {
+            unsubscribeCourses();
+        }
+        unsubscribeUserData();
+        if (courseCtrl !== null) {
+            courseCtrl.destroy();
+        }
+    });
 
     const dispatch = createEventDispatcher();
 
@@ -35,20 +74,6 @@
     }
 
     let showCourses = true;
-
-    /**
-     * @type {SideBarCourseEntry[] | null}
-     */
-    let courses = null;
-    $: unsubscribeCourses = courseCtrl.courses.subscribe(val => {
-        courses = val?.map(e => {
-            return new SideBarCourseEntry(e.identity);
-        }) ?? null;
-    });
-    onDestroy(() => {
-        unsubscribeCourses();
-        courseCtrl.destroy();
-    });
 
     let courseBrowserEntry = new SideBarEntry("Browse courses");
     let courseAdderEntry = new SideBarEntry("Add course");
@@ -98,6 +123,10 @@
      * @param {CustomEvent} event
      */
     async function onAddCourse(event) {
+        if (courseCtrl === null) {
+            return;
+        }
+
         await courseCtrl.addCourseAsTeacher(event.detail.courseCode, event.detail.courseName);
         const result = courses?.find(e => e.courseIdentity.courseCode == event.detail.courseCode);
         if (result !== undefined) {
@@ -109,6 +138,10 @@
      * @param {CustomEvent} event
      */
     async function onUpdateCourseIdentity(event) {
+        if (courseCtrl === null) {
+            return;
+        }
+
         const entry = event.detail.entry;
         const courseCode = event.detail.courseCode;
         const courseName = event.detail.courseName;
@@ -120,10 +153,11 @@
     }
 </script>
 
-<SideBar
-    pageName={pageName}
-    userData={userData}
->
+{#if userData !== null && courseCtrl !== null}
+    <SideBar
+        pageName={pageName}
+        userData={userData}
+    >
     <SideBarSectionHeader on:click={onCourseShowToggle}>
         <div class="div flex">
             <span class="font-bold">Courses</span>
@@ -158,8 +192,8 @@
             <span class="font-bold">{otherPage.title}</span>
         </SideBarItem>
     {/each}
-</SideBar>
-<div class="flex">
+    </SideBar>
+    <div class="flex">
     <div class="div max-w-96 w-[30vw]"/>
     <div class="mx-auto">
         {#if selectedPage == courseBrowserEntry}
@@ -186,4 +220,5 @@
             />
         {/if}
     </div>
-</div>
+    </div>
+{/if}

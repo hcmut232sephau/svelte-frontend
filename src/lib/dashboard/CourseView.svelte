@@ -52,6 +52,11 @@
         unsubscribeUserData();
         unsubscribeCourseData();
     });
+
+    /**
+     * @type {UserData | null}
+     */
+    let userView = null;
 </script>
 <div class="flex flex-col w-[50vw]">
     {#if isAuthenticatedTeacher || isOwner}
