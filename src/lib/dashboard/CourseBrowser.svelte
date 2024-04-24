@@ -4,8 +4,6 @@
     import { CourseController, CourseData } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
-    import { SideBarCourseEntry } from "./sidebar/States";
-    import CourseSettings from "./CourseSettings.svelte";
 
     let dispatch = createEventDispatcher();
 
