@@ -22,7 +22,7 @@
     /**
      * @type {UserData | null}
      */
-    let userData;
+    let userData = null;
     const unsubscribeUser = authCtrl.user.subscribe(val => {
         user = val;
     });

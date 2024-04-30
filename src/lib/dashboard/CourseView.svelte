@@ -29,7 +29,7 @@
     /**
      * @type {UserData | null}
      */
-    let userData;
+    let userData = null;
     /**
      * @type {CourseData | null}
      */

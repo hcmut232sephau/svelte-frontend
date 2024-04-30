@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import { AuthenticationController } from "./AuthenticationController";
-import { collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { reinterpretCast } from "./TypeTools";
 
 export class CourseIdentity {
@@ -86,9 +86,9 @@ export class CourseController {
 
         let q;
         if (userData.accountType == "teacher") {
-            q = query(coursesRef, where("teachers", "array-contains-any", [uid]));
+            q = query(coursesRef, where("teachers", "array-contains", uid));
         } else if (userData.accountType == "student") {
-            q = query(coursesRef, where("students", "array-contains-any", [uid]));
+            q = query(coursesRef, where("students", "array-contains", uid));
         } else {
             throw new Error("Invalid account type");
         }
@@ -167,6 +167,44 @@ export class CourseController {
         };
 
         await updateDoc(document, data);
+        this.courses.set(await this.#getCourses());
+    }
+
+    /**
+     * @param {string} id
+     */
+    async leaveCourseAsTeacher(id) {
+        const user = get(this.authCtrl.user);
+        const userData = get(this.authCtrl.userData);
+        if ((user === null) || (user == "loggedOut") || (userData === null)) {
+            throw new Error("Trying to add course while not logged in");
+        }
+
+        const db = this.authCtrl.firebaseCtrl.db;
+        const uid = user.uid;
+        const coursesRef = collection(db, "courses");
+        const document = doc(coursesRef, id);
+
+        await updateDoc(document, { teachers: arrayRemove(uid) });
+        this.courses.set(await this.#getCourses());
+    }
+
+    /**
+     * @param {string} id
+     */
+    async leaveCourseAsStudent(id) {
+        const user = get(this.authCtrl.user);
+        const userData = get(this.authCtrl.userData);
+        if ((user === null) || (user == "loggedOut") || (userData === null)) {
+            throw new Error("Trying to add course while not logged in");
+        }
+
+        const db = this.authCtrl.firebaseCtrl.db;
+        const uid = user.uid;
+        const coursesRef = collection(db, "courses");
+        const document = doc(coursesRef, id);
+
+        await updateDoc(document, { students: arrayRemove(uid) });
         this.courses.set(await this.#getCourses());
     }
 }

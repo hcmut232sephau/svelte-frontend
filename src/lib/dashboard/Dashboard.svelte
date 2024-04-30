@@ -224,7 +224,6 @@
         {#if selectedPage == courseBrowserEntry}
             <CourseBrowser
                 authCtrl={authCtrl}
-                courseCtrl={courseCtrl}
             />
         {:else if selectedPage == courseAdderEntry}
             <AddCourse
