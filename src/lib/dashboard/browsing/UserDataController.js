@@ -18,10 +18,8 @@ export class UserDataController {
         this.data = writable(null);
         this.id = id;
 
-        console.log("get user data");
         this.#getData().then(e => {
             this.data.set(e);
-            console.log("set user data", e);
         });
     }
 

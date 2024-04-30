@@ -51,7 +51,7 @@
                 <span class="my-auto text-white">{course.identity.courseName}</span>
                 {#if user === null || user == "loggedOut"}
                     Loading...
-                {:else if !course.students.includes(user.uid)}
+                {:else if course.students.includes(user.uid)}
                     <Button disabled class="ml-auto w-24">Joined</Button>
                 {:else}
                     <Button class="ml-auto w-24" on:click={() => {
