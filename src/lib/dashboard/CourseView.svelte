@@ -45,7 +45,7 @@
     });
 
     $: isOwner = userData?.accountType == "teacher" && user !== null && user != "loggedOut" && user.uid == courseData?.owner;
-    $: isAuthenticatedTeacher = userData?.accountType == "teacher" && user !== null && user != "loggedOut" && (courseData?.teachers.includes(user.uid) ?? false);
+    $: isTeacher = userData?.accountType == "teacher" && user !== null && user != "loggedOut";
 
     onDestroy(() => {
         unsubscribeUser();
@@ -59,14 +59,13 @@
     let userView = null;
 </script>
 <div class="flex flex-col w-[50vw]">
-    {#if isAuthenticatedTeacher || isOwner}
-        <CourseSettings
-            entry={entry}
-            isOwner={isOwner}
-            isAuthenticatedTeacher={isAuthenticatedTeacher}
-            on:updateCourseIdentity
-            on:deleteCourse
-        />
-    {/if}
+    <CourseSettings
+        entry={entry}
+        isOwner={isOwner}
+        isTeacher={isTeacher}
+        on:updateCourseIdentity
+        on:deleteCourse
+        on:leaveCourse
+    />
 </div>
 

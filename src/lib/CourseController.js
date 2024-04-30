@@ -101,6 +101,12 @@ export class CourseController {
         }));
     }
 
+    async updateCourses() {
+        return this.#getCourses().then(e => {
+            this.courses.set(e);
+        });
+    }
+
     /**
      * @param {string} courseCode
      * @param {string} courseName
@@ -125,7 +131,7 @@ export class CourseController {
         };
 
         await setDoc(document, data);
-        this.courses.set(await this.#getCourses());
+        await this.updateCourses();
     }
 
     /**
@@ -144,7 +150,7 @@ export class CourseController {
         const document = doc(coursesRef, id);
 
         await deleteDoc(document);
-        this.courses.set(await this.#getCourses());
+        await this.updateCourses();
     }
 
     /**
@@ -158,7 +164,6 @@ export class CourseController {
         }
 
         const db = this.authCtrl.firebaseCtrl.db;
-        const uid = user.uid;
         const coursesRef = collection(db, "courses");
         const document = doc(coursesRef, id.id);
         const data = {
@@ -167,7 +172,7 @@ export class CourseController {
         };
 
         await updateDoc(document, data);
-        this.courses.set(await this.#getCourses());
+        await this.updateCourses();
     }
 
     /**
@@ -186,7 +191,7 @@ export class CourseController {
         const document = doc(coursesRef, id);
 
         await updateDoc(document, { teachers: arrayRemove(uid) });
-        this.courses.set(await this.#getCourses());
+        await this.updateCourses();
     }
 
     /**
@@ -205,6 +210,6 @@ export class CourseController {
         const document = doc(coursesRef, id);
 
         await updateDoc(document, { students: arrayRemove(uid) });
-        this.courses.set(await this.#getCourses());
+        await this.updateCourses();
     }
 }

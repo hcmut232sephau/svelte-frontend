@@ -176,6 +176,31 @@
             selectedPage = courses[index] ?? null;
         }
     }
+
+    /**
+     * @param {CustomEvent} event
+     */
+    async function onLeaveCourse(event) {
+        if (courseCtrl === null) {
+            return;
+        }
+
+        const entry = event.detail.entry;
+        const indexToSelectNext = courses?.findIndex(e => e.courseIdentity.id == entry.courseIdentity.id);
+        await courseCtrl.leaveCourseAsStudent(entry.courseIdentity.id);
+        if (courses === null) {
+            selectedPage = null;
+        } else if ((indexToSelectNext === undefined) || (courses.length == 0)) {
+            if (userData?.accountType == "student") {
+                selectedPage = courseBrowserEntry;
+            } else if (userData?.accountType == "teacher") {
+                selectedPage = courseAdderEntry;
+            }
+        } else {
+            const index = Math.min(indexToSelectNext, courses.length - 1);
+            selectedPage = courses[index] ?? null;
+        }
+    }
 </script>
 
 {#if userData !== null && courseCtrl !== null}
@@ -183,40 +208,40 @@
         pageName={pageName}
         userData={userData}
     >
-    <SideBarSectionHeader on:click={onCourseShowToggle}>
-        <div class="div flex">
-            <span class="font-bold">Courses</span>
-            {#if !showCourses}
-                <AngleRightOutline class="ml-auto"/>
-            {:else}
-                <AngleDownOutline class="ml-auto"/>
-            {/if}
-        </div>
-    </SideBarSectionHeader>
-    {#if courses !== null && showCourses}
-        {#each courses as entry}
+        <SideBarSectionHeader on:click={onCourseShowToggle}>
+            <div class="div flex">
+                <span class="font-bold">Courses</span>
+                {#if !showCourses}
+                    <AngleRightOutline class="ml-auto"/>
+                {:else}
+                    <AngleDownOutline class="ml-auto"/>
+                {/if}
+            </div>
+        </SideBarSectionHeader>
+        {#if courses !== null && showCourses}
+            {#each courses as entry}
+                <SideBarItem
+                    entry={entry}
+                    isSelected={entry == selectedPage}
+                    on:sidebarSelect={onSidebarSelect}
+                >
+                    <div class="div w-5">
+                        <span class="font-black text-gray-500 text-xs">{entry.courseIdentity.courseCode}</span>
+                    </div>
+                    {entry.courseIdentity.courseName}
+                </SideBarItem>
+            {/each}
+        {/if}
+        <li class="mb-7"></li>
+        {#each otherPages as otherPage}
             <SideBarItem
-                entry={entry}
-                isSelected={entry == selectedPage}
+                entry={otherPage}
+                isSelected={otherPage == selectedPage}
                 on:sidebarSelect={onSidebarSelect}
             >
-                <div class="div w-5">
-                    <span class="font-black text-gray-500 text-xs">{entry.courseIdentity.courseCode}</span>
-                </div>
-                {entry.courseIdentity.courseName}
+                <span class="font-bold">{otherPage.title}</span>
             </SideBarItem>
         {/each}
-    {/if}
-    <li class="mb-7"></li>
-    {#each otherPages as otherPage}
-        <SideBarItem
-            entry={otherPage}
-            isSelected={otherPage == selectedPage}
-            on:sidebarSelect={onSidebarSelect}
-        >
-            <span class="font-bold">{otherPage.title}</span>
-        </SideBarItem>
-    {/each}
     </SideBar>
     <div class="flex">
     <div class="div max-w-96 w-[30vw]"/>
@@ -224,6 +249,7 @@
         {#if selectedPage == courseBrowserEntry}
             <CourseBrowser
                 authCtrl={authCtrl}
+                courseCtrl={courseCtrl}
             />
         {:else if selectedPage == courseAdderEntry}
             <AddCourse
@@ -242,6 +268,7 @@
                 entry={reinterpretCast(selectedPage)}
                 on:updateCourseIdentity={onUpdateCourseIdentity}
                 on:deleteCourse={onDeleteCourse}
+                on:leaveCourse={onLeaveCourse}
             />
         {/if}
     </div>

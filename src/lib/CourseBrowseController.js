@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import { AuthenticationController } from "./AuthenticationController";
-import { CourseIdentity, CourseData } from "./CourseController";
+import { CourseIdentity, CourseData, CourseController } from "./CourseController";
 import { arrayUnion, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { reinterpretCast } from "./TypeTools";
 
@@ -13,9 +13,11 @@ export class CourseBrowseController {
 
     /**
      * @param {AuthenticationController} authCtrl
+     * @param {CourseController} courseCtrl
      */
-    constructor(authCtrl) {
+    constructor(authCtrl, courseCtrl) {
         this.authCtrl = authCtrl;
+        this.courseCtrl = courseCtrl;
         this.courses = writable(null);
 
         this.#getCourses().then(e => {
@@ -67,5 +69,6 @@ export class CourseBrowseController {
 
         await updateDoc(document, { students: arrayUnion(uid) });
         this.courses.set(await this.#getCourses());
+        this.courseCtrl.updateCourses();
     }
 }

@@ -23,12 +23,6 @@
     export let userData;
 
     $: formattedAccountType = formatAccountType(userData.accountType);
-
-    const dispatch = createEventDispatcher();
-
-    function onLogout() {
-        dispatch('logout', {});
-    }
 </script>
 <aside class="h-screen fixed">
     <div class="h-full flex flex-col bg-neutral-800 max-w-96 w-[30vw] min-w-64">

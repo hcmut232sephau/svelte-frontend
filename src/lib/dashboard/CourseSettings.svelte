@@ -17,7 +17,7 @@
     /**
      * @type {boolean}
      */
-    export let isAuthenticatedTeacher;
+    export let isTeacher;
     
     $: courseCode = entry.courseIdentity.courseCode;
     $: courseName = entry.courseIdentity.courseName;
@@ -29,9 +29,13 @@
     function onDeleteCourse() {
         dispatch("deleteCourse", {entry});
     }
+
+    function onLeaveCourse() {
+        dispatch("leaveCourse", {entry});
+    }
 </script>
 <div class="flex flex-col w-[50vw]">
-    {#if isAuthenticatedTeacher}
+    {#if isTeacher}
         <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
             Course code
                 <div class="flex my-2">
@@ -78,6 +82,16 @@
                 Delete course
             </Button>
         </Card>
+    {:else}
+        <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+            <Button 
+                class="my-2 bg-red-800"
+                on:click={onLeaveCourse}
+            >
+                Leave course
+            </Button>
+        </Card>
     {/if}
+    
 </div>
 

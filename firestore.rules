@@ -20,9 +20,9 @@ service cloud.firestore {
       allow create, update: if request.auth != null
                             && targetUid == request.auth.uid
                             && (
-                              (!("accountType" in request.resource.data)
+                              (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["accountType"])
                                || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
-                              && (!("username" in request.resource.data)
+                              && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
                             );
 
@@ -33,6 +33,11 @@ service cloud.firestore {
       function isTeacher() {
         let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
         return userData.accountType == "teacher";
+      }
+
+      function isStudent() {
+        let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+        return userData.accountType == "student";
       }
 
       function isIncludedInTeachers() {
@@ -49,23 +54,41 @@ service cloud.firestore {
                     && userHasUserData()
                     && userHasFullUserData()
                     && isTeacher()
-                    && "courseCode" in request.resource.data
-                    && request.resource.data.courseCode != "" && request.resource.data.courseCode.size() <= 10
-                    && "courseName" in request.resource.data
-                    && request.resource.data.courseName != "" && request.resource.data.courseName.size() <= 72
-                    && "owner" in request.resource.data
-                    && request.auth.uid == request.resource.data.owner
-                    && "teachers" in request.resource.data
-                    && request.resource.data.teachers.size() == 1
+                    && request.resource.data.keys().hasAll(["courseCode", "courseName", "owner", "teachers", "students"])
+                    && request.resource.data.courseCode is string && request.resource.data.courseCode != "" && request.resource.data.courseCode.size() <= 10
+                    && request.resource.data.courseCode is string && request.resource.data.courseName != "" && request.resource.data.courseName.size() <= 72
+                    && request.resource.data.owner is string && request.auth.uid == request.resource.data.owner
+                    && request.resource.data.teachers is list && request.resource.data.teachers.size() == 1
                     && request.auth.uid in request.resource.data.teachers;
       allow update: if request.auth != null
                     && userHasUserData()
                     && userHasFullUserData()
-                    && isTeacher()
-                    && isIncludedInTeachers()
                     && (
-                      !("owner" in request.resource.data)
-                      || (request.auth.uid == resource.data.owner)
+                      (
+                        isTeacher()
+                        && isIncludedInTeachers()
+                        && (
+                          !request.resource.data.diff(resource.data).affectedKeys().hasAny(["owner"])
+                          || (request.auth.uid == resource.data.owner)
+                        )
+                      )
+                      || (
+                        isStudent()
+                        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["owner", "teachers"])
+                        && (
+                          !request.resource.data.diff(resource.data).affectedKeys().hasAny(["students"])
+                          || (
+                            request.resource.data.students.size() == resource.data.students.size() + 1
+                            && !resource.data.students.hasAny([request.auth.uid])
+                            && request.resource.data.students.hasAll(resource.data.students)
+                            && request.resource.data.students.hasAll([request.auth.uid])
+                          )
+                          || (
+                            request.resource.data.students.size() == resource.data.students.size() - 1
+                            && resource.data.students.removeAll(request.resource.data.students)[0] == request.auth.uid
+                          )
+                        )
+                      )
                     );
       allow delete: if request.auth.uid == resource.data.owner;
     }
