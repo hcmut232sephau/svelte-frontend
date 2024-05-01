@@ -54,14 +54,14 @@
         {#if userData === null}
             Loading...
         {:else}
-            <div class="flex m-8">
-                <img src="icons/user-solid.svg" alt="" class="w-24 h-24 bg-white rounded-full p-8">
+            <div class="flex m-2 mb-6">
+                <img src="icons/user-solid.svg" alt="" class="w-16 h-16 bg-white rounded-full p-4">
                 <div class="flex flex-col ml-10">
-                    <h1 class="mt-auto mb-2 font-black text-white text-2xl">{userData.username}</h1>
+                    <h1 class="mt-auto font-black text-white text-2xl">{userData.username}</h1>
                     <h1 class="mb-auto text-xl">{formatAccountType(userData.accountType)}</h1>
                 </div>
             </div>
-            <div class="flex flex-col m-8">
+            <div class="flex flex-col m-2">
                 <h1 class="text-xl font-black text-white">Date of birth</h1>
                 <p class="mb-4">Jan 1, 1990</p>
                 <h1 class="text-xl font-black text-white">Email</h1>

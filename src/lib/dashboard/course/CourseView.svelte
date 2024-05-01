@@ -76,11 +76,11 @@
 </script>
 {#if userView == null}
     <Card class="bg-neutral-800 border-none mx-auto mt-10 w-[50vw]" size="lg">
-        <div class="flex m-8">
-            <img src="icons/user-solid.svg" alt="" class="w-24 h-24 bg-white rounded-full p-8">
+        <div class="flex m-2">
+            <img src="icons/user-solid.svg" alt="" class="w-16 h-16 bg-white rounded-full p-4">
             <div class="flex flex-col text-xl ml-10">
                 <button 
-                    class="mt-auto mb-2 font-black text-blue-600 text-2xl hover:text-blue-800"
+                    class="mt-auto font-black text-blue-600 text-2xl hover:text-blue-800"
                     on:click={() => {
                     userView = courseState?.data.owner ?? null;
                 }}>
@@ -91,7 +91,7 @@
     </div>
     </Card>
     <Card class="bg-neutral-800 border-none mx-auto mt-10 w-[50vw]" size="lg">
-        <Timeline order="horizontal" class="mx-auto my-8">
+        <Timeline order="horizontal" class="mx-auto my-4 mb-2">
             {#each index as i}
             <TimelineItem>
                 <svelte:fragment slot="icon">
@@ -103,7 +103,7 @@
                   </div>
                 </svelte:fragment>
                 <h1 class="text-white text-2xl font-black mt-2 mr-20">{dates[i]}</h1>
-                <p class="whitespace-pre">{details[i]}</p>
+                <p class="whitespace-pre text-wrap">{details[i]}</p>
               </TimelineItem>
             {/each}
         </Timeline>
@@ -121,11 +121,11 @@
     {#each index as i}
         <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
             <div class="flex ">
-                <img src="icons/file-solid.svg" alt="" class="bg-white p-10 mr-12 my-auto w-[20vw] h-[20vw] rounded max-w-56 max-h-56" />
+                <img src="icons/file-solid.svg" alt="" class="bg-white p-10 mr-12 my-auto w-[15vw] h-[15vw] rounded max-w-48 max-h-48" />
                 <div class="flex flex-col">
                     <div class="flex-col mb-auto">
                         <h1 class="text-white font-black text-2xl">{titles[i]}</h1>
-                        <p class="mt-2 whitespace-pre">{notes[i]}</p>
+                        <p class="mt-2 whitespace-pre text-wrap">{notes[i]}</p>
                     </div>
                     <div class="flex">
                         <Button class="mr-4">Open</Button>
@@ -138,7 +138,7 @@
         </Card>
     {/each}
     </div>
-    <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8" size="lg">
+    <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8 w-[50vw]" size="lg">
         <div class="flex mb-4">
             <h1 class="text-white text-2xl font-black mr-auto">Add new document</h1>
             <Button class="mr-4">
