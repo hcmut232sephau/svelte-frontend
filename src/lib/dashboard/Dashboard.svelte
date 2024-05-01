@@ -9,7 +9,7 @@
     import AddCourse from './AddCourse.svelte';
     import SideBarSectionHeader from './sidebar/SideBarSectionHeader.svelte';
     import Settings from './settings/Settings.svelte';
-    import CourseView from "./CourseView.svelte";
+    import CourseView from "./course/CourseView.svelte";
     import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
     import { reinterpretCast, typelessIncludes } from "$lib/TypeTools";
     import { UserDataCacheController } from "$lib/UserDataCacheController";
@@ -270,6 +270,7 @@
         {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
             <CourseView
                 authCtrl={authCtrl}
+                userDataCacheCtrl={userDataCacheCtrl}
                 courseCtrl={courseCtrl}
                 entry={reinterpretCast(selectedPage)}
                 on:updateCourseIdentity={onUpdateCourseIdentity}

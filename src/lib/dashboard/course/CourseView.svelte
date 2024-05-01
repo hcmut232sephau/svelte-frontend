@@ -4,8 +4,10 @@
     import { CourseController, CourseData, CourseState } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
-    import { SideBarCourseEntry } from "./sidebar/States";
+    import { SideBarCourseEntry } from "../sidebar/States";
     import CourseSettings from "./CourseSettings.svelte";
+    import { UserDataCacheController } from "$lib/UserDataCacheController";
+    import UserView from "./UserView.svelte";
 
     let dispatch = createEventDispatcher();
 
@@ -13,6 +15,10 @@
      * @type {AuthenticationController}
      */
     export let authCtrl;
+    /**
+     * @type {UserDataCacheController}
+     */
+    export let userDataCacheCtrl;
     /**
      * @type {CourseController}
      */
@@ -54,18 +60,38 @@
     });
 
     /**
-     * @type {UserData | null}
+     * @type {string | null}
      */
     let userView = null;
 </script>
-<div class="flex flex-col w-[50vw]">
-    <CourseSettings
-        entry={entry}
-        isOwner={isOwner}
-        isTeacher={isTeacher}
-        on:updateCourseIdentity
-        on:deleteCourse
-        on:leaveCourse
+{#if userView == null}
+    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+        <Button 
+            class="my-2"
+            on:click={() => {
+                userView = courseState?.data.owner ?? null;
+            }}
+        >
+            View owner
+        </Button>
+    </Card>
+    <div class="flex flex-col w-[50vw]">
+        <CourseSettings
+            entry={entry}
+            isOwner={isOwner}
+            isTeacher={isTeacher}
+            on:updateCourseIdentity
+            on:deleteCourse
+            on:leaveCourse
+        />
+    </div>
+{:else}
+    <UserView
+        userId={userView}
+        userDataCacheCtrl={userDataCacheCtrl}
+        on:closeUserView={() => {
+            userView = null;
+        }}
     />
-</div>
+{/if}
 
