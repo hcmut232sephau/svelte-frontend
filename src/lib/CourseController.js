@@ -182,6 +182,25 @@ export class CourseController {
     /**
      * @param {string} id
      */
+    async joinCourseAsStudent(id) {
+        const user = get(this.authCtrl.user);
+        const userData = get(this.authCtrl.userData);
+        if ((user === null) || (user == "loggedOut") || (userData === null)) {
+            throw new Error("Trying to join course while not logged in");
+        }
+
+        const db = this.authCtrl.firebaseCtrl.db;
+        const uid = user.uid;
+        const coursesRef = collection(db, "courses");
+        const documentRef = doc(coursesRef, id, "students", uid);
+
+        await setDoc(documentRef, {});
+        await this.updateCourses();
+    }
+
+    /**
+     * @param {string} id
+     */
     async leaveCourseAsTeacher(id) {
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);

@@ -38,7 +38,4 @@
     <div class="text-sm">
         Owned by <span class="font-medium">{userData.username}</span>
     </div>
-    <div class="text-sm">
-        {course.teachers.length} teacher{course.teachers.length == 1 ? "" : "s"} and {course.students.length} student{course.students.length == 1 ? "" : "s"}
-    </div>
 {/if}
