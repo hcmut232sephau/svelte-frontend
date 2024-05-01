@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { writable, get } from 'svelte/store';
 import { FirebaseController } from "./FirebaseController";
+import { UserDataCacheController } from "./UserDataCacheController";
 
 export class AuthenticationController {
     /**
@@ -16,11 +17,15 @@ export class AuthenticationController {
      */
     userData;
 
+    #unsubscribeUserDataCache;
+
     /**
      * @param {FirebaseController} firebaseCtrl
+     * @param {UserDataCacheController} userDataCacheCtrl;
      */
-    constructor(firebaseCtrl) {
+    constructor(firebaseCtrl, userDataCacheCtrl) {
         this.firebaseCtrl = firebaseCtrl;
+        this.userDataCacheCtrl = userDataCacheCtrl;
 
         this.user = writable(null);
         this.isRegistering = writable(false);
@@ -29,6 +34,16 @@ export class AuthenticationController {
         this.firebaseCtrl.auth.onAuthStateChanged(u => {
             this.onAuthStateChanged(u);
         });
+        this.#unsubscribeUserDataCache = this.userDataCacheCtrl.cache.subscribe(e => {
+            const user = get(this.user);
+            if (user !== null && user != "loggedOut") {
+                this.userData.set(e.get(user.uid) ?? null);
+            }
+        });
+    }
+
+    destroy() {
+        this.#unsubscribeUserDataCache();
     }
 
     /**
@@ -40,33 +55,7 @@ export class AuthenticationController {
             this.userData.set(null);
         } else {
             this.user.set(newUser);
-            let currentUserData = get(this.userData);
-            if (currentUserData === null) {
-                const db = this.firebaseCtrl.db;
-                const usersRef = collection(db, "users");
-                getDoc(doc(usersRef, newUser.uid)).then(e => {
-                    let accountType;
-                    const currentAccountType = e.get("accountType");
-                    if (currentAccountType === undefined) {
-                        accountType = "unselected";
-                    } else {
-                        accountType = currentAccountType;
-                    }
-
-                    let username = "";
-                    const currentUsername = e.get("username");
-                    if (currentUsername === undefined) {
-                        // Empty string for unset username
-                        username = "";
-                    } else {
-                        username = currentUsername;
-                    }
-
-                    this.userData.set(new UserData(accountType, username));
-
-                    return e;
-                });
-            }
+            this.userDataCacheCtrl.fetchUserData(newUser.uid);
         }
     }
 

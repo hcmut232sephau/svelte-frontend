@@ -12,8 +12,8 @@
     const pageName = "Neuroflask";
 
     let firebaseCtrl = new FirebaseController();
-    let authCtrl = new AuthenticationController(firebaseCtrl);
     let userDataCacheCtrl = new UserDataCacheController(firebaseCtrl);
+    let authCtrl = new AuthenticationController(firebaseCtrl, userDataCacheCtrl);
 
     let isRegistering = false;
 
