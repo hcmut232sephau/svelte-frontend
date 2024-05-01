@@ -3,11 +3,14 @@
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { CourseController, CourseData, CourseState } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
-    import { Card, Button, Input } from 'flowbite-svelte';
+    import { Card, Button, Input, Textarea} from 'flowbite-svelte';
     import { SideBarCourseEntry } from "../sidebar/States";
     import CourseSettings from "./CourseSettings.svelte";
     import { UserDataCacheController } from "$lib/UserDataCacheController";
     import UserView from "./UserView.svelte";
+    import {ArrowRightOutline, FileLinesSolid, FileCirclePlusSolid, TrashBinSolid} from "flowbite-svelte-icons"
+    import { Timeline, TimelineItem } from 'flowbite-svelte';
+    import { CalendarWeekSolid } from 'flowbite-svelte-icons';
 
     let dispatch = createEventDispatcher();
 
@@ -63,19 +66,49 @@
      * @type {string | null}
      */
     let userView = null;
+    
+    let titles = ["Introduction", "Assignment"]
+    let notes = ["Introduction to the course", "Grading \nCriteria\nResources"]
+    let index = [0, 1]
+    let dates = ["Tue May 13", "Thur May 15"]
+    let details = ["Room 306\nBuilding B4", "https://meet.google.com/sasf-sfs-wtw"]
+
 </script>
 {#if userView == null}
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        <Button 
-            class="my-2"
-            on:click={() => {
-                userView = courseState?.data.owner ?? null;
-            }}
-        >
-            View owner
-        </Button>
+    <Card class="bg-neutral-800 border-none mx-auto mt-10 w-[50vw]" size="lg">
+        <div class="flex m-8">
+            <img src="icons/user-solid.svg" alt="" class="w-24 h-24 bg-white rounded-full p-8">
+            <div class="flex flex-col text-xl ml-10">
+                <button 
+                    class="mt-auto mb-2 font-black text-blue-600 text-2xl hover:text-blue-800"
+                    on:click={() => {
+                    userView = courseState?.data.owner ?? null;
+                }}>
+                    Example
+                </button>
+                <h1 class="mb-auto">Teacher</h1>
+            </div>
+    </div>
     </Card>
-    <div class="flex flex-col w-[50vw]">
+    <Card class="bg-neutral-800 border-none mx-auto mt-10 w-[50vw]" size="lg">
+        <Timeline order="horizontal" class="mx-auto my-8">
+            {#each index as i}
+            <TimelineItem>
+                <svelte:fragment slot="icon">
+                  <div class="flex items-center">
+                    <div class="flex z-10 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-0 ring-white dark:bg-primary-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                      <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    </div>
+                    <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700" />
+                  </div>
+                </svelte:fragment>
+                <h1 class="text-white text-2xl font-black mt-2 mr-20">{dates[i]}</h1>
+                <p class="whitespace-pre">{details[i]}</p>
+              </TimelineItem>
+            {/each}
+        </Timeline>
+    </Card>
+    <div class="flex flex-col w-[50vw] mb-8">
         <CourseSettings
             entry={entry}
             isOwner={isOwner}
@@ -84,7 +117,38 @@
             on:deleteCourse
             on:leaveCourse
         />
+
+    {#each index as i}
+        <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
+            <div class="flex ">
+                <img src="icons/file-solid.svg" alt="" class="bg-white p-10 mr-12 my-auto w-[20vw] h-[20vw] rounded max-w-56 max-h-56" />
+                <div class="flex flex-col">
+                    <div class="flex-col mb-auto">
+                        <h1 class="text-white font-black text-2xl">{titles[i]}</h1>
+                        <p class="mt-2 whitespace-pre">{notes[i]}</p>
+                    </div>
+                    <div class="flex">
+                        <Button class="mr-4">Open</Button>
+                        <Button class="">
+                            <TrashBinSolid/>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </Card>
+    {/each}
     </div>
+    <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8" size="lg">
+        <div class="flex mb-4">
+            <h1 class="text-white text-2xl font-black mr-auto">Add new document</h1>
+            <Button class="mr-4">
+                <FileCirclePlusSolid/>
+            </Button>
+            <Button>Save</Button>
+        </div>
+        <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
+        <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
+    </Card>
 {:else}
     <UserView
         userId={userView}
@@ -94,4 +158,5 @@
         }}
     />
 {/if}
+
 

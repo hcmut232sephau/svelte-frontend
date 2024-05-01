@@ -51,11 +51,30 @@
 </script>
 <div class="flex flex-col w-[50vw]">
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        <div>User</div>
         {#if userData === null}
             Loading...
         {:else}
-            {userData.username} ({formatAccountType(userData.accountType)})
+            <div class="flex m-8">
+                <img src="icons/user-solid.svg" alt="" class="w-24 h-24 bg-white rounded-full p-8">
+                <div class="flex flex-col ml-10">
+                    <h1 class="mt-auto mb-2 font-black text-white text-2xl">{userData.username}</h1>
+                    <h1 class="mb-auto text-xl">{formatAccountType(userData.accountType)}</h1>
+                </div>
+            </div>
+            <div class="flex flex-col m-8">
+                <h1 class="text-xl font-black text-white">Date of birth</h1>
+                <p class="mb-4">Jan 1, 1990</p>
+                <h1 class="text-xl font-black text-white">Email</h1>
+                <p class="mb-4">username@exmaple.com</p>
+                {#if userData.accountType == "student"}
+                    <h1 class="text-xl font-black text-white">Major</h1>
+                    <p class="mb-4">Computer Science</p>
+                {/if}
+                {#if userData.accountType == "teacher"}
+                    <h1 class="text-xl font-black text-white">Degree</h1>
+                    <p class="mb-4">Computer Science</p>
+                {/if}
+            </div>
         {/if}
 
         <Button class="my-2" on:click={onCloseView}>
