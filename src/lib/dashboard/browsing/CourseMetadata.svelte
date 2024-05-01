@@ -23,12 +23,6 @@
         userData = e;
     });
 
-    const dispatch = createEventDispatcher();
-
-    function onSelect() {
-        // dispatch('sidebarSelect', entry);
-    }
-    
     onDestroy(() => {
         ownerDataUnsubscribe();
         ownerDataCtrl.destroy();
