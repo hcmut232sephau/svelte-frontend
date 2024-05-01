@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import { AuthenticationController } from "./AuthenticationController";
-import { CourseIdentity, CourseData, CourseController } from "./CourseController";
+import { CourseData, CourseController } from "./CourseController";
 import { arrayUnion, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { reinterpretCast } from "./TypeTools";
 
@@ -47,8 +47,7 @@ export class CourseBrowseController {
         return reinterpretCast((await getDocs(q)).docs.map(e => {
             const id = e.id;
             const data = e.data();
-            const identity = new CourseIdentity(id, data.courseCode, data.courseName);
-            return new CourseData(identity, data.owner, data.teachers, data.students);
+            return new CourseData(id, data.courseCode, data.courseName, data.owner);
         }));
     }
 
@@ -65,9 +64,9 @@ export class CourseBrowseController {
         const db = this.authCtrl.firebaseCtrl.db;
         const uid = user.uid;
         const coursesRef = collection(db, "courses");
-        const document = doc(coursesRef, id);
+        const documentRef = doc(coursesRef, id, "students", uid);
 
-        await updateDoc(document, { students: arrayUnion(uid) });
+        await setDoc(documentRef, {});
         this.courses.set(await this.#getCourses());
         this.courseCtrl.updateCourses();
     }

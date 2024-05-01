@@ -1,7 +1,7 @@
 <script>
     import { onDestroy } from "svelte";
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
-    import { CourseController, CourseData } from "$lib/CourseController";
+    import { CourseController, CourseData, CourseState } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
     import { SideBarCourseEntry } from "./sidebar/States";
@@ -31,9 +31,9 @@
      */
     let userData = null;
     /**
-     * @type {CourseData | null}
+     * @type {CourseState | null}
      */
-    let courseData = null;
+    let courseState = null;
     const unsubscribeUser = authCtrl.user.subscribe(val => {
         user = val;
     });
@@ -41,10 +41,10 @@
         userData = val;
     });
     const unsubscribeCourseData = courseCtrl.courses.subscribe(val => {
-        courseData = val?.find(e => e.identity.id == entry.courseIdentity.id) ?? null;
+        courseState = val?.find(e => e.data.id == entry.course.id) ?? null;
     });
 
-    $: isOwner = userData?.accountType == "teacher" && user !== null && user != "loggedOut" && user.uid == courseData?.owner;
+    $: isOwner = userData?.accountType == "teacher" && user !== null && user != "loggedOut" && user.uid == courseState?.data.owner;
     $: isTeacher = userData?.accountType == "teacher" && user !== null && user != "loggedOut";
 
     onDestroy(() => {

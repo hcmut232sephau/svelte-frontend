@@ -144,12 +144,7 @@ export class AuthenticationController {
             await setDoc(document, update);
         }
 
-        this.userData.update(e => {
-            if (e == null) {
-                return e;
-            }
-            return e.withUsername(name);
-        });
+        this.userData.update(e => e?.withUsername(name) ?? null);
     }
 }
 export class UserData {

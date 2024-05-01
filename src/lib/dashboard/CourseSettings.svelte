@@ -19,8 +19,8 @@
      */
     export let isTeacher;
     
-    $: courseCode = entry.courseIdentity.courseCode;
-    $: courseName = entry.courseIdentity.courseName;
+    $: courseCode = entry.course.courseCode;
+    $: courseName = entry.course.courseName;
 
     function onUpdateCourseIdentity() {
         dispatch("updateCourseIdentity", {entry, courseCode, courseName});

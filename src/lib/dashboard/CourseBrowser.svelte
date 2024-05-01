@@ -25,37 +25,45 @@
     /**
      * @type {CourseData[] | null}
      */
-    let courses = null;
+    let joinedCourses = [];
+    /**
+     * @type {CourseData[] | null}
+     */
+    let allCourses = null;
     let unsubscribeUserData = authCtrl.user.subscribe(val => {
         user = val;
-    })
-    $: unsubscribeCourses = courseBrowseCtrl?.courses.subscribe(val => {
-        courses = val ?? null;
+    });
+    let unsubscribeJoinedCourses = courseCtrl.courses.subscribe(val => {
+        joinedCourses = val;
+    });
+    $: unsubscribeAllCourses = courseBrowseCtrl?.courses.subscribe(val => {
+        allCourses = val;
     }) ?? null;
     onDestroy(() => {
         unsubscribeUserData();
-        if (unsubscribeCourses !== null) {
-            unsubscribeCourses();
+        unsubscribeJoinedCourses();
+        if (unsubscribeAllCourses !== null) {
+            unsubscribeAllCourses();
         }
         if (courseBrowseCtrl !== null) {
             courseBrowseCtrl.destroy();
         }
     });
-    
+
 </script>
 <div class="flex flex-col w-[50vw]">
-    {#each courses ?? [] as course}
+    {#each allCourses ?? [] as course}
         <Card class="mx-auto mt-4 bg-neutral-800 border-none" size="md">
-            <div class="font-black text-gray-500 text-xs">{course.identity.courseCode}</div>
+            <div class="font-black text-gray-500 text-xs">{course.courseCode}</div>
             <div class="flex">
-                <span class="my-auto text-white">{course.identity.courseName}</span>
+                <span class="my-auto text-white">{course.courseName}</span>
                 {#if user === null || user == "loggedOut"}
                     Loading...
-                {:else if course.students.includes(user.uid)}
+                {:else if course.id}
                     <Button disabled class="ml-auto w-24">Joined</Button>
                 {:else}
                     <Button class="ml-auto w-24" on:click={() => {
-                        courseBrowseCtrl.joinCourseAsStudent(course.identity.id);
+                        courseBrowseCtrl.joinCourseAsStudent(course.id);
                     }}>Join</Button>
                 {/if}
             </div>

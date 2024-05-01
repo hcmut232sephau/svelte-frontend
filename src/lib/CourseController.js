@@ -1,56 +1,38 @@
 import { get, writable } from "svelte/store";
 import { AuthenticationController } from "./AuthenticationController";
-import { arrayRemove, collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, collection, deleteDoc, doc, getCountFromServer, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { reinterpretCast } from "./TypeTools";
 
-export class CourseIdentity {
+export class CourseData {
     /**
      * @param {string} id
      * @param {string} courseCode
      * @param {string} courseName
+     * @param {string} owner
      */
-    constructor(id, courseCode, courseName) {
+    constructor(id, courseCode, courseName, owner) {
         this.id = id;
         this.courseCode = courseCode;
         this.courseName = courseName;
-    }
-
-    /**
-     * @param {string} courseCode
-     * @returns {CourseIdentity}
-     */
-    withCode(courseCode) {
-        return new CourseIdentity(this.id, courseCode, this.courseName);
-    }
-
-    /**
-     * @param {string} courseName
-     * @returns {CourseIdentity}
-     */
-    withName(courseName) {
-        return new CourseIdentity(this.id, this.courseCode, courseName);
-    }
-};
-
-export class CourseData {
-    /**
-     * @param {CourseIdentity} identity
-     * @param {string} owner
-     * @param {string[]} teachers
-     * @param {string[]} students
-     */
-    constructor(identity, owner, teachers, students) {
-        this.identity = identity;
         this.owner = owner;
-        this.teachers = teachers;
-        this.students = students;
+    }
+}
+
+export class CourseState {
+    /**
+     * @param {CourseData} data
+     * @param {boolean} joined
+     */
+    constructor(data, joined) {
+        this.data = data;
+        this.joined = joined;
     }
 }
 
 export class CourseController {
     /**
      * Courses visible to this user.
-     * @type {import("svelte/store").Writable<CourseData[] | null>}
+     * @type {import("svelte/store").Writable<CourseState[] | null>}
      */
     courses;
 
@@ -71,7 +53,7 @@ export class CourseController {
     }
 
     /**
-     * @returns {Promise<CourseData[]>}
+     * @returns {Promise<CourseState[]>}
      */
     async #getCourses() {
         const user = get(this.authCtrl.user);
@@ -84,21 +66,43 @@ export class CourseController {
         const uid = user.uid;
         const coursesRef = collection(db, "courses");
 
-        let q;
-        if (userData.accountType == "teacher") {
-            q = query(coursesRef, where("teachers", "array-contains", uid));
-        } else if (userData.accountType == "student") {
-            q = query(coursesRef, where("students", "array-contains", uid));
-        } else {
-            throw new Error("Invalid account type");
-        }
-
-        return reinterpretCast((await getDocs(q)).docs.map(e => {
-            const id = e.id;
-            const data = e.data();
-            const identity = new CourseIdentity(id, data.courseCode, data.courseName);
-            return new CourseData(identity, data.owner, data.teachers, data.students);
+        let firstLevelQuery = query(coursesRef);
+        let firstLevel = await getDocs(firstLevelQuery);
+        let courses = await Promise.all(firstLevel.docs.map(snapshot => {
+            const id = snapshot.id;
+            if (userData.accountType == "teacher") {
+                if (snapshot.data().owner == uid) {
+                    return Promise.resolve({
+                        snapshot,
+                        joined: true
+                    });
+                }
+                let selfRef = doc(db, "courses", id, "teachers", uid);
+                return getDoc(selfRef).then(f => {
+                    return {
+                        snapshot,
+                        joined: f.exists()
+                    };
+                });
+            } else if (userData.accountType == "student") {
+                let selfRef = doc(db, "courses", id, "students", uid);
+                return getDoc(selfRef).then(f => {
+                    return {
+                        snapshot,
+                        joined: f.exists()
+                    };
+                });
+            } else {
+                throw new Error("Invalid account type");
+            }
         }));
+
+        return courses.map(e => {
+            const id = e.snapshot.id;
+            const data = e.snapshot.data();
+            const courseData = new CourseData(id, data.courseCode, data.courseName, data.owner);
+            return new CourseState(courseData, e.joined);
+        });
     }
 
     async updateCourses() {
@@ -125,9 +129,7 @@ export class CourseController {
         const data = {
             courseCode: courseCode,
             courseName: courseName,
-            owner: uid,
-            teachers: [uid],
-            students: [],
+            owner: uid
         };
 
         await setDoc(document, data);
@@ -154,9 +156,11 @@ export class CourseController {
     }
 
     /**
-     * @param {CourseIdentity} id
+     * @param {string} id
+     * @param {string} courseCode
+     * @param {string} courseName
      */
-    async setCourseIdentity(id) {
+    async setCourseIdentity(id, courseCode, courseName) {
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);
         if ((user === null) || (user == "loggedOut") || (userData === null)) {
@@ -165,10 +169,10 @@ export class CourseController {
 
         const db = this.authCtrl.firebaseCtrl.db;
         const coursesRef = collection(db, "courses");
-        const document = doc(coursesRef, id.id);
+        const document = doc(coursesRef, id);
         const data = {
-            courseCode: id.courseCode,
-            courseName: id.courseName
+            courseCode: courseCode,
+            courseName: courseName
         };
 
         await updateDoc(document, data);
@@ -182,15 +186,15 @@ export class CourseController {
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);
         if ((user === null) || (user == "loggedOut") || (userData === null)) {
-            throw new Error("Trying to add course while not logged in");
+            throw new Error("Trying to leave course while not logged in");
         }
 
         const db = this.authCtrl.firebaseCtrl.db;
         const uid = user.uid;
         const coursesRef = collection(db, "courses");
-        const document = doc(coursesRef, id);
+        const documentRef = doc(coursesRef, id, "teachers", uid);
 
-        await updateDoc(document, { teachers: arrayRemove(uid) });
+        await deleteDoc(documentRef);
         await this.updateCourses();
     }
 
@@ -201,15 +205,15 @@ export class CourseController {
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);
         if ((user === null) || (user == "loggedOut") || (userData === null)) {
-            throw new Error("Trying to add course while not logged in");
+            throw new Error("Trying to leave course while not logged in");
         }
 
         const db = this.authCtrl.firebaseCtrl.db;
         const uid = user.uid;
         const coursesRef = collection(db, "courses");
-        const document = doc(coursesRef, id);
+        const documentRef = doc(coursesRef, id, "students", uid);
 
-        await updateDoc(document, { students: arrayRemove(uid) });
+        await deleteDoc(documentRef);
         await this.updateCourses();
     }
 }
