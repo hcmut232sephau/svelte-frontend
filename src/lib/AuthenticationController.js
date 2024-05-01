@@ -147,6 +147,7 @@ export class AuthenticationController {
         this.userData.update(e => e?.withUsername(name) ?? null);
     }
 }
+
 export class UserData {
     /**
      * @type {"student" | "teacher" | "unselected"}

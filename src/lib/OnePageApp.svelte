@@ -7,11 +7,13 @@
     import Register from "./authentication/Register.svelte";
     import AccountTypeSelector from "./authentication/AccountTypeSelector.svelte";
     import UsernameSelector from "./authentication/UsernameSelector.svelte";
+    import { UserDataCacheController } from "./UserDataCacheController.js";
 
     const pageName = "Neuroflask";
 
     let firebaseCtrl = new FirebaseController();
     let authCtrl = new AuthenticationController(firebaseCtrl);
+    let userDataCacheCtrl = new UserDataCacheController(firebaseCtrl);
 
     let isRegistering = false;
 
@@ -86,6 +88,7 @@
     <Dashboard
         pageName={pageName}
         authCtrl={authCtrl}
+        userDataCacheCtrl={userDataCacheCtrl}
         on:logout={onLogout}
     />
 {/if}

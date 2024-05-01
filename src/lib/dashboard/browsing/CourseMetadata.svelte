@@ -1,31 +1,30 @@
 <script>
     import { createEventDispatcher, onDestroy } from 'svelte';
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
-    import { UserDataController } from "./UserDataController";
+    import { UserDataCacheController } from "$lib/UserDataCacheController";
     import { CourseData } from '$lib/CourseController';
 
     /**
-     * @type {AuthenticationController}
+     * @type {UserDataCacheController}
      */
-    export let authCtrl;
+    export let userDataCacheCtrl;
     /**
      * @type {CourseData}
      */
     export let course;
 
-    $: ownerDataCtrl = new UserDataController(authCtrl, course.owner);
+    $: x = userDataCacheCtrl.fetchUserData(course.owner);
 
     /**
      * @type {UserData | null}
      */
     let userData = null;
-    $: ownerDataUnsubscribe = ownerDataCtrl.data.subscribe(e => {
-        userData = e;
+    $: ownerDataUnsubscribe = userDataCacheCtrl.cache.subscribe(e => {
+        userData = e.get(course.owner) ?? null;
     });
 
     onDestroy(() => {
         ownerDataUnsubscribe();
-        ownerDataCtrl.destroy();
     });
 </script>
 {#if userData !== null}

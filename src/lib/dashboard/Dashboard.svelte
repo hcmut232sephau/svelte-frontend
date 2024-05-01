@@ -12,6 +12,7 @@
     import CourseView from "./CourseView.svelte";
     import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
     import { reinterpretCast, typelessIncludes } from "$lib/TypeTools";
+    import { UserDataCacheController } from "$lib/UserDataCacheController";
 
     /**
      * @type {String}
@@ -21,6 +22,10 @@
      * @type {AuthenticationController}
      */
     export let authCtrl;
+    /**
+     * @type {UserDataCacheController}
+     */
+    export let userDataCacheCtrl;
 
     /**
      * @type {UserData | null}
@@ -249,6 +254,7 @@
         {#if selectedPage == courseBrowserEntry}
             <CourseBrowser
                 authCtrl={authCtrl}
+                userDataCacheCtrl={userDataCacheCtrl}
                 courseCtrl={courseCtrl}
             />
         {:else if selectedPage == courseAdderEntry}

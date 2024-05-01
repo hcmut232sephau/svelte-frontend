@@ -1,7 +1,6 @@
 import { get, writable } from "svelte/store";
 import { AuthenticationController } from "./AuthenticationController";
-import { arrayRemove, collection, deleteDoc, doc, getCountFromServer, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
-import { reinterpretCast } from "./TypeTools";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 
 export class CourseData {
     /**

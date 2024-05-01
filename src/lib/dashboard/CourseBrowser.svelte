@@ -5,11 +5,16 @@
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
     import CourseMetadata from "./browsing/CourseMetadata.svelte";
+    import { UserDataCacheController } from "$lib/UserDataCacheController";
 
     /**
      * @type {AuthenticationController}
      */
     export let authCtrl;
+    /**
+     * @type {UserDataCacheController}
+     */
+    export let userDataCacheCtrl;
     /**
      * @type {CourseController}
      */
@@ -49,7 +54,7 @@
                     }}>Join</Button>
                 {/if}
             </div>
-            <CourseMetadata authCtrl={authCtrl} course={course.data}/>
+            <CourseMetadata userDataCacheCtrl={userDataCacheCtrl} course={course.data}/>
         </Card>
     {/each}
 </div>
