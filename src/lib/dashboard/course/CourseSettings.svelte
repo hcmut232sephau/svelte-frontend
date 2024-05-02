@@ -12,10 +12,6 @@
     /**
      * @type {boolean}
      */
-    export let isOwner;
-    /**
-     * @type {boolean}
-     */
     export let isTeacher;
     
     $: courseCode = entry.course.courseCode;
@@ -73,25 +69,17 @@
             Save
         </Button>
     </Card>
-{/if}
-{#if isOwner}
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+    <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
         <h1 class="text-white text-lg font-bold">
             Course management
         </h1>
-        <Button 
-            class="mt-4 bg-red-800"
-            on:click={onDeleteCourse}
-        >
+        <Button class="mt-4 bg-red-800" on:click={onDeleteCourse}>
             Delete course
         </Button>
     </Card>
 {:else}
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        <Button 
-            class="mt-4 bg-red-800"
-            on:click={onLeaveCourse}
-        >
+    <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
+        <Button class="bg-red-800" on:click={onLeaveCourse}>
             Leave course
         </Button>
     </Card>

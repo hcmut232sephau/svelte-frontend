@@ -135,6 +135,7 @@
         await courseCtrl.addCourseAsTeacher(event.detail.courseCode, event.detail.courseName);
         const result = courses?.find(e => e.course.courseCode == event.detail.courseCode);
         if (result !== undefined) {
+            showCourses = true;
             selectedPage = result;
         }
     }
@@ -167,7 +168,7 @@
 
         const entry = event.detail.entry;
         const indexToSelectNext = courses?.findIndex(e => e.course.id == entry.course.id);
-        await courseCtrl.deleteCourseAsOwner(entry.course.id);
+        await courseCtrl.deleteCourseAsTeacher(entry.course.id);
         if (courses === null) {
             selectedPage = null;
         } else if ((indexToSelectNext === undefined) || (courses.length == 0)) {
@@ -248,36 +249,39 @@
             </SideBarItem>
         {/each}
     </SideBar>
-    <div class="flex">
-    <div class="div max-w-96 w-[30vw]"/>
-    <div class="mx-auto">
-        {#if selectedPage == courseBrowserEntry}
-            <CourseBrowser
-                authCtrl={authCtrl}
-                userDataCacheCtrl={userDataCacheCtrl}
-                courseCtrl={courseCtrl}
-            />
-        {:else if selectedPage == courseAdderEntry}
-            <AddCourse
-                on:addCourse={onAddCourse}
-            />
-        {:else if selectedPage == settingsEntry}
-            <Settings
-                authCtrl={authCtrl}
-                userData={userData}
-                on:logout={onLogout}
-            />
-        {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
-            <CourseView
-                authCtrl={authCtrl}
-                userDataCacheCtrl={userDataCacheCtrl}
-                courseCtrl={courseCtrl}
-                entry={reinterpretCast(selectedPage)}
-                on:updateCourseIdentity={onUpdateCourseIdentity}
-                on:deleteCourse={onDeleteCourse}
-                on:leaveCourse={onLeaveCourse}
-            />
-        {/if}
-    </div>
+    <div class="flex bg-neutral-900 h-screen">
+        <div class="div max-w-96 h-full w-[30vw]"/>
+        <div class="w-full overflow-auto">
+            <div class="mx-auto">
+                {#if selectedPage == courseBrowserEntry}
+                    <CourseBrowser
+                        authCtrl={authCtrl}
+                        userDataCacheCtrl={userDataCacheCtrl}
+                        courseCtrl={courseCtrl}
+                    />
+                {:else if selectedPage == courseAdderEntry}
+                    <AddCourse
+                        on:addCourse={onAddCourse}
+                    />
+                {:else if selectedPage == settingsEntry}
+                    <Settings
+                        authCtrl={authCtrl}
+                        userData={userData}
+                        on:logout={onLogout}
+                    />
+                {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
+                    <CourseView
+                        authCtrl={authCtrl}
+                        userDataCacheCtrl={userDataCacheCtrl}
+                        courseCtrl={courseCtrl}
+                        entry={reinterpretCast(selectedPage)}
+                        on:updateCourseIdentity={onUpdateCourseIdentity}
+                        on:deleteCourse={onDeleteCourse}
+                        on:leaveCourse={onLeaveCourse}
+                    />
+                {/if}
+            </div>
+        </div>
+        
     </div>
 {/if}

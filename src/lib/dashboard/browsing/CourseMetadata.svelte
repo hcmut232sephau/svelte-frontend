@@ -13,18 +13,18 @@
      */
     export let course;
 
-    $: x = userDataCacheCtrl.fetchUserData(course.owner);
+    $: x = userDataCacheCtrl.fetchUserData(course.teacher);
 
     /**
      * @type {UserData | null}
      */
     let userData = null;
-    $: ownerDataUnsubscribe = userDataCacheCtrl.cache.subscribe(e => {
-        userData = e.get(course.owner) ?? null;
+    $: teacherDataUnsubscribe = userDataCacheCtrl.cache.subscribe(e => {
+        userData = e.get(course.teacher) ?? null;
     });
 
     onDestroy(() => {
-        ownerDataUnsubscribe();
+        teacherDataUnsubscribe();
     });
 </script>
 {#if userData !== null}

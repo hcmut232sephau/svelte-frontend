@@ -40,7 +40,7 @@
     });
 
 </script>
-<div class="flex flex-col w-[50vw]">
+<div class="flex flex-col h-full mt-16 w-[50vw]">
     {#each (courses ?? []).filter(e => !e.joined) as course}
         <Card class="mx-auto mt-4 bg-neutral-800 border-none" size="md">
             <div class="font-black text-gray-500 text-xs">{course.data.courseCode}</div>

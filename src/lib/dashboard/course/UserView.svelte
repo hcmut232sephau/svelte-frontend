@@ -35,7 +35,7 @@
     }
 </script>
 <div class="flex flex-col w-[50vw]">
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+    <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
         {#if userData === null}
             Loading...
         {:else}

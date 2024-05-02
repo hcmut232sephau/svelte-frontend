@@ -7,13 +7,13 @@ export class CourseData {
      * @param {string} id
      * @param {string} courseCode
      * @param {string} courseName
-     * @param {string} owner
+     * @param {string} teacher
      */
-    constructor(id, courseCode, courseName, owner) {
+    constructor(id, courseCode, courseName, teacher) {
         this.id = id;
         this.courseCode = courseCode;
         this.courseName = courseName;
-        this.owner = owner;
+        this.teacher = teacher;
     }
 }
 
@@ -70,18 +70,9 @@ export class CourseController {
         let courses = await Promise.all(firstLevel.docs.map(snapshot => {
             const id = snapshot.id;
             if (userData.accountType == "teacher") {
-                if (snapshot.data().owner == uid) {
-                    return Promise.resolve({
-                        snapshot,
-                        joined: true
-                    });
-                }
-                let selfRef = doc(db, "courses", id, "teachers", uid);
-                return getDoc(selfRef).then(f => {
-                    return {
-                        snapshot,
-                        joined: f.exists()
-                    };
+                return Promise.resolve({
+                    snapshot,
+                    joined: snapshot.data().teacher == uid
                 });
             } else if (userData.accountType == "student") {
                 let selfRef = doc(db, "courses", id, "students", uid);
@@ -99,7 +90,7 @@ export class CourseController {
         return courses.map(e => {
             const id = e.snapshot.id;
             const data = e.snapshot.data();
-            const courseData = new CourseData(id, data.courseCode, data.courseName, data.owner);
+            const courseData = new CourseData(id, data.courseCode, data.courseName, data.teacher);
             return new CourseState(courseData, e.joined);
         });
     }
@@ -128,7 +119,7 @@ export class CourseController {
         const data = {
             courseCode: courseCode,
             courseName: courseName,
-            owner: uid
+            teacher: uid
         };
 
         await setDoc(document, data);
@@ -138,7 +129,7 @@ export class CourseController {
     /**
      * @param {string} id 
      */
-    async deleteCourseAsOwner(id) {
+    async deleteCourseAsTeacher(id) {
         const user = get(this.authCtrl.user);
         const userData = get(this.authCtrl.userData);
         if ((user === null) || (user == "loggedOut") || (userData === null)) {
@@ -194,25 +185,6 @@ export class CourseController {
         const documentRef = doc(coursesRef, id, "students", uid);
 
         await setDoc(documentRef, {});
-        await this.updateCourses();
-    }
-
-    /**
-     * @param {string} id
-     */
-    async leaveCourseAsTeacher(id) {
-        const user = get(this.authCtrl.user);
-        const userData = get(this.authCtrl.userData);
-        if ((user === null) || (user == "loggedOut") || (userData === null)) {
-            throw new Error("Trying to leave course while not logged in");
-        }
-
-        const db = this.authCtrl.firebaseCtrl.db;
-        const uid = user.uid;
-        const coursesRef = collection(db, "courses");
-        const documentRef = doc(coursesRef, id, "teachers", uid);
-
-        await deleteDoc(documentRef);
         await this.updateCourses();
     }
 
