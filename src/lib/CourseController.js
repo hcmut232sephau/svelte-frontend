@@ -131,9 +131,19 @@ export class CourseController {
         }
 
         const db = this.authCtrl.firebaseCtrl.db;
-        const uid = user.uid;
         const coursesRef = collection(db, "courses");
         const document = doc(coursesRef, id);
+        
+        const schedulesSubcollection = collection(document, "schedules");
+        const notesSubcollection = collection(document, "notes");
+        const studentsSubcollection = collection(document, "students");
+
+        for (let subcollection of [schedulesSubcollection, notesSubcollection, studentsSubcollection]) {
+            let q = await getDocs(query(subcollection));
+            for (let doc of q.docs) {
+                deleteDoc(doc.ref);
+            }
+        }
 
         await deleteDoc(document);
         await this.updateCourses();
