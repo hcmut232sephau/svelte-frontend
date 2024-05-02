@@ -250,7 +250,7 @@
     </SideBar>
     <div class="flex">
     <div class="div max-w-96 w-[30vw]"/>
-    <div class="">
+    <div class="mx-auto">
         {#if selectedPage == courseBrowserEntry}
             <CourseBrowser
                 authCtrl={authCtrl}

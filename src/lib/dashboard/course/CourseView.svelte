@@ -76,27 +76,7 @@
 
 </script>
 {#if userView == null}
-    <Card class="fixed bg-neutral-800 border-none mt-8 ml-6 w-64">
-        <Timeline order="vertical" class="mx-4 mt-6 mb-2">
-            {#each index as i}
-            <TimelineItem>
-                <svelte:fragment slot="icon">
-                    <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
-                      <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                    </span>
-                </svelte:fragment>                    
-                <h1 class="text-white text-2xl font-black mt-3 ">{dates[i]}</h1>
-                <p class="whitespace-pre-wrap break-words">{details[i]}</p>
-            </TimelineItem>
-            {/each}
-        </Timeline>
-        <Input  placeholder="dd/mm/yy"  class="bg-neutral-700 text-white my-2"/>
-        <Textarea  placeholder="Detail"  class="bg-neutral-700 text-white mb-2"/>
-        <Button>Add</Button>
-    </Card>
-    <div class="flex ml-2">
-        <div class="ml-4 w-48"></div>
-        <div class="flex flex-col w-[50vw] mb-8 mx-auto pl-16">
+    <div class="flex flex-col w-[50vw] mb-8 mx-auto pl-16">
             <Card class="bg-neutral-800 border-none mx-auto mt-10 " size="lg">
                 {#if courseState !== null}
                     <InlineCourseOwnerView
@@ -107,6 +87,22 @@
                         }}
                     />
                 {/if}
+                <Timeline order="vertical" class="mx-4 mt-6 mb-2">
+                    {#each index as i}
+                    <TimelineItem>
+                        <svelte:fragment slot="icon">
+                            <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
+                                <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                            </span>
+                        </svelte:fragment>                    
+                        <h1 class="text-white text-2xl font-black mt-3 ">{dates[i]}</h1>
+                        <p class="whitespace-pre-wrap break-words">{details[i]}</p>
+                    </TimelineItem>
+                    {/each}
+                </Timeline>
+                <Input  placeholder="dd/mm/yy"  class="bg-neutral-700 text-white my-2"/>
+                <Textarea  placeholder="Detail"  class="bg-neutral-700 text-white mb-2"/>
+                <Button>Add</Button>
             </Card>
             {#each index as i}
                 <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
@@ -151,7 +147,6 @@
                 on:leaveCourse
             />
         </div>
-    </div>
 {:else}
     <UserView
         userId={userView}
