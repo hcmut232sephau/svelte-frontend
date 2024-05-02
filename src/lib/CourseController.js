@@ -42,9 +42,7 @@ export class CourseController {
         this.authCtrl = authCtrl;
         this.courses = writable(null);
 
-        this.#getCourses().then(e => {
-            this.courses.set(e);
-        });
+        this.updateCourses();
     }
 
     destroy() {

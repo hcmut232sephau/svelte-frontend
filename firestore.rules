@@ -74,6 +74,28 @@ service cloud.firestore {
                       && request.auth.uid == targetStudentId;
       }
 
+      match /schedules/{targetScheduleId} {
+        allow read: if request.auth != null
+                    && userHasUserData()
+                    && userHasFullUserData();
+
+        allow write: if request.auth != null
+                    && userHasUserData()
+                    && userHasFullUserData()
+                    && isTeacher();
+      }
+
+      match /notes/{targetNoteId} {
+        allow read: if request.auth != null
+                    && userHasUserData()
+                    && userHasFullUserData();
+
+        allow write: if request.auth != null
+                    && userHasUserData()
+                    && userHasFullUserData()
+                    && isTeacher();
+      }
+
       allow read: if request.auth != null
                   && userHasUserData()
                   && userHasFullUserData();
@@ -90,32 +112,9 @@ service cloud.firestore {
       allow update: if request.auth != null
                     && userHasUserData()
                     && userHasFullUserData()
-                    && (
-                      (
-                        isTeacher()
-                        && (
-                          !request.resource.data.diff(resource.data).affectedKeys().hasAny(["teacher"])
-                          || (request.auth.uid == resource.data.teacher)
-                        )
-                      )
-                      // || (
-                      //   isStudent()
-                      //   && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["owner", "teachers"])
-                      //   && (
-                      //     !request.resource.data.diff(resource.data).affectedKeys().hasAny(["students"])
-                      //     || (
-                      //       request.resource.data.students.size() == resource.data.students.size() + 1
-                      //       && !resource.data.students.hasAny([request.auth.uid])
-                      //       && request.resource.data.students.hasAll(resource.data.students)
-                      //       && request.resource.data.students.hasAll([request.auth.uid])
-                      //     )
-                      //     || (
-                      //       request.resource.data.students.size() == resource.data.students.size() - 1
-                      //       && resource.data.students.removeAll(request.resource.data.students)[0] == request.auth.uid
-                      //     )
-                      //   )
-                      // )
-                    );
+                    && isTeacher()
+                    && request.auth.uid == resource.data.teacher;
+
       allow delete: if request.auth.uid == resource.data.teacher;
     }
   }

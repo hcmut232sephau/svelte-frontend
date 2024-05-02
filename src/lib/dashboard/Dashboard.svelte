@@ -1,6 +1,6 @@
 <script>
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
-    import { CourseController } from "$lib/CourseController";
+    import { CourseController, CourseState } from "$lib/CourseController";
     import { createEventDispatcher, onDestroy } from 'svelte';
     import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
@@ -216,11 +216,19 @@
     >
         <SideBarSectionHeader on:click={onCourseShowToggle}>
             <div class="div flex">
-                <span class="font-bold">Courses</span>
-                {#if !showCourses}
-                    <AngleRightOutline class="ml-auto"/>
-                {:else}
-                    <AngleDownOutline class="ml-auto"/>
+                <span class="font-bold">
+                    {#if courses === null}
+                        Loading courses...
+                    {:else}
+                        Courses
+                    {/if}
+                </span>
+                {#if courses !== null}
+                    {#if !showCourses}
+                        <AngleRightOutline class="ml-auto"/>
+                    {:else}
+                        <AngleDownOutline class="ml-auto"/>
+                    {/if}
                 {/if}
             </div>
         </SideBarSectionHeader>
@@ -252,7 +260,7 @@
     <div class="flex bg-neutral-900 h-screen">
         <div class="div max-w-96 h-full w-[30vw]"/>
         <div class="w-full overflow-auto">
-            <div class="mx-auto">
+            <div class="flex flex-col w-[50vw] mb-8 mx-auto">
                 {#if selectedPage == courseBrowserEntry}
                     <CourseBrowser
                         authCtrl={authCtrl}

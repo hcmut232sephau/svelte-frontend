@@ -45,7 +45,6 @@
         }
 
         if (isInputValid) {
-            // courseCtrl.addCourseAsTeacher(courseCode, courseName);
             dispatch("addCourse", {courseCode, courseName});
         }
     }
