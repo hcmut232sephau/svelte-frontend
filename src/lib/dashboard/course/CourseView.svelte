@@ -77,79 +77,79 @@
 </script>
 {#if userView == null}
     <div class="flex flex-col w-[50vw] mb-8 mx-auto pl-16">
-            <Card class="bg-neutral-800 border-none mx-auto mt-10 " size="lg">
-                {#if courseState !== null}
-                    <InlineCourseOwnerView
-                        userId={courseState.data.owner}
-                        userDataCacheCtrl={userDataCacheCtrl}
-                        on:openUserView={event => {
-                            userView = event.detail;
-                        }}
-                    />
-                {/if}
-                <Timeline order="vertical" class="mx-4 mt-6 mb-2">
-                    {#each index as i}
-                    <TimelineItem>
-                        <svelte:fragment slot="icon">
-                            <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
-                                <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                            </span>
-                        </svelte:fragment>                    
+        <Card class="bg-neutral-800 border-none mx-auto mt-10 " size="lg">
+            {#if courseState !== null}
+                <InlineCourseOwnerView
+                    userId={courseState.data.owner}
+                    userDataCacheCtrl={userDataCacheCtrl}
+                    on:openUserView={event => {
+                        userView = event.detail;
+                    }}
+                />
+            {/if}
+            <Timeline order="vertical" class="mx-4 mt-6 mb-2">
+                {#each index as i}
+                <TimelineItem>
+                    <svelte:fragment slot="icon">
+                        <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
+                            <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                        </span>
+                    </svelte:fragment>
+                    <div class="flex ml-2">
+                        <h1 class="text-white text-xl font-bold mr-auto">{dates[i]}</h1>
+                        <Button class="bg-red-700 px-3"><TrashBinSolid/></Button>
+                    </div>
+                    <p class="whitespace-pre-wrap break-words ml-2">{details[i]}</p>
+                </TimelineItem>
+                {/each}
+            </Timeline>
+            <Input  placeholder="dd/mm/yy" class="bg-neutral-700 text-white my-2"/>
+            <Textarea  placeholder="Detail" class="bg-neutral-700 text-white mb-2"/>
+            <Button>Add</Button>
+        </Card>
+        {#each index as i}
+            <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
+                <div class="flex-col mx-2">
+                    <div class="flex mb-2">
+                        <h1 class="text-white font-black text-xl mr-auto">{titles[i]}</h1>
+                        <img src="icons/file-solid.svg" alt="" class=" invert w-8 h-8 " />
+                    </div>
+                    <p class="mb-8 whitespace-pre text-wrap">{notes[i]}</p>
+                    <div class="flex flex-col">
+                        <div class="flex-col mb-auto">
+                        </div>
                         <div class="flex">
-                            <h1 class="text-white text-2xl font-black mt-3 mr-auto ">{dates[i]}</h1>
-                            <Button class="bg-red-700 px-3"><TrashBinSolid/></Button>
-                        </div>
-                        <p class="whitespace-pre-wrap break-words">{details[i]}</p>
-                    </TimelineItem>
-                    {/each}
-                </Timeline>
-                <Input  placeholder="dd/mm/yy"  class="bg-neutral-700 text-white my-2"/>
-                <Textarea  placeholder="Detail"  class="bg-neutral-700 text-white mb-2"/>
-                <Button>Add</Button>
-            </Card>
-            {#each index as i}
-                <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
-                    <div class="flex-col mx-2">
-                        <div class="flex mb-2">
-                            <h1 class="text-white font-black text-2xl mr-auto">{titles[i]}</h1>
-                            <img src="icons/file-solid.svg" alt="" class=" invert w-8 h-8 " />
-                        </div>
-                        <p class="mb-8 whitespace-pre text-wrap">{notes[i]}</p>
-                        <div class="flex flex-col">
-                            <div class="flex-col mb-auto">
-                            </div>
-                            <div class="flex">
-                                <Button class="mr-2">Open</Button>
-                                <Button class="px-3 bg-red-700">
-                                    <TrashBinSolid/>
-                                </Button>
-                            </div>
+                            <Button class="mr-2">Open</Button>
+                            <Button class="px-3 bg-red-700">
+                                <TrashBinSolid/>
+                            </Button>
                         </div>
                     </div>
-                </Card>
-            {/each}
-            <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8 " size="lg">
-                <div class="flex mb-4">
-                    <h1 class="text-white text-lg font-bold mr-auto">
-                        Add document
-                    </h1>
-                    <Button class="mr-2 px-3">
-                        <FileCirclePlusSolid/>
-                    </Button>
-                    <Button class="">Add</Button>
                 </div>
-                <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
-                <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
             </Card>
-            <CourseSettings
-                entry={entry}
-                isOwner={isOwner}
-                isTeacher={isTeacher}
-                on:updateCourseIdentity
-                on:deleteCourse
-                on:leaveCourse
-            />
-        </div>
+        {/each}
+        <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8 " size="lg">
+            <div class="flex mb-4">
+                <h1 class="text-white text-lg font-bold mr-auto">
+                    Add document
+                </h1>
+                <Button class="mr-2 px-3">
+                    <FileCirclePlusSolid/>
+                </Button>
+                <Button class="">Add</Button>
+            </div>
+            <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
+            <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
+        </Card>
+        <CourseSettings
+            entry={entry}
+            isOwner={isOwner}
+            isTeacher={isTeacher}
+            on:updateCourseIdentity
+            on:deleteCourse
+            on:leaveCourse
+        />
+    </div>
 {:else}
     <UserView
         userId={userView}

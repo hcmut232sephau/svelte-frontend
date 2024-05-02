@@ -34,11 +34,11 @@
     }
 </script>
 {#if userData !== null}
-    <div class="flex m-2">
+    <div class="flex">
         <img src="icons/user-solid.svg" alt="" class="w-14 h-14 bg-white rounded-full p-4">
         <div class="flex flex-col text-l ml-6">
             <button
-                class="mt-auto font-black text-blue-600 text-2xl hover:text-blue-800"
+                class="mt-auto font-black text-blue-600 text-xl hover:text-blue-800"
                 on:click={onOpenUserView}
             >
                 {userData.username}
