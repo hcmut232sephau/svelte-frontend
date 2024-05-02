@@ -95,7 +95,10 @@
                                 <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
                             </span>
                         </svelte:fragment>                    
-                        <h1 class="text-white text-2xl font-black mt-3 ">{dates[i]}</h1>
+                        <div class="flex">
+                            <h1 class="text-white text-2xl font-black mt-3 mr-auto ">{dates[i]}</h1>
+                            <Button class="bg-red-700 px-3"><TrashBinSolid/></Button>
+                        </div>
                         <p class="whitespace-pre-wrap break-words">{details[i]}</p>
                     </TimelineItem>
                     {/each}
@@ -117,7 +120,7 @@
                             </div>
                             <div class="flex">
                                 <Button class="mr-2">Open</Button>
-                                <Button class="px-3">
+                                <Button class="px-3 bg-red-700">
                                     <TrashBinSolid/>
                                 </Button>
                             </div>
@@ -133,7 +136,7 @@
                     <Button class="mr-2 px-3">
                         <FileCirclePlusSolid/>
                     </Button>
-                    <Button class="">Save</Button>
+                    <Button class="">Add</Button>
                 </div>
                 <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
                 <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
