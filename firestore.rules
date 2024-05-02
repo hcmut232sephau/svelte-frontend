@@ -24,6 +24,8 @@ service cloud.firestore {
                                || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
                               && (!request.resource.data.keys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
+                              && (!request.resource.data.keys().hasAny(["bio"])
+                               || !(request.resource.data.bio == "" || request.resource.data.bio.size() > 144))
                             );
 
       allow update: if request.auth != null

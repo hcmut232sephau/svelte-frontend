@@ -1,7 +1,7 @@
 <script>
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
-    import { Card, Button, Input } from 'flowbite-svelte';
+    import { Card, Button, Input, Textarea } from 'flowbite-svelte';
 
     /**
      * @type {AuthenticationController}
@@ -19,33 +19,38 @@
     }
 
     let username = userData.username;
+    let bio = userData.bio;
 </script>
 <div class="flex flex-col w-[50vw]">
     <Card class="bg-neutral-800 border-none mt-16 mx-auto" size="lg">
-        Username
-            <div class="flex my-2">
-            <Input
-                class="bg-neutral-700 text-white mr-3"
-                placeholder="Username"
-                bind:value={username}
-            />
-            <Button 
-                class=""
-                on:click={() => {
-                    authCtrl.setUsername(username);
-                    // TODO: input verification
-                }}
-            >
-                Save
-            </Button>
-        </div>
+        <div>Username</div>
+        <Input
+            class="bg-neutral-700 text-white mt-2"
+            placeholder="Username"
+            bind:value={username}
+        />
+        <div class="mt-2">Bio</div>
+        <Textarea
+            class="bg-neutral-700 text-white mt-2"
+            placeholder="Bio"
+            bind:value={bio}
+        />
+        <Button 
+            class="mt-4"
+            on:click={() => {
+                authCtrl.setUserData(userData.withUsername(username).withBio(bio));
+                // TODO: input verification
+            }}
+        >
+            Save
+        </Button>
     </Card>
     <Card class="bg-neutral-800 border-none mt-16 mx-auto" size="lg">
         {#if userData.accountType != "student"}
             <Button 
                 class=""
                 on:click={() => {
-                    authCtrl.changeAccountType("student");
+                    authCtrl.setUserData(userData.withType("student"));
                 }}
             >
                 Become a student
@@ -55,18 +60,13 @@
             <Button 
                 class=""
                 on:click={() => {
-                    authCtrl.changeAccountType("teacher");
+                    authCtrl.setUserData(userData.withType("teacher"));
                 }}
             >
                 Become a teacher
             </Button>
         {/if}
-    </Card>
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        <Button 
-            class="ml-2 bg-red-800"
-            on:click={onLogout}
-        >
+        <Button class="bg-red-800 mt-2" on:click={onLogout}>
             Log out
         </Button>
     </Card>

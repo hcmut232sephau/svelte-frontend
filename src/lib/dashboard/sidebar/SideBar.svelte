@@ -1,17 +1,5 @@
 <script>
     import { UserData } from "$lib/AuthenticationController";
-    import { createEventDispatcher } from 'svelte';
-
-    /**
-     * @param {"student" | "teacher" | "unselected"} type
-     */
-    function formatAccountType(type) {
-        switch (type) {
-            case "student": return "Student";
-            case "teacher": return "Teacher";
-            case "unselected": return "Unselected";
-        }
-    }
 
     /**
      * @type {String}
@@ -21,8 +9,6 @@
      * @type {UserData}
      */
     export let userData;
-
-    $: formattedAccountType = formatAccountType(userData.accountType);
 </script>
 <aside class="h-screen fixed">
     <div class="h-full flex flex-col bg-neutral-800 max-w-96 w-[30vw] min-w-64">
@@ -37,7 +23,7 @@
             <div class="flex px-6 justify-between items-center">
                 <div class="leading-6">
                     <h4 class="font-bold">{userData.username}</h4>
-                    <span class="text-xz text-gray-500">{formattedAccountType}</span>
+                    <span class="text-xz text-gray-500">{userData.formattedAccountType()}</span>
                 </div>
             </div>
         </div>

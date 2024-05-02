@@ -26,25 +26,12 @@ export class UserDataCacheController {
         const db = this.firebaseCtrl.db;
         const usersRef = collection(db, "users");
         getDoc(doc(usersRef, id)).then(e => {
-            let accountType;
-            const currentAccountType = e.get("accountType");
-            if (currentAccountType === undefined) {
-                accountType = "unselected";
-            } else {
-                accountType = currentAccountType;
-            }
-
-            let username = "";
-            const currentUsername = e.get("username");
-            if (currentUsername === undefined) {
-                // Empty string for unset username
-                username = "";
-            } else {
-                username = currentUsername;
-            }
+            let accountType = e.get("accountType") ?? "unset";
+            let username = e.get("username") ?? "";
+            let bio = e.get("bio") ?? "";
 
             this.cache.update(e => {
-                e?.set(id, new UserData(accountType, username));
+                e?.set(id, new UserData(accountType, username, bio));
                 return e;
             });
 

@@ -53,7 +53,7 @@
 <div class="flex flex-col w-[50vw]">
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         Course code
-        <div class="flex my-2">
+        <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
                 bind:value={courseCode}
@@ -61,14 +61,14 @@
             <InputError error={courseCodeError}/>
         </div>
         Course name
-        <div class="flex my-2">
+        <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
                 bind:value={courseName}
             />
             <InputError error={courseNameError}/>
         </div>
-        <Button class="flex my-2" on:click={onAddCourse}>Add</Button>
+        <Button class="flex mt-2" on:click={onAddCourse}>Add</Button>
     </Card>
 </div>
 

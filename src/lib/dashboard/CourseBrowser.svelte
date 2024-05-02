@@ -45,7 +45,7 @@
         <Card class="mx-auto mt-4 bg-neutral-800 border-none" size="md">
             <div class="font-black text-gray-500 text-xs">{course.data.courseCode}</div>
             <div class="flex">
-                <span class="my-auto text-white">{course.data.courseName}</span>
+                <span class="mt-auto text-white">{course.data.courseName}</span>
                 {#if user === null || user == "loggedOut"}
                     Loading...
                 {:else}

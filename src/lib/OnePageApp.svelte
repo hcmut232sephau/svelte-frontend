@@ -6,7 +6,7 @@
     import Login from "./authentication/Login.svelte";
     import Register from "./authentication/Register.svelte";
     import AccountTypeSelector from "./authentication/AccountTypeSelector.svelte";
-    import UsernameSelector from "./authentication/UsernameSelector.svelte";
+    import PersonalInfoSelector from "./authentication/PersonalInfoSelector.svelte";
     import { UserDataCacheController } from "./UserDataCacheController.js";
 
     const pageName = "Neuroflask";
@@ -35,6 +35,9 @@
         unsubscribeUser();
         unsubscribeUserData();
     });
+
+    // Account type is left out, we have a separate screen for it
+    $: isUserDataIncomplete = userData != null && (userData.username == "" || userData.bio == "");
 
     /**
      * @param {CustomEvent} event
@@ -68,17 +71,18 @@
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         Loading...
     </div>
-{:else if userData.accountType === "unselected"}
+{:else if isUserDataIncomplete}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
-        <AccountTypeSelector
+        <PersonalInfoSelector
             pageName={pageName}
             authCtrl={authCtrl}
+            userData={userData}
             on:logout={onLogout}
         />
     </div>
-{:else if userData.username === ""}
+{:else if userData.accountType === "unset"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
-        <UsernameSelector
+        <AccountTypeSelector
             pageName={pageName}
             authCtrl={authCtrl}
             on:logout={onLogout}

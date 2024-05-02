@@ -80,41 +80,10 @@ export class AuthenticationController {
     }
 
     /**
-     * Change the account type by writing to Firestore.
-     * @param {"student" | "teacher"} type
+     * Change personal info.
+     * @param {UserData} data
      */
-    async changeAccountType(type) {
-        const user = get(this.user);
-        if ((user === null) || (user == "loggedOut")) {
-            return; // ??!!
-        }
-
-        const db = this.firebaseCtrl.db;
-        const usersRef = collection(db, "users");
-        const document = doc(usersRef, user.uid);
-        const update = {
-            accountType: type,
-        };
-
-        try {
-            await updateDoc(document, update);
-        } catch {
-            await setDoc(document, update);
-        }
-
-        this.userData.update(e => {
-            if (e == null) {
-                return e;
-            }
-            return e.withType(type);
-        });
-    }
-
-    /**
-     * Change the account username.
-     * @param {string} name
-     */
-    async setUsername(name) {
+    async setUserData(data) {
         const user = get(this.user);
         if ((user === null) || (user == "loggedOut")) {
             return; // ??
@@ -124,7 +93,9 @@ export class AuthenticationController {
         const usersRef = collection(db, "users");
         const document = doc(usersRef, user.uid);
         const update = {
-            username: name,
+            accountType: data.accountType,
+            username: data.username,
+            bio: data.bio
         };
 
         try {
@@ -133,36 +104,32 @@ export class AuthenticationController {
             await setDoc(document, update);
         }
 
-        this.userData.update(e => e?.withUsername(name) ?? null);
+        await this.userDataCacheCtrl.fetchUserData(user.uid);
     }
 }
 
 export class UserData {
-    /**
-     * @type {"student" | "teacher" | "unselected"}
-     */
     accountType;
-
-    /**
-     * @type {string}
-     */
     username;
+    bio;
 
     /**
-     * @param {"student" | "teacher" | "unselected"} accountType
+     * @param {"student" | "teacher" | "unset"} accountType
      * @param {string} username
+     * @param {string} bio
      */
-    constructor(accountType, username) {
+    constructor(accountType, username, bio) {
         this.accountType = accountType;
         this.username = username;
+        this.bio = bio;
     }
 
     /**
-     * @param {"student" | "teacher" | "unselected"} accountType
+     * @param {"student" | "teacher" | "unset"} accountType
      * @returns {UserData}
      */
     withType(accountType) {
-        return new UserData(accountType, this.username);
+        return new UserData(accountType, this.username, this.bio);
     }
 
     /**
@@ -170,7 +137,26 @@ export class UserData {
      * @returns {UserData}
      */
     withUsername(username) {
-        return new UserData(this.accountType, username);
+        return new UserData(this.accountType, username, this.bio);
+    }
+
+    /**
+     * @param {string} bio
+     * @returns {UserData}
+     */
+    withBio(bio) {
+        return new UserData(this.accountType, this.username, bio);
+    }
+
+    /**
+     * @returns {string}
+     */
+    formattedAccountType() {
+        switch (this.accountType) {
+            case "student": return "Student";
+            case "teacher": return "Teacher";
+            case "unset": return "Unset";
+        }
     }
 }
 

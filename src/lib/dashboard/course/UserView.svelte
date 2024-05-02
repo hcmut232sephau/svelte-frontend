@@ -1,24 +1,9 @@
 <script>
     import { onDestroy } from "svelte";
-    import { AuthenticationController, UserData } from "$lib/AuthenticationController";
-    import { CourseController, CourseData, CourseState } from "$lib/CourseController";
+    import { UserData } from "$lib/AuthenticationController";
     import { createEventDispatcher } from 'svelte';
-    import { Card, Button, Input } from 'flowbite-svelte';
-    import { SideBarCourseEntry } from "../sidebar/States";
-    import CourseSettings from "./CourseSettings.svelte";
+    import { Card, Button } from 'flowbite-svelte';
     import { UserDataCacheController } from "$lib/UserDataCacheController";
-
-    /**
-     * @param {"student" | "teacher" | "unselected"} type
-     */
-    function formatAccountType(type) {
-        switch (type) {
-            case "student": return "Student";
-            case "teacher": return "Teacher";
-            case "unselected": return "Unselected";
-        }
-    }
-
 
     let dispatch = createEventDispatcher();
 
@@ -58,26 +43,16 @@
                 <img src="icons/user-solid.svg" alt="" class="w-16 h-16 bg-white rounded-full p-4">
                 <div class="flex flex-col ml-10">
                     <h1 class="mt-auto font-black text-white text-2xl">{userData.username}</h1>
-                    <h1 class="mb-auto text-xl">{formatAccountType(userData.accountType)}</h1>
+                    <h1 class="mb-auto text-xl">{userData.formattedAccountType()}</h1>
                 </div>
             </div>
             <div class="flex flex-col m-2">
-                <h1 class="text-xl font-black text-white">Date of birth</h1>
-                <p class="mb-4">Jan 1, 1990</p>
-                <h1 class="text-xl font-black text-white">Email</h1>
-                <p class="mb-4">username@exmaple.com</p>
-                {#if userData.accountType == "student"}
-                    <h1 class="text-xl font-black text-white">Major</h1>
-                    <p class="mb-4">Computer Science</p>
-                {/if}
-                {#if userData.accountType == "teacher"}
-                    <h1 class="text-xl font-black text-white">Degree</h1>
-                    <p class="mb-4">Computer Science</p>
-                {/if}
+                <h1 class="text-xl font-black text-white">Bio</h1>
+                <p class="mb-4">{userData.bio}</p>
             </div>
         {/if}
 
-        <Button class="my-2" on:click={onCloseView}>
+        <Button class="mt-2" on:click={onCloseView}>
             Close
         </Button>
     </Card>

@@ -37,7 +37,7 @@
 {#if isTeacher}
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         Course code
-            <div class="flex my-2">
+            <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
                 placeholder="Course code"
@@ -51,7 +51,7 @@
             />
         </div>
         Course name
-        <div class="flex my-2">
+        <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
                 placeholder="Course name"
@@ -65,7 +65,7 @@
             />
         </div>
         <Button 
-            class="my-2"
+            class="mt-2"
             on:click={onUpdateCourseIdentity}
         >
             Save
@@ -75,7 +75,7 @@
 {#if isOwner}
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
-            class="my-2 bg-red-800"
+            class="mt-2 bg-red-800"
             on:click={onDeleteCourse}
         >
             Delete course
@@ -84,7 +84,7 @@
 {:else}
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
-            class="my-2 bg-red-800"
+            class="mt-2 bg-red-800"
             on:click={onLeaveCourse}
         >
             Leave course
