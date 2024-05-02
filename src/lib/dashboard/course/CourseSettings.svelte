@@ -1,5 +1,4 @@
 <script>
-    import { CourseController } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
     import { SideBarCourseEntry } from "$lib/dashboard/sidebar/States";
@@ -35,9 +34,12 @@
     }
 </script>
 {#if isTeacher}
-    <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        Course code
-            <div class="flex mt-2">
+    <Card class="bg-neutral-800 border-none mx-auto" size="lg">
+        <h1 class="text-white text-lg font-bold">
+            Course settings
+        </h1>
+        <div class="flex mt-2">Course code</div>
+        <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
                 placeholder="Course code"
@@ -50,7 +52,7 @@
                 }}
             />
         </div>
-        Course name
+        <div class="mt-2">Course name</div>
         <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
@@ -65,7 +67,7 @@
             />
         </div>
         <Button 
-            class="mt-2"
+            class="mt-4"
             on:click={onUpdateCourseIdentity}
         >
             Save
@@ -74,8 +76,11 @@
 {/if}
 {#if isOwner}
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
+        <h1 class="text-white text-lg font-bold">
+            Course management
+        </h1>
         <Button 
-            class="mt-2 bg-red-800"
+            class="mt-4 bg-red-800"
             on:click={onDeleteCourse}
         >
             Delete course
@@ -84,7 +89,7 @@
 {:else}
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
         <Button 
-            class="mt-2 bg-red-800"
+            class="mt-4 bg-red-800"
             on:click={onLeaveCourse}
         >
             Leave course

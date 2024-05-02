@@ -52,7 +52,7 @@
 </script>
 <div class="flex flex-col w-[50vw]">
     <Card class="bg-neutral-800 border-none mx-auto mt-10" size="lg">
-        Course code
+        <div>Course code</div>
         <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
@@ -60,7 +60,7 @@
             />
             <InputError error={courseCodeError}/>
         </div>
-        Course name
+        <div class="mt-2">Course name</div>
         <div class="flex mt-2">
             <Input
                 class="bg-neutral-700 text-white"
@@ -68,7 +68,7 @@
             />
             <InputError error={courseNameError}/>
         </div>
-        <Button class="flex mt-2" on:click={onAddCourse}>Add</Button>
+        <Button class="flex mt-4" on:click={onAddCourse}>Add</Button>
     </Card>
 </div>
 
