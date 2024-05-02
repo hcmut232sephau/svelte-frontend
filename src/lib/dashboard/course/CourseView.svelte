@@ -76,74 +76,81 @@
 
 </script>
 {#if userView == null}
-    <div class="flex flex-col w-[50vw] mb-8">
-        <Card class="bg-neutral-800 border-none mx-auto mt-10 w-[50vw]" size="lg">
-            {#if courseState !== null}
-                <InlineCourseOwnerView
-                    userId={courseState.data.owner}
-                    userDataCacheCtrl={userDataCacheCtrl}
-                    on:openUserView={event => {
-                        userView = event.detail;
-                    }}
-                />
-            {/if}
-            <Timeline order="horizontal" class="mx-4 mt-6 mb-2">
-                {#each index as i}
-                <TimelineItem>
-                    <svelte:fragment slot="icon">
-                    <div class="flex items-center">
-                        <div class="flex z-10 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-0 ring-white dark:bg-primary-900 sm:ring-8 dark:ring-gray-900 shrink-0">
-                        <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                        </div>
-                        <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700" />
-                    </div>
-                    </svelte:fragment>
-                    <h1 class="text-white text-2xl font-black mt-3 mr-20">{dates[i]}</h1>
-                    <p class="whitespace-pre text-wrap">{details[i]}</p>
-                </TimelineItem>
-                {/each}
-            </Timeline>
-        </Card>
-        {#each index as i}
-            <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
-                <div class="flex">
-                    <img src="icons/file-solid.svg" alt="" class="bg-white p-10 mr-8 mt-auto w-[10vw] h-[10vw] rounded max-w-30 max-h-30" />
-                    <div class="flex flex-col">
-                        <div class="flex-col mb-auto">
-                            <h1 class="text-white font-black text-2xl">{titles[i]}</h1>
-                            <p class="mt-2 whitespace-pre text-wrap">{notes[i]}</p>
-                        </div>
-                        <div class="flex">
-                            <Button class="mr-4">Open</Button>
-                            <Button class="">
-                                <TrashBinSolid/>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+    <Card class="fixed bg-neutral-800 border-none mt-8 ml-6 w-64">
+        <Timeline order="vertical" class="mx-4 mt-6 mb-2">
+            {#each index as i}
+            <TimelineItem>
+                <svelte:fragment slot="icon">
+                    <span class="flex absolute -start-3 justify-center items-center w-6 h-6 bg-primary-200 rounded-full ring-8 ring-white dark:ring-gray-900 dark:bg-primary-900">
+                      <CalendarWeekSolid class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    </span>
+                </svelte:fragment>                    
+                <h1 class="text-white text-2xl font-black mt-3 ">{dates[i]}</h1>
+                <p class="whitespace-pre-wrap break-words">{details[i]}</p>
+            </TimelineItem>
+            {/each}
+        </Timeline>
+        <Input  placeholder="dd/mm/yy"  class="bg-neutral-700 text-white my-2"/>
+        <Textarea  placeholder="Detail"  class="bg-neutral-700 text-white mb-2"/>
+        <Button>Add</Button>
+    </Card>
+    <div class="flex ml-2">
+        <div class="ml-4 w-48"></div>
+        <div class="flex flex-col w-[50vw] mb-8 mx-auto pl-16">
+            <Card class="bg-neutral-800 border-none mx-auto mt-10 " size="lg">
+                {#if courseState !== null}
+                    <InlineCourseOwnerView
+                        userId={courseState.data.owner}
+                        userDataCacheCtrl={userDataCacheCtrl}
+                        on:openUserView={event => {
+                            userView = event.detail;
+                        }}
+                    />
+                {/if}
             </Card>
-        {/each}
-        <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8 w-[50vw]" size="lg">
-            <div class="flex mb-4">
-                <h1 class="text-white text-lg font-bold mr-auto">
-                    Add document
-                </h1>
-                <Button class="mr-4">
-                    <FileCirclePlusSolid/>
-                </Button>
-                <Button>Save</Button>
-            </div>
-            <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
-            <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
-        </Card>
-        <CourseSettings
-            entry={entry}
-            isOwner={isOwner}
-            isTeacher={isTeacher}
-            on:updateCourseIdentity
-            on:deleteCourse
-            on:leaveCourse
-        />
+            {#each index as i}
+                <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none" size="lg">
+                    <div class="flex-col mx-2">
+                        <div class="flex mb-2">
+                            <h1 class="text-white font-black text-2xl mr-auto">{titles[i]}</h1>
+                            <img src="icons/file-solid.svg" alt="" class=" invert w-8 h-8 " />
+                        </div>
+                        <p class="mb-8 whitespace-pre text-wrap">{notes[i]}</p>
+                        <div class="flex flex-col">
+                            <div class="flex-col mb-auto">
+                            </div>
+                            <div class="flex">
+                                <Button class="mr-2">Open</Button>
+                                <Button class="px-3">
+                                    <TrashBinSolid/>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+            {/each}
+            <Card class="bg-neutral-800 border-none mx-auto mt-10 pl-none mb-8 " size="lg">
+                <div class="flex mb-4">
+                    <h1 class="text-white text-lg font-bold mr-auto">
+                        Add document
+                    </h1>
+                    <Button class="mr-2 px-3">
+                        <FileCirclePlusSolid/>
+                    </Button>
+                    <Button class="">Save</Button>
+                </div>
+                <Input placeholder="Title"  class="bg-neutral-700 text-white mb-4"/>
+                <Textarea placeholder="Note" class="bg-neutral-700 text-white h-36"/>
+            </Card>
+            <CourseSettings
+                entry={entry}
+                isOwner={isOwner}
+                isTeacher={isTeacher}
+                on:updateCourseIdentity
+                on:deleteCourse
+                on:leaveCourse
+            />
+        </div>
     </div>
 {:else}
     <UserView
