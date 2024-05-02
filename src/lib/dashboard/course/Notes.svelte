@@ -3,31 +3,18 @@
     import InputError from "$lib/ui/InputError.svelte";
     import { Button, Card, Input, Textarea } from "flowbite-svelte";
     import { AngleDownOutline, AngleRightOutline, FileLinesSolid, TrashBinSolid } from "flowbite-svelte-icons";
-    import { onDestroy } from "svelte";
+    import { createEventDispatcher } from "svelte";
 
-    /**
-     * @param {string} url
-     */
-    function openInNewTab(url) {
-        window.open(url, '_blank')?.focus();
-    }
-
-    /**
-     * @type {SingleCourseController}
-     */
-    export let singleCourseCtrl;
-    /**
-     * @type {boolean}
-     */
-    export let isTeacher;
+    let dispatch = createEventDispatcher();
 
     /**
      * @type {CourseNote[] | null}
      */
-    let notes = null;
-    let unsubscribeNotes = singleCourseCtrl.notes.subscribe(e => {
-        notes = e;
-    });
+    export let notes;
+    /**
+     * @type {boolean}
+     */
+    export let isTeacher;
 
     let showAdd = false;
 
@@ -77,13 +64,27 @@
         }
 
         if (isInputValid) {
-            singleCourseCtrl.addNoteAsTeacher(title, description, link);
+            dispatch("addNote", {
+                title: title,
+                description: description,
+                link: link,
+            });
         }
     }
 
-    onDestroy(() => {
-        unsubscribeNotes();
-    });
+    /**
+     * @param {string} id
+     */
+    function onDeleteNote(id) {
+        dispatch("deleteNote", id);
+    }
+
+    /**
+     * @param {string} url
+     */
+    function onOpenLink(url) {
+        dispatch("openLink", url);
+    }
 </script>
 <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
     {#if notes === null}
@@ -110,13 +111,13 @@
                 <div class="flex mt-4">
                     {#if note.link != ""}
                         <Button class="mr-2" on:click={() => {
-                            openInNewTab(note.link);
+                            onOpenLink(note.link);
                         }}>
                             Open link
                         </Button>
                     {/if}
                     <Button class="px-3 bg-red-700" on:click={() => {
-                        singleCourseCtrl.deleteNoteAsTeacher(note.id);
+                        onDeleteNote(note.id);
                     }}>
                         <TrashBinSolid class="mr-2"/> Delete
                     </Button>

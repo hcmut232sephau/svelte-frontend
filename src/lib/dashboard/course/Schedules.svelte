@@ -3,31 +3,18 @@
     import InputError from '$lib/ui/InputError.svelte';
     import { Button, Card, Input, Textarea } from "flowbite-svelte";
     import { AngleDownOutline, AngleRightOutline, CalendarWeekSolid, TrashBinSolid } from "flowbite-svelte-icons";
-    import { onDestroy } from "svelte";
+    import { createEventDispatcher } from "svelte";
 
-    /**
-     * @param {string} url
-     */
-    function openInNewTab(url) {
-        window.open(url, '_blank')?.focus();
-    }
-
-    /**
-     * @type {SingleCourseController}
-     */
-    export let singleCourseCtrl;
-    /**
-     * @type {boolean}
-     */
-    export let isTeacher;
+    let dispatch = createEventDispatcher();
 
     /**
      * @type {CourseSchedule[] | null}
      */
-    let schedules = null;
-    let unsubscribeSchedules = singleCourseCtrl.schedules.subscribe(e => {
-        schedules = e;
-    });
+    export let schedules;
+    /**
+     * @type {boolean}
+     */
+    export let isTeacher;
 
     let showAdd = false;
 
@@ -77,13 +64,27 @@
         }
 
         if (isInputValid) {
-            singleCourseCtrl.addScheduleAsTeacher(title, description, link);
+            dispatch("addSchedule", {
+                title: title,
+                description: description,
+                link: link,
+            });
         }
     }
 
-    onDestroy(() => {
-        unsubscribeSchedules();
-    });
+    /**
+     * @param {string} id
+     */
+    function onDeleteSchedule(id) {
+        dispatch("deleteSchedule", id);
+    }
+
+    /**
+     * @param {string} url
+     */
+     function onOpenLink(url) {
+        dispatch("openLink", url);
+    }
 </script>
 <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
     {#if schedules === null}
@@ -110,13 +111,13 @@
                 <div class="flex mt-4">
                     {#if schedule.link != ""}
                         <Button class="mr-2" on:click={() => {
-                            openInNewTab(schedule.link);
+                            onOpenLink(schedule.link);
                         }}>
                             Open link
                         </Button>
                     {/if}
                     <Button class="px-3 bg-red-700" on:click={() => {
-                        singleCourseCtrl.deleteScheduleAsTeacher(schedule.id);
+                        onDeleteSchedule(schedule.id);
                     }}>
                         <TrashBinSolid class="mr-2"/> Delete
                     </Button>

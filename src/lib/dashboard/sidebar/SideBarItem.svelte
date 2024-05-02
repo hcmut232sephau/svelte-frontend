@@ -3,7 +3,7 @@
     import { SideBarEntry } from './States';
 
     /**
-     * @type {SideBarEntry}
+     * @type {SideBarEntry | string}
      */
     export let entry;
     /**

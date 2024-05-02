@@ -45,10 +45,6 @@ export class CourseController {
         this.updateCourses();
     }
 
-    destroy() {
-        // TODO
-    }
-
     /**
      * @returns {Promise<CourseState[]>}
      */

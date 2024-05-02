@@ -66,10 +66,6 @@ export class SingleCourseController {
         this.updateNotes();
     }
 
-    destroy() {
-        // TODO
-    }
-
     /**
      * @returns {Promise<CourseSchedule[]>}
      */
@@ -171,6 +167,6 @@ export class SingleCourseController {
         const document = doc(notesRef, id);
 
         await deleteDoc(document);
-        await this.updateSchedules();
+        await this.updateNotes();
     }
 }

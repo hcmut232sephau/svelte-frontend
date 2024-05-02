@@ -85,6 +85,7 @@
         <AccountTypeSelector
             pageName={pageName}
             authCtrl={authCtrl}
+            userData={userData}
             on:logout={onLogout}
         />
     </div>

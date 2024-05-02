@@ -2,7 +2,7 @@
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { CourseController, CourseState } from "$lib/CourseController";
     import { createEventDispatcher, onDestroy } from 'svelte';
-    import { SideBarCourseEntry, SideBarEntry } from './sidebar/States';
+    import { SideBarEntry } from './sidebar/States';
     import SideBar from './sidebar/SideBar.svelte';
     import SideBarItem from './sidebar/SideBarItem.svelte';
     import CourseBrowser from "./CourseBrowser.svelte";
@@ -35,6 +35,14 @@
      * @type {CourseController | null}
      */
     let courseCtrl = null;
+    /**
+     * @type {CourseState[] | null}
+     */
+    let courses = null;
+    /**
+     * @type {import("svelte/store").Unsubscriber | null}
+     */
+    let unsubscribeCourses = null;
     $: unsubscribeUserData = authCtrl.userData.subscribe(val => {
         let refreshCourseCtrl = false;
         if ((userData === null) || (val === null) || (userData.accountType != val.accountType)) {
@@ -42,34 +50,25 @@
         }
         userData = val;
         if (refreshCourseCtrl) {
-            if (courseCtrl !== null) {
-                courseCtrl.destroy();
+            if (unsubscribeCourses !== null) {
+                unsubscribeCourses();
             }
             if (userData === null) {
                 courseCtrl = null;
             } else {
                 courseCtrl = new CourseController(authCtrl);
+                unsubscribeCourses = courseCtrl.courses.subscribe(val => {
+                    courses = val?.filter(e => e.joined) ?? null;
+                }) ?? null;
             }
         }
     });
 
-    /**
-     * @type {SideBarCourseEntry[] | null}
-     */
-    let courses = null;
-    $: unsubscribeCourses = courseCtrl?.courses.subscribe(val => {
-        courses = val?.filter(e => e.joined).map(e => {
-            return new SideBarCourseEntry(e.data);
-        }) ?? null;
-    }) ?? null;
     onDestroy(() => {
         if (unsubscribeCourses !== null) {
             unsubscribeCourses();
         }
         unsubscribeUserData();
-        if (courseCtrl !== null) {
-            courseCtrl.destroy();
-        }
     });
 
     const dispatch = createEventDispatcher();
@@ -103,7 +102,7 @@
     $: otherPages = getOtherPages(userData);
 
     /**
-     * @type {SideBarEntry | null}
+     * @type {SideBarEntry | string | null}
      */
     let selectedPage = null;
 
@@ -112,7 +111,7 @@
      */
     function onSidebarSelect(event) {
         selectedPage = event.detail;
-        if (courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)) {
+        if (courses !== null && selectedPage !== null && courses.some(e => e.data.id == selectedPage)) {
             showCourses = true;
         }
     }
@@ -133,10 +132,10 @@
         }
 
         await courseCtrl.addCourseAsTeacher(event.detail.courseCode, event.detail.courseName);
-        const result = courses?.find(e => e.course.courseCode == event.detail.courseCode);
+        const result = courses?.find(e => e.data.courseCode == event.detail.courseCode);
         if (result !== undefined) {
             showCourses = true;
-            selectedPage = result;
+            selectedPage = result.data.id;
         }
     }
 
@@ -148,13 +147,13 @@
             return;
         }
 
-        const entry = event.detail.entry;
+        const courseId = event.detail.id;
         const courseCode = event.detail.courseCode;
         const courseName = event.detail.courseName;
-        await courseCtrl.setCourseIdentity(entry.course.id, courseCode, courseName);
-        const result = courses?.find(e => e.course.id == entry.course.id);
+        await courseCtrl.setCourseIdentity(courseId, courseCode, courseName);
+        const result = courses?.find(e => e.data.id == courseId);
         if (result !== undefined) {
-            selectedPage = result;
+            selectedPage = result.data.id;
         }
     }
 
@@ -166,9 +165,9 @@
             return;
         }
 
-        const entry = event.detail.entry;
-        const indexToSelectNext = courses?.findIndex(e => e.course.id == entry.course.id);
-        await courseCtrl.deleteCourseAsTeacher(entry.course.id);
+        const id = event.detail;
+        const indexToSelectNext = courses?.findIndex(e => e.data.id == id);
+        await courseCtrl.deleteCourseAsTeacher(id);
         if (courses === null) {
             selectedPage = null;
         } else if ((indexToSelectNext === undefined) || (courses.length == 0)) {
@@ -179,7 +178,7 @@
             }
         } else {
             const index = Math.min(indexToSelectNext, courses.length - 1);
-            selectedPage = courses[index] ?? null;
+            selectedPage = courses[index]?.data.id ?? null;
         }
     }
 
@@ -191,9 +190,9 @@
             return;
         }
 
-        const entry = event.detail.entry;
-        const indexToSelectNext = courses?.findIndex(e => e.course.id == entry.course.id);
-        await courseCtrl.leaveCourseAsStudent(entry.course.id);
+        const id = event.detail;
+        const indexToSelectNext = courses?.findIndex(e => e.data.id == id);
+        await courseCtrl.leaveCourseAsStudent(id);
         if (courses === null) {
             selectedPage = null;
         } else if ((indexToSelectNext === undefined) || (courses.length == 0)) {
@@ -204,7 +203,7 @@
             }
         } else {
             const index = Math.min(indexToSelectNext, courses.length - 1);
-            selectedPage = courses[index] ?? null;
+            selectedPage = courses[index]?.data.id ?? null;
         }
     }
 </script>
@@ -233,16 +232,16 @@
             </div>
         </SideBarSectionHeader>
         {#if courses !== null && showCourses}
-            {#each courses as entry}
+            {#each courses as course}
                 <SideBarItem
-                    entry={entry}
-                    isSelected={entry == selectedPage}
+                    entry={course.data.id}
+                    isSelected={course.data.id == selectedPage}
                     on:sidebarSelect={onSidebarSelect}
                 >
                     <div class="div w-5">
-                        <span class="font-black text-gray-500 text-xs">{entry.course.courseCode}</span>
+                        <span class="font-black text-gray-500 text-xs">{course.data.courseCode}</span>
                     </div>
-                    {entry.course.courseName}
+                    {course.data.courseName}
                 </SideBarItem>
             {/each}
         {/if}
@@ -277,12 +276,12 @@
                         userData={userData}
                         on:logout={onLogout}
                     />
-                {:else if courses !== null && selectedPage !== null && typelessIncludes(courses, selectedPage)}
+                {:else if courses !== null && selectedPage !== null && courses.some(e => e.data.id == selectedPage)}
                     <CourseView
                         authCtrl={authCtrl}
                         userDataCacheCtrl={userDataCacheCtrl}
                         courseCtrl={courseCtrl}
-                        entry={reinterpretCast(selectedPage)}
+                        courseId={reinterpretCast(selectedPage)}
                         on:updateCourseIdentity={onUpdateCourseIdentity}
                         on:deleteCourse={onDeleteCourse}
                         on:leaveCourse={onLeaveCourse}

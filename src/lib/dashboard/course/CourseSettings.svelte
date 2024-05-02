@@ -1,22 +1,22 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { Card, Button, Input } from 'flowbite-svelte';
-    import { SideBarCourseEntry } from "$lib/dashboard/sidebar/States";
     import InputError from '$lib/ui/InputError.svelte';
+    import { CourseData } from '$lib/CourseController';
 
     let dispatch = createEventDispatcher();
 
     /**
-     * @type {SideBarCourseEntry}
+     * @type {CourseData}
      */
-    export let entry;
+    export let courseData;
     /**
      * @type {boolean}
      */
     export let isTeacher;
     
-    $: courseCode = entry.course.courseCode;
-    $: courseName = entry.course.courseName;
+    $: courseCode = courseData.courseCode;
+    $: courseName = courseData.courseName;
 
     /**
      * @type {String | null}
@@ -54,16 +54,20 @@
         }
 
         if (isInputValid) {
-            dispatch("updateCourseIdentity", {entry, courseCode, courseName});
+            dispatch("updateCourseIdentity", {
+                id: courseData.id,
+                courseCode: courseCode,
+                courseName: courseName
+            });
         }
     }
 
     function onDeleteCourse() {
-        dispatch("deleteCourse", {entry});
+        dispatch("deleteCourse", courseData.id);
     }
 
     function onLeaveCourse() {
-        dispatch("leaveCourse", {entry});
+        dispatch("leaveCourse", courseData.id);
     }
 </script>
 {#if isTeacher}
