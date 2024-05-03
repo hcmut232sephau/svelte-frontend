@@ -28,11 +28,10 @@ export class AuthenticationController {
         this.userDataCacheCtrl = userDataCacheCtrl;
 
         this.user = writable(null);
-        this.isRegistering = writable(false);
         this.userData = writable(null);
 
         this.firebaseCtrl.auth.onAuthStateChanged(u => {
-            this.onAuthStateChanged(u);
+            this.#onAuthStateChanged(u);
         });
         this.#unsubscribeUserDataCache = this.userDataCacheCtrl.cache.subscribe(e => {
             const user = get(this.user);
@@ -49,7 +48,7 @@ export class AuthenticationController {
     /**
      * @param {import("@firebase/auth").User | null} newUser
      */
-    onAuthStateChanged(newUser) {
+    #onAuthStateChanged(newUser) {
         if (newUser === null) {
             this.user.set("loggedOut");
             this.userData.set(null);
