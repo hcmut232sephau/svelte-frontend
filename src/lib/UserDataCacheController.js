@@ -29,9 +29,10 @@ export class UserDataCacheController {
             let accountType = e.get("accountType") ?? "unset";
             let username = e.get("username") ?? "";
             let bio = e.get("bio") ?? "";
+            let degree = e.get("degree") ?? "";
 
             this.cache.update(e => {
-                e?.set(id, new UserData(accountType, username, bio));
+                e?.set(id, new UserData(accountType, username, bio, degree));
                 return e;
             });
 

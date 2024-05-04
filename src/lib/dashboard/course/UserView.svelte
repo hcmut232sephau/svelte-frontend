@@ -46,10 +46,18 @@
                     <h1 class="mb-auto text-l">{userData.formattedAccountType()}</h1>
                 </div>
             </div>
-            <div class="flex flex-col m-2">
-                <h1 class="text-xl font-black text-white">Bio</h1>
-                <p class="mb-4">{userData.bio}</p>
-            </div>
+            {#if userData.bio != ""}
+                <div class="flex flex-col m-2">
+                    <h1 class="text-xl font-black text-white">Bio</h1>
+                    <p class="mb-4">{userData.bio}</p>
+                </div>
+            {/if}
+            {#if userData.degree != ""}
+                <div class="flex flex-col m-2">
+                    <h1 class="text-xl font-black text-white">Degree</h1>
+                    <p class="mb-4">{userData.degree}</p>
+                </div>
+            {/if}
         {/if}
 
         <Button class="mt-2" on:click={onCloseView}>

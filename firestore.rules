@@ -25,7 +25,9 @@ service cloud.firestore {
                               && (!request.resource.data.keys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
                               && (!request.resource.data.keys().hasAny(["bio"])
-                               || !(request.resource.data.bio == "" || request.resource.data.bio.size() > 144))
+                               || !(request.resource.data.bio.size() > 2048))
+                              && (!request.resource.data.keys().hasAny(["degree"])
+                               || !(request.resource.data.degree.size() > 2048))
                             );
 
       allow update: if request.auth != null
@@ -36,7 +38,9 @@ service cloud.firestore {
                               && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
                               && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["bio"])
-                               || !(request.resource.data.bio == "" || request.resource.data.bio.size() > 144))
+                               || !(request.resource.data.bio.size() > 2048))
+                              && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["degree"])
+                               || !(request.resource.data.degree.size() > 2048))
                             );
 
       allow delete: if false; // TODO: implement account deletion

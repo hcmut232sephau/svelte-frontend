@@ -37,7 +37,7 @@
     });
 
     // Account type is left out, we have a separate screen for it
-    $: isUserDataIncomplete = userData != null && (userData.username == "" || userData.bio == "");
+    $: isUserDataIncomplete = userData != null && userData.username == "";
 
     /**
      * @param {CustomEvent} event

@@ -103,19 +103,17 @@ export class AuthenticationController {
 }
 
 export class UserData {
-    accountType;
-    username;
-    bio;
-
     /**
      * @param {"student" | "teacher" | "unset"} accountType
      * @param {string} username
      * @param {string} bio
+     * @param {string} degree
      */
-    constructor(accountType, username, bio) {
+    constructor(accountType, username, bio, degree) {
         this.accountType = accountType;
         this.username = username;
         this.bio = bio;
+        this.degree = degree;
     }
 
     /**
@@ -123,7 +121,7 @@ export class UserData {
      * @returns {UserData}
      */
     withType(accountType) {
-        return new UserData(accountType, this.username, this.bio);
+        return new UserData(accountType, this.username, this.bio, this.degree);
     }
 
     /**
@@ -131,7 +129,7 @@ export class UserData {
      * @returns {UserData}
      */
     withUsername(username) {
-        return new UserData(this.accountType, username, this.bio);
+        return new UserData(this.accountType, username, this.bio, this.degree);
     }
 
     /**
@@ -139,7 +137,15 @@ export class UserData {
      * @returns {UserData}
      */
     withBio(bio) {
-        return new UserData(this.accountType, this.username, bio);
+        return new UserData(this.accountType, this.username, bio, this.degree);
+    }
+
+    /**
+     * @param {string} degree
+     * @returns {UserData}
+     */
+    withDegree(degree) {
+        return new UserData(this.accountType, this.username, this.bio, degree);
     }
 
     /**

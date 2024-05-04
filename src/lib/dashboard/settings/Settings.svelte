@@ -21,6 +21,7 @@
 
     let username = userData.username;
     let bio = userData.bio;
+    let degree = userData.degree;
 
     /**
      * @type {String | null}
@@ -30,10 +31,15 @@
      * @type {String | null}
      */
     let bioError = null;
+    /**
+     * @type {String | null}
+     */
+    let degreeError = null;
 
     function onSaveUserData() {
         usernameError = null;
         bioError = null;
+        degreeError = null;
 
         let isInputValid = true;
 
@@ -47,18 +53,18 @@
             usernameError = "Cannot use more than 72 characters";
         }
 
-        if (bio == "") {
+        if (bio.length > 2048) {
             isInputValid = false;
-            bioError = "Cannot leave this empty";
+            bioError = "Cannot use more than 144 characters";
         }
 
-        if (bio.length > 144) {
+        if (degree.length > 2048) {
             isInputValid = false;
             bioError = "Cannot use more than 144 characters";
         }
 
         if (isInputValid) {
-            authCtrl.setUserData(userData.withUsername(username).withBio(bio))
+            authCtrl.setUserData(userData.withUsername(username).withBio(bio).withDegree(degree))
                 .catch(err => {
                     const code = err.code;
                     usernameError = "Error. Check your input and try again later. (error code " + code + ")";
@@ -82,6 +88,15 @@
             bind:value={bio}
         />
         <InputError error={bioError}/>
+        {#if userData.accountType == "teacher"}
+            <div class="mt-2">Degree</div>
+            <Input
+                class="bg-neutral-700 text-white mt-2"
+                placeholder="Degree"
+                bind:value={degree}
+            />
+            <InputError error={degreeError}/>
+        {/if}
         <Button 
             class="mt-4"
             on:click={onSaveUserData}
