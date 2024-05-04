@@ -110,7 +110,7 @@
         <div>
             Degree
         </div>
-        <SmartTextArea
+        <SmartTextField
             title="Degree"
             bind:value={degree}
             bind:error={degreeError}
