@@ -13,6 +13,7 @@
     import { AngleRightOutline, AngleDownOutline } from 'flowbite-svelte-icons';
     import { reinterpretCast, typelessIncludes } from "$lib/TypeTools";
     import { UserDataCacheController } from "$lib/UserDataCacheController";
+    import TeacherBrowser from "./TeacherBrowser.svelte";
 
     /**
      * @type {String}
@@ -81,20 +82,16 @@
 
     let courseBrowserEntry = new SideBarEntry("Browse courses");
     let courseAdderEntry = new SideBarEntry("Add course");
+    let teachersEntry = new SideBarEntry("Teachers");
     let settingsEntry = new SideBarEntry("Settings");
 
     /**
      * @param {UserData | null} scopedUserData
      */
     function getOtherPages(scopedUserData) {
-        if (scopedUserData?.accountType == "teacher") {
-            return [
-                courseAdderEntry,
-                settingsEntry
-            ];
-        }
         return [
-            courseBrowserEntry,
+            (scopedUserData?.accountType == "teacher") ? courseAdderEntry : courseBrowserEntry,
+            teachersEntry,
             settingsEntry
         ];
     }
@@ -269,6 +266,12 @@
                 {:else if selectedPage == courseAdderEntry}
                     <AddCourse
                         on:addCourse={onAddCourse}
+                    />
+                {:else if selectedPage == teachersEntry}
+                    <TeacherBrowser
+                        authCtrl={authCtrl}
+                        userDataCacheCtrl={userDataCacheCtrl}
+                        on:logout={onLogout}
                     />
                 {:else if selectedPage == settingsEntry}
                     <Settings

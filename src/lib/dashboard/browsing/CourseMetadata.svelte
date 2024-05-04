@@ -29,6 +29,6 @@
 </script>
 {#if userData !== null}
     <div class="text-sm">
-        Owned by <span class="font-medium">{userData.username}</span>
+        Taught by <span class="font-medium">{userData.username}</span>
     </div>
 {/if}
