@@ -160,7 +160,14 @@
      * @param {CustomEvent} event
      */
     function onOpenLink(event) {
-        window.open(event.detail, '_blank')?.focus();
+        /**
+         * @type {string}
+         */
+        let url = event.detail;
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "https://" + url;
+        }
+        window.open(url, '_blank')?.focus();
     }
 </script>
 {#if userView !== null}
