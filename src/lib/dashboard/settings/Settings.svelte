@@ -55,12 +55,12 @@
 
         if (bio.length > 2048) {
             isInputValid = false;
-            bioError = "Cannot use more than 144 characters";
+            bioError = "Cannot use more than 2048 characters";
         }
 
         if (degree.length > 2048) {
             isInputValid = false;
-            bioError = "Cannot use more than 144 characters";
+            degreeError = "Cannot use more than 2048 characters";
         }
 
         if (isInputValid) {

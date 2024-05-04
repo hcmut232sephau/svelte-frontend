@@ -80,6 +80,27 @@ export class AuthenticationController {
 
     /**
      * Change personal info.
+     * @param {"student" | "teacher" | "unset"} type
+     */
+    async setAccountType(type) {
+        const user = get(this.user);
+        if ((user === null) || (user == "loggedOut")) {
+            return; // ??
+        }
+
+        const db = this.firebaseCtrl.db;
+        const usersRef = collection(db, "users");
+        const document = doc(usersRef, user.uid);
+        const update = {
+            accountType: type,
+        };
+
+        await setDoc(document, update, { merge: true });
+        await this.userDataCacheCtrl.fetchUserData(user.uid);
+    }
+
+    /**
+     * Change personal info.
      * @param {UserData} data
      */
     async setUserData(data) {

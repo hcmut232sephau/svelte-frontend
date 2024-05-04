@@ -18,8 +18,9 @@
      */
     export let userData;
 
-    let name = userData.username ?? "";
-    let bio = userData.bio ?? "";
+    let name = userData.username;
+    let bio = userData.bio;
+    let degree = userData.degree;
 
     /**
      * @type {String | null}
@@ -29,12 +30,17 @@
      * @type {String | null}
      */
     let bioError = null;
+    /**
+     * @type {String | null}
+     */
+    let degreeError = null;
 
     const dispatch = createEventDispatcher();
 
     function onSetInfo() {
         nameError = null;
         bioError = null;
+        degreeError = null;
 
         let isInputValid = true;
 
@@ -53,13 +59,23 @@
             bioError = "Cannot leave this empty";
         }
 
-        if (bio.length > 144) {
+        if (bio.length > 2048) {
             isInputValid = false;
-            bioError = "Cannot use more than 144 characters";
+            bioError = "Cannot use more than 2048 characters";
+        }
+
+        if (userData.accountType == "teacher" && degree == "") {
+            isInputValid = false;
+            degreeError = "Cannot leave this empty";
+        }
+
+        if (degree.length > 2048) {
+            isInputValid = false;
+            degreeError = "Cannot use more than 2048 characters";
         }
 
         if (isInputValid) {
-            authCtrl.setUserData(userData.withUsername(name).withBio(bio))
+            authCtrl.setUserData(userData.withUsername(name).withBio(bio).withDegree(degree))
                 .catch(err => {
                     const code = err.code;
                     bioError = "Error. Check your input and try again later. (error code " + code + ")";
@@ -90,6 +106,14 @@
             title="Bio"
             bind:value={bio}
             bind:error={bioError}
+        />
+        <div>
+            Degree
+        </div>
+        <SmartTextArea
+            title="Degree"
+            bind:value={degree}
+            bind:error={degreeError}
         />
         <div>
             <button class="PrimaryButton w-full" on:click={onSetInfo}>Continue</button>

@@ -37,7 +37,7 @@
     });
 
     // Account type is left out, we have a separate screen for it
-    $: isUserDataIncomplete = userData != null && userData.username == "";
+    $: isUserDataIncomplete = userData != null && userData.username == "" && (userData.accountType != "teacher" || userData.degree == "");
 
     /**
      * @param {CustomEvent} event
@@ -71,18 +71,16 @@
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         Loading...
     </div>
-{:else if isUserDataIncomplete}
-    <div class="flex justify-center items-center h-screen bg-neutral-950">
-        <PersonalInfoSelector
-            pageName={pageName}
-            authCtrl={authCtrl}
-            userData={userData}
-            on:logout={onLogout}
-        />
-    </div>
 {:else if userData.accountType === "unset"}
     <div class="flex justify-center items-center h-screen bg-neutral-950">
         <AccountTypeSelector
+            authCtrl={authCtrl}
+            on:logout={onLogout}
+        />
+    </div>
+{:else if isUserDataIncomplete}
+    <div class="flex justify-center items-center h-screen bg-neutral-950">
+        <PersonalInfoSelector
             pageName={pageName}
             authCtrl={authCtrl}
             userData={userData}

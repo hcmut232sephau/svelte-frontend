@@ -3,26 +3,18 @@
     import { createEventDispatcher } from 'svelte';
 
     /**
-     * @type {String}
-     */
-    export let pageName;
-    /**
      * @type {AuthenticationController}
      */
     export let authCtrl;
-    /**
-     * @type {UserData}
-     */
-    export let userData;
 
     const dispatch = createEventDispatcher();
 
     function selectStudentType() {
-        authCtrl.setUserData(userData.withType("student"));
+        authCtrl.setAccountType("student");
     }
 
     function selectTeacherType() {
-        authCtrl.setUserData(userData.withType("teacher"));
+        authCtrl.setAccountType("teacher");
     }
 
     function onLogout() {
