@@ -107,10 +107,10 @@
             bind:value={bio}
             bind:error={bioError}
         />
-        <div>
-            Degree
-        </div>
         {#if userData.accountType == "teacher"}
+            <div>
+                Degree
+            </div>
             <SmartTextField
                 title="Degree"
                 bind:value={degree}
