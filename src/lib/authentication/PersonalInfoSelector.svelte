@@ -110,14 +110,16 @@
         <div>
             Degree
         </div>
-        <SmartTextField
-            title="Degree"
-            bind:value={degree}
-            bind:error={degreeError}
-        />
-        <div>
-            <button class="PrimaryButton w-full" on:click={onSetInfo}>Continue</button>
-        </div>
+        {#if userData.accountType == "teacher"}
+            <SmartTextField
+                title="Degree"
+                bind:value={degree}
+                bind:error={degreeError}
+            />
+            <div>
+                <button class="PrimaryButton w-full" on:click={onSetInfo}>Continue</button>
+            </div>
+        {/if}
         <div>
             Want to <button class="text-blue-600" on:click={onLogout}>log out</button> instead?
         </div>

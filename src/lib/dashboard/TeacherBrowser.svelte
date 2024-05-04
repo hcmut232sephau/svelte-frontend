@@ -44,7 +44,7 @@
                         <div class="text-l flex items-center">
                             <span class="font-bold text-white">{teacher.username}</span>
                             {#if teacher.degree != ""}
-                                <span class="font-medium text-sm text-gray-300 ml-1 bg-gray-700 px-1 rounded">{teacher.degree.toUpperCase()}</span>
+                                <span class="font-medium text-sm text-gray-300 ml-2 bg-gray-700 px-1 rounded">{teacher.degree.toUpperCase()}</span>
                             {/if}
                         </div>
                         <div class="flex">
