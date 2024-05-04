@@ -33,7 +33,7 @@
     export let courseId;
 
     /**
-     * @type {CourseState | null}
+     * @type {string | null}
      */
     let previousCourseId = null;
 
@@ -77,6 +77,7 @@
 
     $: {
         if (courseId != previousCourseId) {
+            previousCourseId = courseId;
             courseState = get(courseCtrl.courses)?.find(f => f.data.id == courseId) ?? null;
             let nextCtrl = (courseState === null) ? null : new SingleCourseController(authCtrl, courseState.data);
             if (nextCtrl !== null) {
