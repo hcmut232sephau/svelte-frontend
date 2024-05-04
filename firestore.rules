@@ -21,7 +21,7 @@ service cloud.firestore {
                             && targetUid == request.auth.uid
                             && (
                               (!request.resource.data.keys().hasAny(["accountType"])
-                               || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
+                               || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher" || request.resource.data.accountType == "unset"))
                               && (!request.resource.data.keys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
                               && (!request.resource.data.keys().hasAny(["bio"])
@@ -32,9 +32,11 @@ service cloud.firestore {
                             && targetUid == request.auth.uid
                             && (
                               (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["accountType"])
-                               || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher"))
+                               || (request.resource.data.accountType == "student" || request.resource.data.accountType == "teacher" || request.resource.data.accountType == "unset"))
                               && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["username"])
                                || !(request.resource.data.username == "" || request.resource.data.username.size() > 72))
+                              && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["bio"])
+                               || !(request.resource.data.bio == "" || request.resource.data.bio.size() > 144))
                             );
 
       allow delete: if false; // TODO: implement account deletion

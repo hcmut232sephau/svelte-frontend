@@ -97,12 +97,7 @@ export class AuthenticationController {
             bio: data.bio
         };
 
-        try {
-            await updateDoc(document, update);
-        } catch {
-            await setDoc(document, update);
-        }
-
+        await setDoc(document, update);
         await this.userDataCacheCtrl.fetchUserData(user.uid);
     }
 }

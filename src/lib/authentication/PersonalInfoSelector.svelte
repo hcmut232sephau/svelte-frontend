@@ -32,7 +32,7 @@
 
     const dispatch = createEventDispatcher();
 
-    function onSetUsername() {
+    function onSetInfo() {
         nameError = null;
         bioError = null;
 
@@ -62,7 +62,7 @@
             authCtrl.setUserData(userData.withUsername(name).withBio(bio))
                 .catch(err => {
                     const code = err.code;
-                    nameError = "Error. Check your input and try again later. (error code " + code + ")";
+                    bioError = "Error. Check your input and try again later. (error code " + code + ")";
                 });
         }
     }
@@ -92,7 +92,7 @@
             bind:error={bioError}
         />
         <div>
-            <button class="PrimaryButton w-full" on:click={onSetUsername}>Continue</button>
+            <button class="PrimaryButton w-full" on:click={onSetInfo}>Continue</button>
         </div>
         <div>
             Want to <button class="text-blue-600" on:click={onLogout}>log out</button> instead?
