@@ -3,7 +3,7 @@
     import { AuthenticationController, UserData } from "$lib/AuthenticationController";
     import { CourseController, CourseData, CourseState } from "$lib/CourseController";
     import { createEventDispatcher } from 'svelte';
-    import { Card } from 'flowbite-svelte';
+    import { Button, Card } from 'flowbite-svelte';
     import CourseSettings from "./CourseSettings.svelte";
     import { UserDataCacheController } from "$lib/UserDataCacheController";
     import UserView from "./UserView.svelte";
@@ -12,6 +12,7 @@
     import Schedules from "./Schedules.svelte"
     import Notes from "./Notes.svelte";
     import { get } from "svelte/store";
+    import StudentList from "./StudentList.svelte";
 
     let dispatch = createEventDispatcher();
 
@@ -127,6 +128,10 @@
      * @type {string | null}
      */
     let userView = null;
+    /**
+     * @type {boolean}
+     */
+    let studentListView = false;
 
     /**
      * @param {CustomEvent} event
@@ -178,6 +183,13 @@
             userView = null;
         }}
     />
+{:else if studentListView && singleCourseCtrl != null}
+    <StudentList
+        singleCourseCtrl={singleCourseCtrl}
+        on:close={() => {
+            studentListView = false;
+        }}
+    />
 {:else if courseState !== null && singleCourseCtrl !== null}
     <Card class="bg-neutral-800 border-none mx-auto mt-8" size="lg">
         <InlineCourseTeacherView
@@ -187,6 +199,11 @@
                 userView = event.detail;
             }}
         />
+        <Button class="mt-4" on:click={() => {
+            studentListView = true;
+        }}>
+            View students
+        </Button>
     </Card>
     <Schedules
         schedules={schedules}

@@ -54,7 +54,7 @@
                 <div class="font-black text-gray-500 text-xs">{course.data.courseCode}</div>
                 <div class="flex items-center">
                     <span class="text-white">{course.data.courseName}</span>
-                    {#if course.joined}
+                    {#if !course.joined}
                         <Button class="ml-auto w-24" on:click={() => {
                             courseCtrl.joinCourseAsStudent(course.data.id);
                         }}>Join</Button>

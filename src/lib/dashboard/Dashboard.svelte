@@ -270,7 +270,6 @@
                 {:else if selectedPage == teachersEntry}
                     <TeacherBrowser
                         authCtrl={authCtrl}
-                        userDataCacheCtrl={userDataCacheCtrl}
                         on:logout={onLogout}
                     />
                 {:else if selectedPage == settingsEntry}

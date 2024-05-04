@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { AuthenticationController } from "./AuthenticationController";
+import { AuthenticationController, UserData } from "./AuthenticationController";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc } from "firebase/firestore";
 import { CourseData } from "./CourseController";
 
@@ -53,6 +53,12 @@ export class SingleCourseController {
     notes;
 
     /**
+     * Students. Only present when user is viewing list of students.
+     * @type {import("svelte/store").Writable<UserData[] | null>}
+     */
+    students;
+
+    /**
      * @param {AuthenticationController} authCtrl
      * @param {CourseData} courseData
      */
@@ -61,6 +67,7 @@ export class SingleCourseController {
         this.courseData = courseData;
         this.schedules = writable(null);
         this.notes = writable(null);
+        this.students = writable(null);
 
         this.updateSchedules();
         this.updateNotes();
@@ -168,5 +175,40 @@ export class SingleCourseController {
 
         await deleteDoc(document);
         await this.updateNotes();
+    }
+
+    /**
+     * @returns {Promise<UserData[]>}
+     */
+    async #getStudents() {
+        const db = this.authCtrl.firebaseCtrl.db;
+        const studentsRef = collection(db, "courses", this.courseData.id, "students");
+
+        let q = query(studentsRef);
+        let docs = await getDocs(q);
+
+        return await Promise.all(docs.docs.map(d => {
+            const uid = d.id;
+
+            const usersRef = collection(db, "users");
+            const userDoc = doc(usersRef, uid);
+            return getDoc(userDoc).then(e => {
+                let accountType = e.get("accountType") ?? "unset";
+                let username = e.get("username") ?? "";
+                let bio = e.get("bio") ?? "";
+                let degree = e.get("degree") ?? "";
+                return new UserData(accountType, username, bio, degree);
+            });
+        }));
+    }
+
+    async updateStudents() {
+        return this.#getStudents().then(e => {
+            this.students.set(e);
+        });
+    }
+
+    ditchStudentCache() {
+        this.students.set(null);
     }
 }
