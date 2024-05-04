@@ -115,7 +115,8 @@ export class AuthenticationController {
         const update = {
             accountType: data.accountType,
             username: data.username,
-            bio: data.bio
+            bio: data.bio,
+            degree: data.degree
         };
 
         await setDoc(document, update);
